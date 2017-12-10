@@ -46,6 +46,46 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">ปพ.5</h1>
+                    <div class="">
+                        <a href="#">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">ภาษาไทย ป.1</div>
+                                <div class="panel-body">
+                                    เวลาเรียน พ. 8.00 - 9.00 น.
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="">
+                        <a href="#">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">คณิตศาสตร์ ป.2</div>
+                                <div class="panel-body">
+                                    เวลาเรียน พ. 13.00 - 14.00 น.
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="">
+                        <a href="#">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">อังกฤษ ป.4</div>
+                                <div class="panel-body">
+                                    เวลาเรียน ศ. 13.00 - 14.00 น.
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="">
+                        <a href="#">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">สังคม ป.5</div>
+                                <div class="panel-body">
+                                    เวลาเรียน อ. 8.00 - 9.00 น.
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
