@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Teacher - Evaluation-5</title>
+    <title>Title</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -25,6 +25,9 @@
 
     <!-- Custom Fonts -->
     <link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom Style -->
+    <link href="../../../assets/css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

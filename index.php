@@ -1,5 +1,6 @@
 <?php 
     include_once(__DIR__."/lib/conn.php");
+    $error_login;
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         if($user->login($_POST["id"], $_POST["pass"])) {
             if($user->isLoggedin()) {
@@ -14,7 +15,7 @@
               }
             }
           }else{
-            $user->redirect("index.php");
+            $error_login = "ไอดีหรือรหัสผ่านไม่ถูกต้อง";
           }
     }
 ?>
@@ -28,12 +29,12 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="./favicon.ico">
+    <link rel="icon" href="./assets/favicon.ico">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="./css/bootstrap.min.css" />
-    <link rel="stylesheet" href="./css/font-awesome.min.css" />
-    <script src="./js/jquery-3.2.1.slim.min.js"></script>
-    <script src="./js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./assets/css/font-awesome.min.css" />
+    <script src="./assets/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
     <title>Login</title>
 </head>
 
@@ -42,7 +43,7 @@
     <div class="container" style="margin-top: 30vh;">
         <!-- login -->
         <div class="row">
-            <div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4	col-md-offset-4">
+            <div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                 <form class="form-signin" name="login" method="post">
                     <h2 class="form-signin-heading">Please Login</h2>
                     <label for="inputID" class="sr-only">ID</label>
@@ -53,6 +54,23 @@
                 </form>
             </div>
         </div>
+        <!-- / login -->
+
+        <?php
+        if(isset($error_login)) {
+            echo 
+            '<div class="row" style="padding-top: 10px;">
+                <div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                        <strong>'. $error_login .'</strong>
+                    </div>
+                </div>
+            </div>';
+        }
+        ?>
     </div>
 
 </body>

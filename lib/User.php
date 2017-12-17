@@ -15,6 +15,7 @@
           if($loginRow['user_status'] == 1) {
             $_SESSION['id'] = $loginRow['user_id'];
             if($loginRow['user_level'] == 127) {
+              $_SESSION['id'] = "admin";
               $_SESSION['permission'] = "admin";
               $_SESSION['firstname'] = "Admin";
               return true;
@@ -24,6 +25,7 @@
               $stmtT = $this->db->prepare("SELECT * FROM teacher WHERE user_id=:id");
               $stmtT->execute(array(':id'=>$id));
               $st = $stmtT->fetch(PDO::FETCH_ASSOC);
+              $_SESSION['id'] = $st["teacher_id"];
               $_SESSION['firstname'] = $st["teacher_firstname"];
               $_SESSION['lastname'] = $st["teacher_lastname"];
               return true;
@@ -33,6 +35,7 @@
               $stmtT = $this->db->prepare("SELECT * FROM student WHERE user_id=:id");
               $stmtT->execute(array(':id'=>$id));
               $st = $stmtT->fetch(PDO::FETCH_ASSOC);
+              $_SESSION['id'] = $st["student_id"];
               $_SESSION['firstname'] = $st["student_firstname"];
               $_SESSION['lastname'] = $st["student_lastname"];
               return true;
@@ -46,7 +49,7 @@
           return false;
         }
       } catch(PDOException $e) {
-        echo 'Error : ' . $e.getMessage();
+        echo '<script>console.log("' . $e.getMessage() . '")</script>';
       }
     }
 
