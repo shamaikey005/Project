@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 18, 2017 at 07:53 PM
+-- Generation Time: Dec 24, 2017 at 02:14 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -76,7 +76,9 @@ CREATE TABLE `schedule` (
 
 INSERT INTO `schedule` (`schedule_id`, `subjects_id`, `class_id`, `teacher_id`) VALUES
 (1, 'se01', 'c1-1', 't001'),
-(2, 'st04', 'c4-1', 't002');
+(2, 'st04', 'c4-1', 't002'),
+(3, 'sm01', 'c1-1', 't002'),
+(4, 'sm04', 'c4-1', 't001');
 
 -- --------------------------------------------------------
 
@@ -86,20 +88,25 @@ INSERT INTO `schedule` (`schedule_id`, `subjects_id`, `class_id`, `teacher_id`) 
 
 CREATE TABLE `schedule_detail` (
   `schedule_id` int(11) NOT NULL,
-  `shcedule_begin_time` time NOT NULL,
-  `shcedule_end_time` time NOT NULL,
-  `schedule_weekday` tinyint(4) NOT NULL DEFAULT '0'
+  `schedule_begin_time` time NOT NULL,
+  `schedule_end_time` time NOT NULL,
+  `schedule_weekday` tinyint(4) NOT NULL DEFAULT '0',
+  `schedule_term` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `schedule_detail`
 --
 
-INSERT INTO `schedule_detail` (`schedule_id`, `shcedule_begin_time`, `shcedule_end_time`, `schedule_weekday`) VALUES
-(1, '08:00:00', '10:00:00', 3),
-(1, '14:00:00', '15:00:00', 5),
-(2, '10:00:00', '12:00:00', 4),
-(2, '08:00:00', '09:00:00', 5);
+INSERT INTO `schedule_detail` (`schedule_id`, `schedule_begin_time`, `schedule_end_time`, `schedule_weekday`, `schedule_term`) VALUES
+(1, '08:00:00', '10:00:00', 3, 0),
+(1, '14:00:00', '15:00:00', 5, 0),
+(2, '10:00:00', '12:00:00', 4, 0),
+(2, '08:00:00', '09:00:00', 5, 0),
+(3, '08:00:00', '10:00:00', 2, 0),
+(3, '12:00:00', '14:00:00', 3, 0),
+(4, '14:00:00', '16:00:00', 1, 0),
+(4, '10:00:00', '12:00:00', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -108,11 +115,22 @@ INSERT INTO `schedule_detail` (`schedule_id`, `shcedule_begin_time`, `shcedule_e
 --
 
 CREATE TABLE `score` (
+  `score_id` int(11) NOT NULL,
   `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `subjects_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `schedule_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `score_score` tinyint(4) NOT NULL
+  `score_score` tinyint(4) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `score`
+--
+
+INSERT INTO `score` (`score_id`, `student_id`, `subjects_id`, `schedule_id`, `score_score`) VALUES
+(1, 's001', 'se01', '1', 0),
+(2, 's001', 'sm01', '3', 0),
+(5, 's002', 'st04', '2', 0),
+(6, 's002', 'sm04', '4', 0);
 
 -- --------------------------------------------------------
 
@@ -126,6 +144,44 @@ CREATE TABLE `score_detail` (
   `scored_point` tinyint(4) NOT NULL,
   `scored_max` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `score_detail`
+--
+
+INSERT INTO `score_detail` (`score_id`, `scored_part`, `scored_point`, `scored_max`) VALUES
+(1, 1, 0, 10),
+(1, 2, 0, 10),
+(1, 3, 0, 10),
+(1, 4, 0, 10),
+(1, 5, 0, 10),
+(1, 6, 0, 10),
+(1, 7, 0, 10),
+(1, 8, 0, 30),
+(2, 1, 0, 10),
+(2, 2, 0, 10),
+(2, 3, 0, 10),
+(2, 4, 0, 10),
+(2, 5, 0, 10),
+(2, 6, 0, 10),
+(2, 7, 0, 10),
+(2, 8, 0, 30),
+(5, 1, 0, 10),
+(5, 2, 0, 10),
+(5, 3, 0, 10),
+(5, 4, 0, 10),
+(5, 5, 0, 10),
+(5, 6, 0, 10),
+(5, 7, 0, 10),
+(5, 8, 0, 30),
+(6, 1, 0, 10),
+(6, 2, 0, 10),
+(6, 3, 0, 10),
+(6, 4, 0, 10),
+(6, 5, 0, 10),
+(6, 6, 0, 10),
+(6, 7, 0, 10),
+(6, 8, 0, 30);
 
 -- --------------------------------------------------------
 
@@ -151,7 +207,8 @@ CREATE TABLE `student` (
 
 INSERT INTO `student` (`student_id`, `student_firstname`, `student_lastname`, `student_birthday`, `student_sex`, `student_address`, `student_idcard`, `class_id`, `user_id`) VALUES
 ('s001', 'student', '01', NULL, 0, NULL, NULL, 'c1-1', 's001'),
-('s002', 'student', '02', NULL, 0, NULL, NULL, 'c4-1', 's002');
+('s002', 'student', '02', NULL, 0, NULL, NULL, 'c4-1', 's002'),
+('s003', 'student', '03', NULL, 0, NULL, NULL, 'c1-1', 's003');
 
 -- --------------------------------------------------------
 
@@ -173,6 +230,8 @@ CREATE TABLE `subjects` (
 
 INSERT INTO `subjects` (`subjects_id`, `subjects_name`, `subjects_type`, `subjects_credit`, `subjects_time`) VALUES
 ('se01', 'ภาษาอังกฤษ ป.1', 1, 3, 3),
+('sm01', 'คณิตศาสตร์ ป.1', 1, 3, 3),
+('sm04', 'คณิตศาสตร์ ป.4', 1, 4, 4),
 ('st04', 'ภาษาไทย ป.4', 1, 3, 3);
 
 -- --------------------------------------------------------
@@ -220,6 +279,7 @@ INSERT INTO `user` (`user_id`, `user_password`, `user_status`, `user_level`) VAL
 ('admin', '1234', 1, 127),
 ('s001', '1234', 1, 1),
 ('s002', '1234', 1, 1),
+('s003', '1234', 0, 1),
 ('t001', '1234', 1, 2),
 ('t002', '1234', 1, 2);
 
@@ -238,6 +298,12 @@ ALTER TABLE `class`
 --
 ALTER TABLE `schedule`
   ADD PRIMARY KEY (`schedule_id`);
+
+--
+-- Indexes for table `score`
+--
+ALTER TABLE `score`
+  ADD PRIMARY KEY (`score_id`);
 
 --
 -- Indexes for table `student`
@@ -271,7 +337,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `score`
+--
+ALTER TABLE `score`
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
