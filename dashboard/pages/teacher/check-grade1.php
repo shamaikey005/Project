@@ -1,7 +1,8 @@
-<?php include_once("../../../lib/conn.php") ?>
+<?php include_once(dirname(__DIR__, 3)."/lib/conn.php"); ?>
+<?php include_once(dirname(__DIR__, 3)."/lib/Func.php"); ?>
 <?php 
   ob_start();
-  include_once("../../../components/head.php");
+  include_once(dirname(__DIR__, 3)."/components/head.php");
   $buffer = ob_get_contents();
   ob_end_clean();
 

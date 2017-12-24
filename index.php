@@ -3,7 +3,7 @@
     $error_login;
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         if($user->login($_POST["id"], $_POST["pass"])) {
-            if($user->isLoggedin()) {
+            if($user->isLogin()) {
               if($user->isAdmin()) {
                 $user->redirect("./dashboard/pages/admin/");
               }
@@ -14,10 +14,9 @@
                 $user->redirect("./dashboard/pages/student/");
               }
             }
-          }else{
-            $error_login = "ไอดีหรือรหัสผ่านไม่ถูกต้อง";
-          }
+        }
     }
+    $error_login = $user->isError();
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,6 +71,28 @@
         }
         ?>
     </div>
+
+    <script>
+        // function showLocation(position) {
+        //     var latitude = position.coords.latitude;
+        //     var longitude = position.coords.longitude;
+        //     console.log(latitude + ' : ');
+        //     console.log(longitude);
+        // }
+
+        // function errorHandler(err) {
+        //     if (err.code == 1) {
+        //         console.log("Access is denied");
+        //     }
+        // }
+
+        // function getLocation() {
+        //     var geolocation = navigator.geolocation;
+        //     geolocation.getCurrentPosition(showLocation, errorHandler);
+        // }
+
+        // getLocation();
+    </script>
 
 </body>
 

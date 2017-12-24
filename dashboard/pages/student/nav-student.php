@@ -1,4 +1,9 @@
 <?php include_once('../../../lib/conn.php'); ?>
+<?php
+    if(!$user->isLogin() || !$user->isStudent()){
+        $user->redirect("../../../index.php");
+    }
+?>
 <?php 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         if($_POST["logout"] == true) {
@@ -22,12 +27,12 @@
             <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i> <?php echo $_SESSION["firstname"] . " " . $_SESSION["lastname"]; ?> <i class="fa fa-caret-down"></i>
+                        <i class="fa fa-user fa-fw" aria-hidden="true"></i> <?php echo $_SESSION["firstname"] . " " . $_SESSION["lastname"]; ?> <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="profile.php"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        <li><a href="profile.php"><i class="fa fa-user fa-fw" aria-hidden="true"></i> User Profile</a>
                         </li>
-                        <li><a href="settings.php"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        <li><a href="settings.php"><i class="fa fa-gear fa-fw" aria-hidden="true"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -45,16 +50,16 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> หน้าหลัก</a>
+                            <a href="index.php"><i class="fa fa-dashboard fa-fw" aria-hidden="true"></i> หน้าหลัก</a>
                         </li>
                         <li>
-                            <a href="school-record.php"><i class="fa fa-table fa-fw"></i> ผลการเรียน</a>
+                            <a href="school-record.php"><i class="fa fa-table fa-fw" aria-hidden="true"></i> ผลการเรียน</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-edit fa-fw"></i> ปพ.6</a>
+                            <a href="#"><i class="fa fa-edit fa-fw" aria-hidden="true"></i> ปพ.6</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-files-o fa-fw" aria-hidden="true"></i> Sample Pages<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="blank.html">Blank Page</a>

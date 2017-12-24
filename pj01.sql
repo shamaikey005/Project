@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 17, 2017 at 07:24 PM
+-- Generation Time: Dec 18, 2017 at 07:53 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -117,6 +117,19 @@ CREATE TABLE `score` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `score_detail`
+--
+
+CREATE TABLE `score_detail` (
+  `score_id` int(11) NOT NULL,
+  `scored_part` tinyint(4) NOT NULL,
+  `scored_point` tinyint(4) NOT NULL,
+  `scored_max` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `student`
 --
 
@@ -125,6 +138,7 @@ CREATE TABLE `student` (
   `student_firstname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `student_lastname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `student_birthday` date DEFAULT NULL,
+  `student_sex` tinyint(4) NOT NULL DEFAULT '0',
   `student_address` text COLLATE utf8_unicode_ci,
   `student_idcard` varchar(13) COLLATE utf8_unicode_ci DEFAULT NULL,
   `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
@@ -135,9 +149,9 @@ CREATE TABLE `student` (
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`student_id`, `student_firstname`, `student_lastname`, `student_birthday`, `student_address`, `student_idcard`, `class_id`, `user_id`) VALUES
-('s001', 'student', '01', NULL, NULL, NULL, 'c1-1', 's001'),
-('s002', 'student', '02', NULL, NULL, NULL, 'c4-1', 's002');
+INSERT INTO `student` (`student_id`, `student_firstname`, `student_lastname`, `student_birthday`, `student_sex`, `student_address`, `student_idcard`, `class_id`, `user_id`) VALUES
+('s001', 'student', '01', NULL, 0, NULL, NULL, 'c1-1', 's001'),
+('s002', 'student', '02', NULL, 0, NULL, NULL, 'c4-1', 's002');
 
 -- --------------------------------------------------------
 
