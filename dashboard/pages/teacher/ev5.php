@@ -2,14 +2,16 @@
 <?php include_once(dirname(__DIR__, 3)."/lib/Func.php"); ?>
 <?php
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if($_POST["send"] == 1) {
-      echo "hello";
+    if(isset($_POST["send"])) {
+      echo "<script>console.log('Hello');</script>";
     }
   }
 ?>
 <?php 
   $id = (int)$_GET['sc'];
-  $part = (int)$_GET['p']; 
+  if (isset($_GET['p'])) {
+    $part = (int)$_GET['p'];
+  } 
 
   $class = $conn->prepare("SELECT * FROM class AS c INNER JOIN schedule AS sc ON sc.class_id = c.class_id WHERE sc.schedule_id = :sc");
   $class->execute(array(':sc'=>$id));
@@ -43,31 +45,73 @@
                       <li><a href="Evaluation-5.php">ปพ.5</a></li>
                       <li class="active">ปพ.5 - จัดการ</li>
                     </ul>
-                    <p><?php echo 'ชั้น ป.' . $class_res["class_grade"] . ' ห้อง ' . $class_res["class_room"] . ($part < 8 ? '<br> ช่องที่ ' . $part : '<br> ปลายภาค'); ?></p>
+                    <p><?php echo 'ชั้น ป.' . $class_res["class_grade"] . ' ห้อง ' . $class_res["class_room"]; ?></p>
                     <form method="post">
-                      <table class="table table-hover">
+                    <?php 
+                    
+                    // echo'
+                    //   <table class="table table-hover">
+                    //     <tr>
+                    //       <th>เลขที่</th>
+                    //       <th>ชื่อ - นามสกุล</th>
+                    //       <th>คะแนน</th>
+                    //     </tr>';
+                        
+                    //       $stmt = $conn->prepare('SELECT * FROM `score_detail` AS sd
+                    //                               INNER JOIN `score` AS sc ON sc.score_id = sd.score_id
+                    //                               INNER JOIN `student` AS st ON st.student_id = sc.student_id
+                    //                               WHERE sc.schedule_id = :sc  AND sd.scored_part = :p
+                    //                             ');
+                    //       $stmt->execute(array(':sc'=>$id, ':p'=>$part));
+                    //       while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    //         echo '<tr>
+                    //                 <td><span class="form-control-static">'.$rows["student_id"].'</span></td>
+                    //                 <td><span class="form-control-static">'.$rows["student_firstname"]. ' ' . $rows["student_lastname"] .'</span></td>
+                    //                 <td><input class="form-control" type="number" min="0" max="'.$rows["scored_max"].'" value="'.$rows["scored_point"].'"></input></td>
+                    //               </tr>';
+                    //       }
+                    //   echo '  
+                    //   </table>
+                    //   <button class="btn btn-primary pull-right" type="submit" name="send" value="true">ยืนยัน</button>';
+                    ?>
+                    <?php 
+                      $stmt = $conn->prepare(
+                        "SELECT * FROM score AS s
+                         INNER JOIN student AS st ON s.student_id = st.student_id
+                         WHERE s.schedule_id = :sc
+                      ");
+                      $stmt->execute(array(":sc"=>$id));
+                      
+                      echo '<table class="table table-hover">
+                              <thead><tr>
+                                <th>เลขที่</th>
+                                <th>ชื่อ - นามสกุล</th>
+                                <th>ช่องที่ 1 (10)</th>
+                                <th>ช่องที่ 2 (10)</th>
+                                <th>ช่องที่ 3 (10)</th>
+                                <th>ช่องที่ 4 (10)</th>
+                                <th>ช่องที่ 5 (10)</th>
+                                <th>ช่องที่ 6 (10)</th>
+                                <th>ช่องที่ 7 (10)</th>
+                                <th>ปลายภาค (30)</th>
+                              </tr>
+                              </thead><tbody>
+                            ';
+                      while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $stmt2 = $conn->prepare("SELECT * FROM score_detail WHERE score_id = :score_id");
+                        $stmt2->execute(array("score_id"=>$rows["score_id"]));
+                        echo '
                         <tr>
-                          <th>เลขที่</th>
-                          <th>ชื่อ - นามสกุล</th>
-                          <th>คะแนน</th>
-                        </tr>
-                        <?php 
-                          $stmt = $conn->prepare('SELECT * FROM `score_detail` AS sd
-                                                  INNER JOIN `score` AS sc ON sc.score_id = sd.score_id
-                                                  INNER JOIN `student` AS st ON st.student_id = sc.student_id
-                                                  WHERE sc.schedule_id = :sc  AND sd.scored_part = :p
-                                                ');
-                          $stmt->execute(array(':sc'=>$id, ':p'=>$part));
-                          while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo '<tr>
-                                    <td><span class="form-control-static">'.$rows["student_id"].'</span></td>
-                                    <td><span class="form-control-static">'.$rows["student_firstname"]. ' ' . $rows["student_lastname"] .'</span></td>
-                                    <td><input class="form-control" type="number" min="0" max="'.$rows["scored_max"].'" value="'.$rows["scored_point"].'"></input></td>
-                                  </tr>';
+                          <td><p class="form-control-static">'.$rows["student_id"].'</p></td>
+                          <td><p class="form-control-static">'.$rows["student_firstname"]. ' '. $rows["student_lastname"] .'</p></td>';
+                          while ($rows2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                            echo '<td><input class="form-control" type="number" max="'.$rows2["scored_max"].'" min="0" name="" value="'.$rows2["scored_point"].'"></td>';
                           }
-                        ?>
-                      </table>
-                      <button class="btn btn-primary pull-right" type="submit" name="confirm" value="1">ยืนยัน</button>
+                        echo '</tr>';
+                      }
+                      echo '</tbody></table>';
+                    ?>
+                    <button class="btn btn-primary btn-block center-block" type="submit" name="send" value="true">ยืนยัน</button>
                     </form>
                 <!-- /.col-lg-12 -->
             </div>

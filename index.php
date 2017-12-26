@@ -31,7 +31,7 @@
     <link rel="icon" href="./assets/favicon.ico">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="./assets/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="./assets/css/fontawesome-all.min.css" />
     <script src="./assets/js/jquery-3.2.1.slim.min.js"></script>
     <script src="./assets/js/bootstrap.min.js"></script>
     <title>Login</title>
@@ -45,11 +45,19 @@
             <div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                 <form class="form-signin" name="login" method="post">
                     <h2 class="form-signin-heading">Please Login</h2>
-                    <label for="inputID" class="sr-only">ID</label>
-                    <input type="text" name="id" id="inputID" class="form-control" placeholder="ID" required autofocus>
-                    <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" name="pass" id="inputPassword" class="form-control" placeholder="Password" required>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                    <div class="form-group <?php echo (isset($error_login)) ? "has-error" : "" ?>">
+                        <label for="inputID" class="sr-only">ID</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="fas fa-id-card fa-fw fa-lg" aria-hidden></i></div>
+                            <input type="text" name="id" id="inputID" class="form-control" placeholder="ID" required autofocus>
+                        </div>
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="fas fa-key fa-fw fa-lg" aria-hidden></i></div>
+                            <input type="password" name="pass" id="inputPassword" class="form-control" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit"><i class="fas fa-sign-in-alt fa-fw" aria-hidden></i> Login</button>
                 </form>
             </div>
         </div>
@@ -62,9 +70,9 @@
                 <div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <i class="fas fa-times fa-xs" aria-hidden="true"></i>
                         </button>
-                        <strong>'. $error_login .'</strong>
+                        <strong><i class="fas fa-exclamation-circle fa-fw fa-lg" aria-hidden></i> '. $error_login .'</strong>
                     </div>
                 </div>
             </div>';

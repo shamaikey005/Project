@@ -24,7 +24,7 @@
     <link href="../../vendor/morrisjs/morris.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../assets/css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
 
     <!-- Custom Style -->
     <link href="../../../assets/css/style.css" rel="stylesheet">

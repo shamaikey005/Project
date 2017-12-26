@@ -33,43 +33,62 @@
                                                 "
                                             );
                         $stmt->execute(array(':teacher_id'=>$_SESSION['id']));
-                        while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            $weekday = $conn->prepare("SELECT * FROM schedule_detail WHERE schedule_id = :id");
-                            $weekday->execute(array(':id'=>$rows['schedule_id']));
-                            $part = $conn->prepare("SELECT * FROM score AS s
-                                                    INNER JOIN score_detail AS sd ON sd.score_id = s.score_id 
-                                                    WHERE s.schedule_id = :scid
-                                                    ");
-                            $part->execute(array(':scid'=>$rows['schedule_id']));
+                        // while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        //     $weekday = $conn->prepare("SELECT * FROM schedule_detail WHERE schedule_id = :id");
+                        //     $weekday->execute(array(':id'=>$rows['schedule_id']));
+                        //     $part = $conn->prepare("SELECT * FROM score AS s
+                        //                             INNER JOIN score_detail AS sd ON sd.score_id = s.score_id 
+                        //                             WHERE s.schedule_id = :scid
+                        //                             ");
+                        //     $part->execute(array(':scid'=>$rows['schedule_id']));
                             
-                            echo '
-                                <div class="">
+                        //     echo '
+                        //         <div class="">
                                     
-                                        <div class="panel panel-info">
-                                            <div class="panel-heading">'. $rows['subjects_name'] . ' <br>ชั้น ป.' . $rows["class_grade"] . ' ห้อง ' . $rows["class_room"] . '<br>'; 
-                                            while ($weekday_rows = $weekday->fetch(PDO::FETCH_ASSOC)) {
-                                                echo ' ' . $func->weekday($weekday_rows['schedule_weekday']) . ' ' . $weekday_rows['schedule_begin_time'] . ' - ' . $weekday_rows['schedule_end_time'] . '<br>';
-                                            }
-                                            '</div>
-                                            <div class="list-group">'; 
+                        //                 <div class="panel panel-info">
+                        //                     <div class="panel-heading">'. $rows['subjects_name'] . ' <br>ชั้น ป.' . $rows["class_grade"] . ' ห้อง ' . $rows["class_room"] . '<br>'; 
+                        //                     while ($weekday_rows = $weekday->fetch(PDO::FETCH_ASSOC)) {
+                        //                         echo ' ' . $func->weekday($weekday_rows['schedule_weekday']) . ' ' . $weekday_rows['schedule_begin_time'] . ' - ' . $weekday_rows['schedule_end_time'] . '<br>';
+                        //                     }
+                        //                     '</div>
+                        //                     <div class="list-group">'; 
                                    
-                                            while ($part_rows = $part->fetch(PDO::FETCH_ASSOC)) {
-                                                // if ($part_rows["scored_part"] < 8) {
-                                                //     echo '<a href="ev5.php?sc=' . $part_rows["schedule_id"] .'&p='.$part_rows["scored_part"].'" class="list-group-item">คะแนนช่องที่ '.$part_rows["scored_part"].' ( '.$part_rows["scored_max"].' คะแนน )<i class="pull-right fa fa-chevron-right"></i></a>';
-                                                // } else {
-                                                //     echo '<a href="ev5.php?sc=' . $part_rows["schedule_id"] .'&p='.$part_rows["scored_part"].'" class="list-group-item">คะแนนปลายภาค ( '.$part_rows["scored_max"].' คะแนน )<i class="pull-right fa fa-chevron-right"></i></a>';
-                                                // }
+                        //                     while ($part_rows = $part->fetch(PDO::FETCH_ASSOC)) {
+                        //                         // if ($part_rows["scored_part"] < 8) {
+                        //                         //     echo '<a href="ev5.php?sc=' . $part_rows["schedule_id"] .'&p='.$part_rows["scored_part"].'" class="list-group-item">คะแนนช่องที่ '.$part_rows["scored_part"].' ( '.$part_rows["scored_max"].' คะแนน )<i class="pull-right fa fa-chevron-right"></i></a>';
+                        //                         // } else {
+                        //                         //     echo '<a href="ev5.php?sc=' . $part_rows["schedule_id"] .'&p='.$part_rows["scored_part"].'" class="list-group-item">คะแนนปลายภาค ( '.$part_rows["scored_max"].' คะแนน )<i class="pull-right fa fa-chevron-right"></i></a>';
+                        //                         // }
 
-                                                // shorthand
-                                                echo '<a href="ev5.php?sc=' . $part_rows["schedule_id"] .'&p='.$part_rows["scored_part"].'" class="list-group-item">'.($part_rows["scored_part"] < 8 ? 'คะแนนช่องที่ '.$part_rows["scored_part"] : 'คะแนนปลายภาค').' ( '.$part_rows["scored_max"].' คะแนน )<i class="pull-right fa fa-chevron-right"></i></a>';
-                                            } 
-                                            echo '
-                                            </div>
-                                        </div>
+                        //                         // shorthand
+                        //                         echo '<a href="ev5.php?sc=' . $part_rows["schedule_id"] .'&p='.$part_rows["scored_part"].'" class="list-group-item">'.($part_rows["scored_part"] < 8 ? 'คะแนนช่องที่ '.$part_rows["scored_part"] : 'คะแนนปลายภาค').' ( '.$part_rows["scored_max"].' คะแนน )<i class="pull-right fa fa-chevron-right"></i></a>';
+                        //                     } 
+                        //                     echo '
+                        //                     </div>
+                        //                 </div>
                                    
-                                </div>
-                            ';
+                        //         </div>
+                        //     ';
+                        // }
+                    ?>
+                    <?php 
+                        
+                        while ($rows2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            echo '
+                            <div>
+                                <a href="ev5.php?sc='.$rows2["schedule_id"].'">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading"> 
+                                            Subject    
+                                        </div>
+                                        <div class="panel-body">'.
+                                            $rows2['subjects_name'] . ' <br>ชั้น ป.' . $rows2["class_grade"] . ' ห้อง ' . $rows2["class_room"] . '
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>';
                         }
+
                     ?>
                     
                 <!-- /.col-lg-12 -->

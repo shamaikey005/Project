@@ -27,16 +27,16 @@
             <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw" aria-hidden="true"></i> <?php echo $_SESSION["firstname"] . " " . $_SESSION["lastname"]; ?> <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        <i class="fas fa-user fa-fw" aria-hidden="true"></i> <?php echo $_SESSION["firstname"] . " " . $_SESSION["lastname"]; ?> <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="profile.php"><i class="fa fa-user fa-fw" aria-hidden="true"></i> User Profile</a>
+                        <li><a href="profile.php"><i class="fas fa-user fa-fw" aria-hidden="true"></i> User Profile</a>
                         </li>
-                        <li><a href="settings.php"><i class="fa fa-gear fa-fw" aria-hidden="true"></i> Settings</a>
+                        <li><a href="settings.php"><i class="fas fa-cog fa-fw" aria-hidden="true"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#" onclick="document.getElementById('logout').submit();"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            <a href="#" onclick="document.getElementById('logout').submit();"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
                             <form method="post" id="logout"><input type="hidden" name="logout" value="true"></form>
                         </li>
                     </ul>
@@ -50,13 +50,13 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="index.php"><i class="fa fa-dashboard fa-fw" aria-hidden="true"></i> หน้าหลัก</a>
+                            <a href="index.php"><i class="fas fa-home fa-fw" aria-hidden="true"></i> หน้าหลัก</a>
                         </li>
                         <li>
                             <a href="school-record.php"><i class="fa fa-table fa-fw" aria-hidden="true"></i> ผลการเรียน</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-edit fa-fw" aria-hidden="true"></i> ปพ.6</a>
+                            <a href="#"><i class="fas fa-edit fa-fw" aria-hidden="true"></i> ปพ.6</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-files-o fa-fw" aria-hidden="true"></i> Sample Pages<span class="fa arrow"></span></a>
