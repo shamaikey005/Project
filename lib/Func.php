@@ -61,7 +61,7 @@ class Func {
         break;
       
       case 1:
-        $panel = "info";
+        $panel = "primary";
         break;
 
       case 2:
