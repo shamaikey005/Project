@@ -77,9 +77,9 @@
                             echo '
                             <div>
                                 <a href="ev5.php?sc='.$rows2["schedule_id"].'">
-                                    <div class="panel panel-info">
+                                    <div class="panel panel-'.$func->scheduleStatusPanel($rows2["status"]).'">
                                         <div class="panel-heading"> 
-                                            Subject    
+                                            เทอม '.$rows2["term"].' - ปีการศึกษา '.($rows2["year"]+543).'  
                                         </div>
                                         <div class="panel-body">'.
                                             $rows2['subjects_name'] . ' <br>ชั้น ป.' . $rows2["class_grade"] . ' ห้อง ' . $rows2["class_room"] . '

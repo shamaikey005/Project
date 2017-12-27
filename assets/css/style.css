@@ -1,3 +1,16 @@
-.dropdown:hover .dropdown-menu {
+.dropdown .dropdown-menu {
+    transition: all 0.2s ease-in-out 0s;
+    transform: translateY(-1.25em);
+    opacity: 0;
+    visibility: hidden;
     display: block;
+    overflow: hidden;
+}
+
+.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    display: block;
+    visibility: visible;
+    transform: translateY(0%);
+    transition-delay: 0s, 0s, 0.3s;
 }

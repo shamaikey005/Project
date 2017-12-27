@@ -2,7 +2,7 @@
 
 class Func {
 
-  public function weekday($day) {
+  public function weekday($day) : string {
     switch ($day) {
       case 1:
         return 'วันจันทร์';
@@ -30,7 +30,51 @@ class Func {
     }
   }
 
-  
+  public function scheduleStatusText($status) : string {
+    $res;
+    switch ($status) {
+      case 0:
+        $res = "ยังไม่เปิดสอน";
+        break;
+      
+      case 1:
+        $res = "เปิดสอนตามปกติ";
+        break;
+
+      case 2:
+        $res = "ประเมินผลการเรียน";
+        break;
+
+      case 3:
+        $res = "จบการสอน";
+        break;
+    }
+
+    return $res;
+  }
+
+  public function scheduleStatusPanel($status) : string {
+    $panel;
+    switch ($status) {
+      case 0:
+        $panel = "danger";
+        break;
+      
+      case 1:
+        $panel = "info";
+        break;
+
+      case 2:
+        $panel = "warning";
+        break;
+
+      case 3:
+        $panel = "success";
+        break;
+    }
+
+    return $panel;
+  }
 
 }
 
