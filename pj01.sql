@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 24, 2017 at 02:14 PM
+-- Generation Time: Dec 28, 2017 at 11:03 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -51,11 +51,24 @@ INSERT INTO `class` (`class_id`, `class_name`, `class_grade`, `class_room`, `tea
 --
 
 CREATE TABLE `period` (
-  `student_id` int(11) NOT NULL,
+  `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `subjects_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `schedule_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `period_count` tinyint(4) NOT NULL
+  `period_count` tinyint(4) NOT NULL DEFAULT '0',
+  `period_max` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `period`
+--
+
+INSERT INTO `period` (`student_id`, `subjects_id`, `schedule_id`, `period_count`, `period_max`) VALUES
+('s001', 'se01', '1', 78, 80),
+('s001', 'sm01', '3', 0, 80),
+('s003', 'se01', '1', 70, 80),
+('s003', 'sm01', '3', 0, 80),
+('s002', 'sm04', '4', 2, 80),
+('s002', 'st04', '2', 0, 80);
 
 -- --------------------------------------------------------
 
@@ -67,18 +80,21 @@ CREATE TABLE `schedule` (
   `schedule_id` int(11) NOT NULL,
   `subjects_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `teacher_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+  `teacher_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `year` year(4) NOT NULL,
+  `term` tinyint(4) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `schedule`
 --
 
-INSERT INTO `schedule` (`schedule_id`, `subjects_id`, `class_id`, `teacher_id`) VALUES
-(1, 'se01', 'c1-1', 't001'),
-(2, 'st04', 'c4-1', 't002'),
-(3, 'sm01', 'c1-1', 't002'),
-(4, 'sm04', 'c4-1', 't001');
+INSERT INTO `schedule` (`schedule_id`, `subjects_id`, `class_id`, `teacher_id`, `year`, `term`, `status`) VALUES
+(1, 'se01', 'c1-1', 't001', 2017, 1, 1),
+(2, 'st04', 'c4-1', 't002', 2017, 1, 1),
+(3, 'sm01', 'c1-1', 't002', 2017, 1, 1),
+(4, 'sm04', 'c4-1', 't001', 2017, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -150,14 +166,14 @@ CREATE TABLE `score_detail` (
 --
 
 INSERT INTO `score_detail` (`score_id`, `scored_part`, `scored_point`, `scored_max`) VALUES
-(1, 1, 0, 10),
-(1, 2, 0, 10),
-(1, 3, 0, 10),
-(1, 4, 0, 10),
-(1, 5, 0, 10),
-(1, 6, 0, 10),
-(1, 7, 0, 10),
-(1, 8, 0, 30),
+(1, 1, 4, 10),
+(1, 2, 2, 10),
+(1, 3, 3, 10),
+(1, 4, 4, 10),
+(1, 5, 5, 10),
+(1, 6, 6, 10),
+(1, 7, 7, 10),
+(1, 8, 8, 30),
 (2, 1, 0, 10),
 (2, 2, 0, 10),
 (2, 3, 0, 10),
@@ -166,16 +182,16 @@ INSERT INTO `score_detail` (`score_id`, `scored_part`, `scored_point`, `scored_m
 (2, 6, 0, 10),
 (2, 7, 0, 10),
 (2, 8, 0, 30),
-(5, 1, 0, 10),
-(5, 2, 0, 10),
-(5, 3, 0, 10),
+(5, 1, 3, 10),
+(5, 2, 2, 10),
+(5, 3, 1, 10),
 (5, 4, 0, 10),
 (5, 5, 0, 10),
 (5, 6, 0, 10),
 (5, 7, 0, 10),
 (5, 8, 0, 30),
-(6, 1, 0, 10),
-(6, 2, 0, 10),
+(6, 1, 1, 10),
+(6, 2, 1, 10),
 (6, 3, 0, 10),
 (6, 4, 0, 10),
 (6, 5, 0, 10),
