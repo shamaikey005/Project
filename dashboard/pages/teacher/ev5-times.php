@@ -5,10 +5,16 @@
     if(isset($_POST["send"])) {
       try {
 
-
+        $scid = $_POST["scid"];
+        $conn->beginTransaction();
+        foreach (array_combine($_POST["sid"], $_POST["st"]) as $sid => $st) {
+          $conn->exec("UPDATE `period` SET period_count = $st WHERE student_id = '$sid' AND schedule_id = $scid");
+        }
+        $conn->commit();
 
       } catch(PDOException $e) {
 
+        $conn->rollback();
         echo "Error : Can't update score!" . $e->getMessage();
 
       }
@@ -71,9 +77,10 @@
                         $stmt->execute(array(':scid'=>$id));
                         while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
                           echo '<tr>
-                                  <td>'.$rows["student_id"].'</td>
+                                  <td><input type="hidden" name="sid[]" value="'.$rows["student_id"].'">'.$rows["student_id"].'</td>
                                   <td>'.$rows["student_firstname"].' '.$rows["student_lastname"].'</td>
                                   <td><input class="form-control" type="number" name="st[]" min="0" max="'.$rows["period_max"].'" value="'.$rows["period_count"].'"></td>
+                                  <input type="hidden" name="scid" value="'.$id.'">
                                 </tr>';   
                         }
                       ?>  

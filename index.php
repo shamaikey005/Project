@@ -32,6 +32,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./assets/css/fontawesome-all.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Kanit|Prompt|Roboto" rel="stylesheet">
+    <style>
+    html, body { 
+        font-family: 'supermarket', Helvetica, sans-serif;
+    }
+    </style>
     <script src="./assets/js/jquery-3.2.1.slim.min.js"></script>
     <script src="./assets/js/bootstrap.min.js"></script>
     <title>Login</title>
