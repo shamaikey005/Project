@@ -48,19 +48,19 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="index.php"><i class="fas fa-bars fa-fw" aria-hidden="true"></i> หน้าหลัก</a>
+                            <a href="index.php"><i class="fas fa-home fa-fw" aria-hidden="true"></i> หน้าหลัก</a>
                         </li>
                         <li>
-                            <a href="manage-user.php"><i class="fas fa-handshake-o fa-fw" aria-hidden="true"></i> จัดการผู้ใช้งาน</a>
+                            <a href="manage-user.php"><i class="far fa-edit fa-fw" aria-hidden="true"></i> จัดการผู้ใช้งาน</a>
                         </li>
                         <li>
-                            <a href="manage-subjects.php"><i class="fas fa-graduation-cap fa-fw" aria-hidden="true"></i> จัดการวิชาและครูผู้สอน</a>
+                            <a href="manage-subjects.php"><i class="far fa-edit fa-fw" aria-hidden="true"></i> จัดการวิชาและครูผู้สอน</a>
                         </li>
                         <li>
-                            <a href="check-status.php"><i class="fas fa-check-square-o fa-fw" aria-hidden="true"></i> ตรวจสอบสถานะการส่งเกรด</a>
+                            <a href="check-status.php"><i class="far fa-check-square fa-fw" aria-hidden="true"></i> ตรวจสอบสถานะการส่งเกรด</a>
                         </li>
                         <li>
-                            <a href="check-grade.php"><i class="fas fa-graduation-cap fa-fw" aria-hidden="true"></i> เกรดรวม</a>
+                            <a href="check-grade.php"><i class="far fa-check-square fa-fw" aria-hidden="true"></i> เกรดรวม</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-files-o fa-fw" aria-hidden="true"></i> Sample Pages<span class="fa arrow"></span></a>

@@ -26,6 +26,10 @@
     <!-- Custom Fonts -->
     <link href="../../../assets/css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
 
+    <!-- Data Tables -->
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+
     <!-- Custom Style -->
     <link href="../../../assets/css/style.css" rel="stylesheet">
 

@@ -1,7 +1,5 @@
 html,
-body {
-    font-family: 'supermarket', Helvetica, sans-serif;
-}
+body {}
 
 .dropdown .dropdown-menu {
     transition: all 0.2s ease-in-out 0s;
