@@ -109,6 +109,10 @@
       }
     }
 
+    public function isAvailable($status) {
+      return ($status == 1) ? '<i class="fas fa-check-circle fa-sm" style="color:green;"></i> เปิด' : '<i class="fas fa-times-circle fa-sm" style="color:#d93e3e;"></i> ปิด' ;
+    }
+
     public function redirect($url) {
       header("Location: $url");
     }
