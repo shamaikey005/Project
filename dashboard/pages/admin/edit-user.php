@@ -28,8 +28,8 @@
           $cls = $_POST["class"];
           $num = $_POST["num"];
           $birth = $_POST["birth"];
-          $sex = $_POST["sex"];
-          $address = $_POST["address"];
+          $sex = isset($_POST["sex"]) ? $_POST["sex"] : 0 ;
+          $address = isset($_POST["address"]) ? $_POST["address"] : '';
           $pid = $_POST["pid"];
           $conn->exec("UPDATE `student` SET 
                       `student_id` = '$sid',
@@ -172,8 +172,8 @@
                     <div class="form-group">
                         <label for="c08" class="col-xs-3 control-label">เพศ</label>
                         <div class="col-xs-9">
-                            <label class="radio-inline"><input type="radio" name="sex" id="sex_male" value="1" '.(($rows["student_sex"] == 1) ? 'checked="checked"' : "").'>ชาย</label>
-                            <label class="radio-inline"><input type="radio" name="sex" id="sex_female" value="2" '.(($rows["student_sex"] == 2) ? 'checked="checked"' : "").'>หญิง</label>
+                            <label class="radio-inline"><input type="radio" name="sex" id="sex_male" value="1" '.(($rows["student_sex"] == 1) ? 'checked' : "").'>ชาย</label>
+                            <label class="radio-inline"><input type="radio" name="sex" id="sex_female" value="2" '.(($rows["student_sex"] == 2) ? 'checked' : "").'>หญิง</label>
                         </div>
                     </div>
                     <div class="form-group">
