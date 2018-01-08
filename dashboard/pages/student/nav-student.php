@@ -6,7 +6,7 @@
 ?>
 <?php 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
-        if($_POST["logout"] == true) {
+        if(isset($_POST["logout"])) {
             $user->logout();
             $user->redirect("../../../index.php");
         }

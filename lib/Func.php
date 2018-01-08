@@ -76,6 +76,40 @@ class Func {
     return $panel;
   }
 
+  public function checkSex($data) {
+    $sex;
+    switch ($data) {
+      case 0:
+       $sex = "ไม่ระบุ";
+       break;
+
+      case 1:
+       $sex = "ชาย";
+       break;
+
+      case 2:
+       $sex = "หญิง";
+       break;
+    }
+
+    return $sex;
+  }
+
+  public function checkStatusUser($data) {
+    $status;
+    switch ($data) {
+      case 0:
+        $status = "ปิด";
+        break;
+
+      case 1:
+        $status = "เปิด";
+        break;
+    }
+
+    return $status;
+  }
+
 }
 
 ?>

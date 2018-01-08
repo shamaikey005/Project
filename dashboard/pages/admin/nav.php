@@ -6,7 +6,7 @@
 ?>
 <?php 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
-        if($_POST["logout"] == true) {
+        if(isset($_POST["logout"])) {
             $user->logout();
             $user->redirect("../../../index.php");
         }
@@ -54,25 +54,13 @@
                             <a href="manage-user.php"><i class="far fa-edit fa-fw" aria-hidden="true"></i> จัดการผู้ใช้งาน</a>
                         </li>
                         <li>
-                            <a href="manage-subjects.php"><i class="far fa-edit fa-fw" aria-hidden="true"></i> จัดการวิชาและครูผู้สอน</a>
+                            <a href="manage-gen.php"><i class="far fa-edit fa-fw" aria-hidden="true"></i> จัดการข้อมูลพื้นฐาน</a>
                         </li>
                         <li>
                             <a href="check-status.php"><i class="far fa-check-square fa-fw" aria-hidden="true"></i> ตรวจสอบสถานะการส่งเกรด</a>
                         </li>
                         <li>
                             <a href="check-grade.php"><i class="far fa-check-square fa-fw" aria-hidden="true"></i> เกรดรวม</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw" aria-hidden="true"></i> Sample Pages<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="blank.html">Blank Page</a>
-                                </li>
-                                <li>
-                                    <a href="login.html">Login Page</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
                         </li>
                     </ul>
                 </div>

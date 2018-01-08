@@ -23,6 +23,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">ปพ.6</h1>
+                    <a href="ev6-print.php">ev6</a>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
