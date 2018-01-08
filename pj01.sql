@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 28, 2017 at 11:03 AM
+-- Generation Time: Jan 08, 2018 at 08:23 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -33,7 +33,7 @@ CREATE TABLE `class` (
   `class_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `class_grade` tinyint(4) NOT NULL,
   `class_room` tinyint(4) NOT NULL,
-  `teacher_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+  `teacher_id` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -42,7 +42,11 @@ CREATE TABLE `class` (
 
 INSERT INTO `class` (`class_id`, `class_name`, `class_grade`, `class_room`, `teacher_id`) VALUES
 ('c1-1', NULL, 1, 1, 't001'),
-('c4-1', NULL, 4, 1, 't002');
+('c2-1', '', 2, 1, ''),
+('c3-1', '', 3, 1, ''),
+('c4-1', NULL, 4, 1, 't002'),
+('c5-1', '', 5, 1, ''),
+('c6-1', '', 6, 1, '');
 
 -- --------------------------------------------------------
 
@@ -65,8 +69,6 @@ CREATE TABLE `period` (
 INSERT INTO `period` (`student_id`, `subjects_id`, `schedule_id`, `period_count`, `period_max`) VALUES
 ('s001', 'se01', '1', 78, 80),
 ('s001', 'sm01', '3', 0, 80),
-('s003', 'se01', '1', 70, 80),
-('s003', 'sm01', '3', 0, 80),
 ('s002', 'sm04', '4', 2, 80),
 ('s002', 'st04', '2', 0, 80);
 
@@ -156,8 +158,9 @@ INSERT INTO `score` (`score_id`, `student_id`, `subjects_id`, `schedule_id`, `sc
 
 CREATE TABLE `score_detail` (
   `score_id` int(11) NOT NULL,
+  `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `scored_part` tinyint(4) NOT NULL,
-  `scored_point` tinyint(4) NOT NULL,
+  `scored_point` tinyint(4) NOT NULL DEFAULT '0',
   `scored_max` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -165,39 +168,39 @@ CREATE TABLE `score_detail` (
 -- Dumping data for table `score_detail`
 --
 
-INSERT INTO `score_detail` (`score_id`, `scored_part`, `scored_point`, `scored_max`) VALUES
-(1, 1, 4, 10),
-(1, 2, 2, 10),
-(1, 3, 3, 10),
-(1, 4, 4, 10),
-(1, 5, 5, 10),
-(1, 6, 6, 10),
-(1, 7, 7, 10),
-(1, 8, 8, 30),
-(2, 1, 0, 10),
-(2, 2, 0, 10),
-(2, 3, 0, 10),
-(2, 4, 0, 10),
-(2, 5, 0, 10),
-(2, 6, 0, 10),
-(2, 7, 0, 10),
-(2, 8, 0, 30),
-(5, 1, 3, 10),
-(5, 2, 2, 10),
-(5, 3, 1, 10),
-(5, 4, 0, 10),
-(5, 5, 0, 10),
-(5, 6, 0, 10),
-(5, 7, 0, 10),
-(5, 8, 0, 30),
-(6, 1, 1, 10),
-(6, 2, 1, 10),
-(6, 3, 0, 10),
-(6, 4, 0, 10),
-(6, 5, 0, 10),
-(6, 6, 0, 10),
-(6, 7, 0, 10),
-(6, 8, 0, 30);
+INSERT INTO `score_detail` (`score_id`, `student_id`, `scored_part`, `scored_point`, `scored_max`) VALUES
+(1, 's001', 1, 4, 10),
+(1, 's001', 2, 2, 10),
+(1, 's001', 3, 3, 10),
+(1, 's001', 4, 4, 10),
+(1, 's001', 5, 5, 10),
+(1, 's001', 6, 6, 10),
+(1, 's001', 7, 7, 10),
+(1, 's001', 8, 8, 30),
+(2, 's001', 1, 0, 10),
+(2, 's001', 2, 0, 10),
+(2, 's001', 3, 0, 10),
+(2, 's001', 4, 0, 10),
+(2, 's001', 5, 0, 10),
+(2, 's001', 6, 0, 10),
+(2, 's001', 7, 0, 10),
+(2, 's001', 8, 0, 30),
+(5, 's002', 1, 3, 10),
+(5, 's002', 2, 2, 10),
+(5, 's002', 3, 1, 10),
+(5, 's002', 4, 0, 10),
+(5, 's002', 5, 0, 10),
+(5, 's002', 6, 0, 10),
+(5, 's002', 7, 0, 10),
+(5, 's002', 8, 0, 30),
+(6, 's002', 1, 1, 10),
+(6, 's002', 2, 1, 10),
+(6, 's002', 3, 0, 10),
+(6, 's002', 4, 0, 10),
+(6, 's002', 5, 0, 10),
+(6, 's002', 6, 0, 10),
+(6, 's002', 7, 0, 10),
+(6, 's002', 8, 0, 30);
 
 -- --------------------------------------------------------
 
@@ -209,10 +212,11 @@ CREATE TABLE `student` (
   `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `student_firstname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `student_lastname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `student_num` tinyint(4) NOT NULL DEFAULT '0',
   `student_birthday` date DEFAULT NULL,
   `student_sex` tinyint(4) NOT NULL DEFAULT '0',
   `student_address` text COLLATE utf8_unicode_ci,
-  `student_idcard` varchar(13) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `student_idcard` varchar(17) COLLATE utf8_unicode_ci DEFAULT NULL,
   `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `user_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -221,10 +225,9 @@ CREATE TABLE `student` (
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`student_id`, `student_firstname`, `student_lastname`, `student_birthday`, `student_sex`, `student_address`, `student_idcard`, `class_id`, `user_id`) VALUES
-('s001', 'student', '01', NULL, 0, NULL, NULL, 'c1-1', 's001'),
-('s002', 'student', '02', NULL, 0, NULL, NULL, 'c4-1', 's002'),
-('s003', 'student', '03', NULL, 0, NULL, NULL, 'c1-1', 's003');
+INSERT INTO `student` (`student_id`, `student_firstname`, `student_lastname`, `student_num`, `student_birthday`, `student_sex`, `student_address`, `student_idcard`, `class_id`, `user_id`) VALUES
+('s001', 'student', '01', 1, '2011-05-06', 2, '123 hello', '5-1616-16491-65-2', 'c1-1', 's001'),
+('s002', 'student', '02', 1, NULL, 1, '', '', 'c4-1', 's002');
 
 -- --------------------------------------------------------
 
@@ -262,7 +265,7 @@ CREATE TABLE `teacher` (
   `teacher_lastname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `teacher_birthday` date DEFAULT NULL,
   `teacher_address` text COLLATE utf8_unicode_ci,
-  `teacher_tel` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `teacher_tel` varchar(12) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -271,7 +274,7 @@ CREATE TABLE `teacher` (
 --
 
 INSERT INTO `teacher` (`teacher_id`, `teacher_firstname`, `teacher_lastname`, `teacher_birthday`, `teacher_address`, `teacher_tel`, `user_id`) VALUES
-('t001', 'teacher', '01', NULL, NULL, NULL, 't001'),
+('t001', 'teacher', '01', '1968-01-04', '564', '058-554-5464', 't001'),
 ('t002', 'teacher', '02', NULL, NULL, NULL, 't002');
 
 -- --------------------------------------------------------
@@ -295,7 +298,6 @@ INSERT INTO `user` (`user_id`, `user_password`, `user_status`, `user_level`) VAL
 ('admin', '1234', 1, 127),
 ('s001', '1234', 1, 1),
 ('s002', '1234', 1, 1),
-('s003', '1234', 0, 1),
 ('t001', '1234', 1, 2),
 ('t002', '1234', 1, 2);
 
