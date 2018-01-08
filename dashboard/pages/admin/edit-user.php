@@ -20,54 +20,54 @@
 
         $conn->beginTransaction();
         if ( $level == 1 ) {
-          $sid = $_POST["sid"];
-          $userid = $_POST["uid"];
-          $pass = $_POST["password"];
-          $firstname = $_POST["firstname"];
-          $lastname = $_POST["lastname"];
-          $cls = $_POST["class"];
-          $num = $_POST["num"];
-          $birth = $_POST["birth"];
-          $sex = isset($_POST["sex"]) ? $_POST["sex"] : 0 ;
-          $address = isset($_POST["address"]) ? $_POST["address"] : '';
-          $pid = $_POST["pid"];
+          // $sid = $_POST["sid"];
+          // $userid = $_POST["uid"];
+          // $pass = $_POST["password"];
+          // $firstname = $_POST["firstname"];
+          // $lastname = $_POST["lastname"];
+          // $cls = $_POST["class"];
+          // $num = $_POST["num"];
+          // $birth = $_POST["birth"];
+          // $sex = isset($_POST["sex"]) ? $_POST["sex"] : 0 ;
+          // $address = isset($_POST["address"]) ? $_POST["address"] : '';
+          // $pid = $_POST["pid"];
           $conn->exec("UPDATE `student` SET 
-                      `student_id` = '$sid',
-                      `student_firstname` = '$firstname',
-                      `student_lastname` = '$lastname',
-                      `student_num` = $num,
-                      `student_birthday` = CAST('$birth' AS DATE),
-                      `student_sex` = $sex,
-                      `student_address` = '$address',
-                      `student_idcard` = '$pid',
-                      `class_id` = '$cls',
-                      `user_id` = '$userid' 
-                      WHERE user_id = '$uid'");
+                      `student_id` = '".$_POST["sid"]."',
+                      `student_firstname` = '".$_POST["firstname"]."',
+                      `student_lastname` = '".$_POST["lastname"]."',
+                      `student_num` = ".$_POST["num"].",
+                      `student_birthday` = CAST('".$_POST["birth"]."' AS DATE),
+                      `student_sex` = ".$_POST["sex"].",
+                      `student_address` = '".$_POST["address"]."',
+                      `student_idcard` = '".$_POST["pid"]."',
+                      `class_id` = '".$_POST["class"]."',
+                      `user_id` = '".$_POST["uid"]."' 
+                      WHERE user_id = '".$uid."'");
           $conn->exec("UPDATE `user` SET 
-                      `user_id` = '$userid',
-                      `user_password` = '$pass' 
+                      `user_id` = '".$_POST["uid"]."',
+                      `user_password` = '".$_POST["password"]."' 
                       WHERE user_id = '$uid'");
         } else if ( $level == 2 ) {
-          $tid = $_POST["tid"];
-          $userid = $_POST["uid"];
-          $pass = $_POST["password"];
-          $firstname = $_POST["firstname"];
-          $lastname = $_POST["lastname"];
-          $birth = $_POST["birth"];
-          $address = $_POST["address"];
-          $tel = $_POST["tel"];
+          // $tid = $_POST["tid"];
+          // $userid = $_POST["uid"];
+          // $pass = $_POST["password"];
+          // $firstname = $_POST["firstname"];
+          // $lastname = $_POST["lastname"];
+          // $birth = $_POST["birth"];
+          // $address = $_POST["address"];
+          // $tel = $_POST["tel"];
           $conn->exec("UPDATE `teacher` SET
-                      `teacher_id` = '$tid',
-                      `teacher_firstname` = '$firstname',
-                      `teacher_lastname` = '$lastname',
-                      `teacher_birthday` = CAST('$birth' AS DATE),
-                      `teacher_address` = '$address',
-                      `teacher_tel` = '$tel'
+                      `teacher_id` = '".$_POST["tid"]."',
+                      `teacher_firstname` = '".$_POST["firstname"]."',
+                      `teacher_lastname` = '".$_POST["lastname"]."',
+                      `teacher_birthday` = CAST('".$_POST["birth"]."' AS DATE),
+                      `teacher_address` = '".$_POST["address"]."',
+                      `teacher_tel` = '".$_POST["tel"]."'
                       WHERE `user_id` = '$uid'
           ");
           $conn->exec("UPDATE `user` SET 
-                      `user_id` = '$userid',
-                      `user_password` = '$pass' 
+                      `user_id` = '".$_POST["uid"]."',
+                      `user_password` = '".$_POST["password"]."' 
                       WHERE `user_id` = '$uid'");
         }
         $conn->commit();
