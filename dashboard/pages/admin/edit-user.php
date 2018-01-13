@@ -17,20 +17,8 @@
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["send"])) {
       try {
-
         $conn->beginTransaction();
         if ( $level == 1 ) {
-          // $sid = $_POST["sid"];
-          // $userid = $_POST["uid"];
-          // $pass = $_POST["password"];
-          // $firstname = $_POST["firstname"];
-          // $lastname = $_POST["lastname"];
-          // $cls = $_POST["class"];
-          // $num = $_POST["num"];
-          // $birth = $_POST["birth"];
-          // $sex = isset($_POST["sex"]) ? $_POST["sex"] : 0 ;
-          // $address = isset($_POST["address"]) ? $_POST["address"] : '';
-          // $pid = $_POST["pid"];
           $conn->exec("UPDATE `student` SET 
                       `student_id` = '".$_POST["sid"]."',
                       `student_firstname` = '".$_POST["firstname"]."',
@@ -48,14 +36,6 @@
                       `user_password` = '".$_POST["password"]."' 
                       WHERE user_id = '$uid'");
         } else if ( $level == 2 ) {
-          // $tid = $_POST["tid"];
-          // $userid = $_POST["uid"];
-          // $pass = $_POST["password"];
-          // $firstname = $_POST["firstname"];
-          // $lastname = $_POST["lastname"];
-          // $birth = $_POST["birth"];
-          // $address = $_POST["address"];
-          // $tel = $_POST["tel"];
           $conn->exec("UPDATE `teacher` SET
                       `teacher_id` = '".$_POST["tid"]."',
                       `teacher_firstname` = '".$_POST["firstname"]."',

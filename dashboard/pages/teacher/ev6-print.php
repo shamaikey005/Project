@@ -26,6 +26,12 @@
     </acticle>
   </section>
 
+  <section class="sheet padding-10mm">
+    <article>
+      Hello
+    </acticle>
+  </section>
+
   <?php require_once("./js.inc.php"); ?>
   <script>
     $('#printBtn').click(function() {

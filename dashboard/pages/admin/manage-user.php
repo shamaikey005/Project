@@ -24,7 +24,6 @@
             $uid = (string)$_POST["uid"];
             try {
                 $conn->beginTransaction();
-                // $conn->exec("UPDATE `user` SET `user_status` = 0 WHERE `user_id` = '$uid'");
                 $conn->exec("DELETE FROM `score` WHERE `student_id` = '".$sid."'");
                 $conn->exec("DELETE FROM `score_detail` WHERE `student_id` = '".$sid."'");
                 $conn->exec("DELETE FROM `period` WHERE `student_id` = '".$sid."'");
@@ -41,7 +40,6 @@
             $uid = (string)$_POST["uid"];
             try {
                 $conn->beginTransaction();
-                // $conn->exec("UPDATE `user` SET `user_status` = 0 WHERE `user_id` = '$uid'");
                 $conn->exec("DELETE FROM `teacher` WHERE `teacher_id` = '$tid' AND `user_id` = '$uid'");
                 $conn->exec("DELETE FROM `user` WHERE `user_id` = '$uid'");
                 $conn->commit();
@@ -51,22 +49,10 @@
             }
         }
         if ( isset($_POST["insStudentBtn"]) ) {
-            $uid = $_POST["uid"];
-            $sid = $_POST["sid"];
-            $pass = $_POST["password"];
-            $firstname = $_POST["firstname"];
-            $lastname = $_POST["lastname"];
-            $cls = $_POST["class"];
-            $num = $_POST["num"];
-            $birth = $_POST["birth"];
-            $sex = $_POST["sex"];
-            $address = $_POST["address"];
-            $pid = $_POST["pid"];
-
             try {
                 $conn->beginTransaction();
-                $conn->exec("INSERT INTO `student` VALUES ('$sid','$firstname','$lastname',$num,CAST('$birth' AS DATE),$sex,'$address','$pid','$cls','$uid')");
-                $conn->exec("INSERT INTO `user` VALUES ('$uid','$pass',1,1)");
+                $conn->exec("INSERT INTO `student` VALUES ('".$_POST["sid"]."','".$_POST["firstname"]."','".$_POST["lastname"]."',".$_POST["num"].",CAST('".$_POST["birth"]."' AS DATE),".$_POST["sex"].",'".$_POST["address"]."','".$_POST["pid"]."','".$_POST["class"]."','".$_POST["uid"]."')");
+                $conn->exec("INSERT INTO `user` VALUES ('".$_POST["uid"]."','".$_POST["password"]."',1,1)");
                 $conn->commit();
             } catch(PDOException $e) {
                 $conn->rollback();
@@ -76,19 +62,10 @@
             unset($_POST["insStudentBtn"]);
         }
         if ( isset($_POST["insTeacherBtn"]) ) {
-            $uid = $_POST["uid"];
-            $tid = $_POST["tid"];
-            $pass = $_POST["password"];
-            $firstname = $_POST["firstname"];
-            $lastname = $_POST["lastname"];
-            $birth = $_POST["birth"];
-            $address = $_POST["address"];
-            $tel = $_POST["tel"];
-
             try {
                 $conn->beginTransaction();
-                $conn->exec("INSERT INTO `teacher` VALUES ('$tid','$firstname','$lastname',CAST('$birth' AS DATE),'$address','$tel','$uid')");
-                $conn->exec("INSERT INTO `user` VALUES ('$uid','$pass',1,2)");
+                $conn->exec("INSERT INTO `teacher` VALUES ('".$_POST["tid"]."','".$_POST["firstname"]."','".$_POST["lastname"]."',CAST('".$_POST["birth"]."' AS DATE),'".$_POST["address"]."','".$_POST["tel"]."','".$_POST["uid"]."')");
+                $conn->exec("INSERT INTO `user` VALUES ('".$_POST["uid"]."','".$_POST["password"]."',1,2)");
                 $conn->commit();
             } catch(PDOException $e) {
                 $conn->rollback();
@@ -129,7 +106,6 @@
                                 <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insStudentModal">นักเรียน</a></li>
                                 <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insTeacherModal">ครู</a></li>
                             </ul>
-                            
                         </div>
                     </h1>
                     <ul class="nav nav-pills nav-justified" role="tablist" style="padding-bottom: 1em;">
@@ -383,7 +359,7 @@
                         <div class="form-group">
                             <label for="ins12" class="col-xs-3 control-label">TID</label>
                             <div class="col-xs-9">
-                                <input type="text" class="form-control" name="tid" id="ins12" placeholder="Student ID" />
+                                <input type="text" class="form-control" name="tid" id="ins12" placeholder="Teacher ID" />
                             </div>
                         </div>
                         <div class="form-group">

@@ -38,11 +38,11 @@ class Func {
         break;
       
       case 1:
-        $res = "เปิดสอนตามปกติ";
+        $res = "เปิดสอน";
         break;
 
       case 2:
-        $res = "ประเมินผลการเรียน";
+        $res = "ประเมินผล";
         break;
 
       case 3:
@@ -108,6 +108,29 @@ class Func {
     }
 
     return $status;
+  }
+
+  public function checkSubjectsType($data) {
+    $type;
+    switch ($data) {
+      case 0:
+        $type = "ไม่ระบุ";
+        break;
+      
+      case 1:
+        $type = "พื้นฐาน";
+        break;
+
+      case 2:
+        $type = "เพิ่มเติม";
+        break;
+      
+      case 3:
+        $type = "กิจกรรม";
+        break;
+    }
+
+    return $type;
   }
 
 }
