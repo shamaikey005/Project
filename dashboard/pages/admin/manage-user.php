@@ -65,7 +65,7 @@
             try {
                 unset($error_manage_user);
                 $conn->beginTransaction();
-                $conn->exec("INSERT INTO `teacher` VALUES ('".$_POST["tid"]."','".$_POST["firstname"]."','".$_POST["lastname"]."',CAST('".$_POST["birth"]."' AS DATE),'".$_POST["address"]."','".$_POST["tel"]."','".$_POST["uid"]."')");
+                $conn->exec("INSERT INTO `teacher` VALUES ('".$_POST["tid"]."', '".$_POST["title"]."','".$_POST["firstname"]."','".$_POST["lastname"]."',CAST('".$_POST["birth"]."' AS DATE),'".$_POST["address"]."','".$_POST["tel"]."','".$_POST["uid"]."')");
                 $conn->exec("INSERT INTO `user` VALUES ('".$_POST["uid"]."','".$_POST["password"]."',1,2)");
                 $conn->commit();
             } catch(PDOException $e) {
@@ -386,6 +386,16 @@
                             </div>
                         </div>
                         <hr />
+                        <div class="form-group">
+                            <label for="ins14-0" class="col-xs-3 control-label">คำนำหน้า</label>
+                            <div class="col-xs-9">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <input type="text" class="form-control" name="title" id="ins14-0" placeholder="Title" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="ins14-1" class="col-xs-3 control-label">ชื่อ-นามสกุล</label>
                             <div class="col-xs-9">
