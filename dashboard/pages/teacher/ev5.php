@@ -4,22 +4,34 @@
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["send"])) {
       try {
+        
+        $count = 0;
         $conn->beginTransaction();
-        foreach($_POST["sid"] as $sid) {
-          $count = 0;
+        foreach(array_combine($_POST["sid"], $_POST["stid"]) as $sid => $stid) {
+          $sum = 0;
+          $conn->exec(
+            "DELETE FROM `score_detail` WHERE `score_id` = $sid"
+          );
           for ($i = 1; $i <= 8; $i++) {
             $s_name = "s" . $i;
             $s_part = $i;
             $score = $_POST[$s_name][$count];
-            $conn->exec(
-              "UPDATE score_detail 
-              SET scored_point = $score 
-              WHERE score_id = $sid AND scored_part = $s_part"
-            );
+            $sum += $score;
+            // $sql = 
+            //   "UPDATE score_detail 
+            //   SET scored_point = $score 
+            //   WHERE score_id = $sid AND scored_part = $s_part";
+            if ($i < 8) {
+              $sql = "INSERT INTO `score_detail` VALUES ('".$sid."', '".$stid."', ".$i.", ".$score.", 10)";
+            } else {
+              $sql = "INSERT INTO `score_detail` VALUES ('".$sid."', '".$stid."', ".$i.", ".$score.", 30)";
+            }
+            $conn->exec($sql);
           }
-          $count++;
+          $count+=1;
+          $conn->exec("UPDATE `score` SET `score_score` = $sum WHERE `score_id` = $sid");
         }
-
+        
         $conn->commit();
 
       } catch(PDOException $e) {
@@ -97,13 +109,13 @@
                         $stmt2->execute(array("score_id"=>$rows["score_id"]));
                         $i = 1;
                         echo '
-                        <tr>
-                          <td><p class="form-control-static">'.$rows["student_id"].'</p><input type="hidden" name="sid[]" value="'.$rows["score_id"].'"></td>
-                          <td><p class="form-control-static">'.$rows["student_firstname"]. ' '. $rows["student_lastname"] .'</p></td>';
-                          while ($rows2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                            echo '<td><input class="form-control" type="number" max="'.$rows2["scored_max"].'" min="0" name="s'.$i.'[]" value="'.$rows2["scored_point"].'"></td>';
-                            $i++;
-                          }
+                          <tr>
+                            <td><p class="form-control-static">'.$rows["student_num"].'</p><input type="hidden" name="sid[]" value="'.$rows["score_id"].'"><input type="hidden" name="stid[]" value="'.$rows["student_id"].'"></td>
+                            <td><p class="form-control-static">'.$rows["student_firstname"]. ' '. $rows["student_lastname"] .'</p></td>';
+                            while ($rows2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                              echo '<td><input class="form-control" type="number" max="'.$rows2["scored_max"].'" min="0" name="s'.$i.'[]" value="'.$rows2["scored_point"].'"></td>';
+                              $i++;
+                            }
                         echo '</tr>';
                       }
                       echo '</tbody></table>';
@@ -113,6 +125,11 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
+            <div class="row">
+                <div class="col-xs-12" style="padding-top: 20px;padding-bottom: 20px;">
+                      
+                </div>
+            </div>
         </div>
         <!-- /#page-wrapper -->
 

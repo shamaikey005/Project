@@ -14,7 +14,7 @@
 <?php
     $class_stmt = $conn->prepare("SELECT * FROM class");
     $class_stmt->execute();
-
+    $error_manage_user;
     $func = new Func();
 ?>
 <?php 
@@ -63,13 +63,15 @@
         }
         if ( isset($_POST["insTeacherBtn"]) ) {
             try {
+                unset($error_manage_user);
                 $conn->beginTransaction();
                 $conn->exec("INSERT INTO `teacher` VALUES ('".$_POST["tid"]."','".$_POST["firstname"]."','".$_POST["lastname"]."',CAST('".$_POST["birth"]."' AS DATE),'".$_POST["address"]."','".$_POST["tel"]."','".$_POST["uid"]."')");
                 $conn->exec("INSERT INTO `user` VALUES ('".$_POST["uid"]."','".$_POST["password"]."',1,2)");
                 $conn->commit();
             } catch(PDOException $e) {
                 $conn->rollback();
-                echo 'Error : ' . $e->getMessage();
+                // echo 'Error : ' . $e->getMessage();
+                $error_manage_user = "ไม่สามารถเพิ่มข้อมูลได้";
             }
             unset($_POST["insTeacherBtn"]);
         }
@@ -99,7 +101,7 @@
                     <h1 class="page-header">จัดการข้อมูลผู้ใช้ 
                         <div class="dropdown" style="display: inline-block;">
                             <button class="btn btn-success dropdown-toggle" id="insDropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-plus-circle fa-fw1"> เพิ่ม</i>
+                                <i class="fas fa-plus-circle"> เพิ่ม</i>
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" aria-lebelledby="insDropdown">
@@ -108,6 +110,21 @@
                             </ul>
                         </div>
                     </h1>
+                    <?php
+                    if(isset($error_manage_user)) {
+                        echo 
+                        '<div class="row" style="padding-top: 10px;">
+                            <div class="col-xs-12">
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <i class="fas fa-times fa-xs" aria-hidden="true"></i>
+                                    </button>
+                                    <strong><i class="fas fa-exclamation-circle fa-fw fa-lg" aria-hidden></i> '. $error_manage_user .'</strong>
+                                </div>
+                            </div>
+                        </div>';
+                    }
+                    ?>
                     <ul class="nav nav-pills nav-justified" role="tablist" style="padding-bottom: 1em;">
                         <li role="presentation" class="active"><a href="#student" aria-controls="student" role="tab" data-toggle="tab">นักเรียน</a></li>
                         <li role="presentation" class=""><a href="#teacher" aria-controls="teacher" role="tab" data-toggle="tab">ครู</a></li>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 08, 2018 at 08:23 AM
+-- Generation Time: Jan 15, 2018 at 12:20 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -30,7 +30,6 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `class` (
   `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `class_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `class_grade` tinyint(4) NOT NULL,
   `class_room` tinyint(4) NOT NULL,
   `teacher_id` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL
@@ -40,13 +39,8 @@ CREATE TABLE `class` (
 -- Dumping data for table `class`
 --
 
-INSERT INTO `class` (`class_id`, `class_name`, `class_grade`, `class_room`, `teacher_id`) VALUES
-('c1-1', NULL, 1, 1, 't001'),
-('c2-1', '', 2, 1, ''),
-('c3-1', '', 3, 1, ''),
-('c4-1', NULL, 4, 1, 't002'),
-('c5-1', '', 5, 1, ''),
-('c6-1', '', 6, 1, '');
+INSERT INTO `class` (`class_id`, `class_grade`, `class_room`, `teacher_id`) VALUES
+('c1-1', 1, 1, 't001');
 
 -- --------------------------------------------------------
 
@@ -67,10 +61,30 @@ CREATE TABLE `period` (
 --
 
 INSERT INTO `period` (`student_id`, `subjects_id`, `schedule_id`, `period_count`, `period_max`) VALUES
-('s001', 'se01', '1', 78, 80),
-('s001', 'sm01', '3', 0, 80),
-('s002', 'sm04', '4', 2, 80),
-('s002', 'st04', '2', 0, 80);
+('7423', 'ค11101', '12', 0, 127),
+('7429', 'ค11101', '12', 0, 127),
+('7461', 'ค11101', '12', 0, 127),
+('7614', 'ค11101', '12', 0, 127),
+('8102', 'ค11101', '12', 0, 127),
+('8134', 'ค11101', '12', 0, 127),
+('8137', 'ค11101', '12', 0, 127);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roll`
+--
+
+CREATE TABLE `roll` (
+  `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `roll_sick_leave` smallint(6) NOT NULL DEFAULT '0',
+  `roll_personal_leave` smallint(6) NOT NULL DEFAULT '0',
+  `roll_absent` smallint(6) NOT NULL DEFAULT '0',
+  `roll_attend` smallint(6) NOT NULL DEFAULT '0',
+  `term` tinyint(4) NOT NULL,
+  `year` year(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -85,7 +99,7 @@ CREATE TABLE `schedule` (
   `teacher_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `year` year(4) NOT NULL,
   `term` tinyint(4) NOT NULL DEFAULT '0',
-  `status` tinyint(4) NOT NULL DEFAULT '0'
+  `status` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -93,38 +107,7 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`schedule_id`, `subjects_id`, `class_id`, `teacher_id`, `year`, `term`, `status`) VALUES
-(1, 'se01', 'c1-1', 't001', 2017, 1, 1),
-(2, 'st04', 'c4-1', 't002', 2017, 1, 1),
-(3, 'sm01', 'c1-1', 't002', 2017, 1, 1),
-(4, 'sm04', 'c4-1', 't001', 2017, 1, 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `schedule_detail`
---
-
-CREATE TABLE `schedule_detail` (
-  `schedule_id` int(11) NOT NULL,
-  `schedule_begin_time` time NOT NULL,
-  `schedule_end_time` time NOT NULL,
-  `schedule_weekday` tinyint(4) NOT NULL DEFAULT '0',
-  `schedule_term` tinyint(4) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `schedule_detail`
---
-
-INSERT INTO `schedule_detail` (`schedule_id`, `schedule_begin_time`, `schedule_end_time`, `schedule_weekday`, `schedule_term`) VALUES
-(1, '08:00:00', '10:00:00', 3, 0),
-(1, '14:00:00', '15:00:00', 5, 0),
-(2, '10:00:00', '12:00:00', 4, 0),
-(2, '08:00:00', '09:00:00', 5, 0),
-(3, '08:00:00', '10:00:00', 2, 0),
-(3, '12:00:00', '14:00:00', 3, 0),
-(4, '14:00:00', '16:00:00', 1, 0),
-(4, '10:00:00', '12:00:00', 2, 0);
+(12, 'ค11101', 'c1-1', 't001', 2017, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -145,10 +128,13 @@ CREATE TABLE `score` (
 --
 
 INSERT INTO `score` (`score_id`, `student_id`, `subjects_id`, `schedule_id`, `score_score`) VALUES
-(1, 's001', 'se01', '1', 0),
-(2, 's001', 'sm01', '3', 0),
-(5, 's002', 'st04', '2', 0),
-(6, 's002', 'sm04', '4', 0);
+(14, '7423', 'ค11101', '12', 2),
+(15, '7429', 'ค11101', '12', 0),
+(16, '7461', 'ค11101', '12', 0),
+(17, '7614', 'ค11101', '12', 0),
+(18, '8102', 'ค11101', '12', 0),
+(19, '8134', 'ค11101', '12', 0),
+(20, '8137', 'ค11101', '12', 0);
 
 -- --------------------------------------------------------
 
@@ -169,38 +155,74 @@ CREATE TABLE `score_detail` (
 --
 
 INSERT INTO `score_detail` (`score_id`, `student_id`, `scored_part`, `scored_point`, `scored_max`) VALUES
-(1, 's001', 1, 4, 10),
-(1, 's001', 2, 2, 10),
-(1, 's001', 3, 3, 10),
-(1, 's001', 4, 4, 10),
-(1, 's001', 5, 5, 10),
-(1, 's001', 6, 6, 10),
-(1, 's001', 7, 7, 10),
-(1, 's001', 8, 8, 30),
-(2, 's001', 1, 0, 10),
-(2, 's001', 2, 0, 10),
-(2, 's001', 3, 0, 10),
-(2, 's001', 4, 0, 10),
-(2, 's001', 5, 0, 10),
-(2, 's001', 6, 0, 10),
-(2, 's001', 7, 0, 10),
-(2, 's001', 8, 0, 30),
-(5, 's002', 1, 3, 10),
-(5, 's002', 2, 2, 10),
-(5, 's002', 3, 1, 10),
-(5, 's002', 4, 0, 10),
-(5, 's002', 5, 0, 10),
-(5, 's002', 6, 0, 10),
-(5, 's002', 7, 0, 10),
-(5, 's002', 8, 0, 30),
-(6, 's002', 1, 1, 10),
-(6, 's002', 2, 1, 10),
-(6, 's002', 3, 0, 10),
-(6, 's002', 4, 0, 10),
-(6, 's002', 5, 0, 10),
-(6, 's002', 6, 0, 10),
-(6, 's002', 7, 0, 10),
-(6, 's002', 8, 0, 30);
+(14, '7423', 1, 1, 10),
+(14, '7423', 2, 1, 10),
+(14, '7423', 3, 0, 10),
+(14, '7423', 4, 0, 10),
+(14, '7423', 5, 0, 10),
+(14, '7423', 6, 0, 10),
+(14, '7423', 7, 0, 10),
+(14, '7423', 8, 0, 30),
+(15, '7429', 1, 0, 10),
+(15, '7429', 2, 0, 10),
+(15, '7429', 3, 0, 10),
+(15, '7429', 4, 0, 10),
+(15, '7429', 5, 0, 10),
+(15, '7429', 6, 0, 10),
+(15, '7429', 7, 0, 10),
+(15, '7429', 8, 0, 30),
+(16, '7461', 1, 0, 10),
+(16, '7461', 2, 0, 10),
+(16, '7461', 3, 0, 10),
+(16, '7461', 4, 0, 10),
+(16, '7461', 5, 0, 10),
+(16, '7461', 6, 0, 10),
+(16, '7461', 7, 0, 10),
+(16, '7461', 8, 0, 30),
+(17, '7614', 1, 0, 10),
+(17, '7614', 2, 0, 10),
+(17, '7614', 3, 0, 10),
+(17, '7614', 4, 0, 10),
+(17, '7614', 5, 0, 10),
+(17, '7614', 6, 0, 10),
+(17, '7614', 7, 0, 10),
+(17, '7614', 8, 0, 30),
+(18, '8102', 1, 0, 10),
+(18, '8102', 2, 0, 10),
+(18, '8102', 3, 0, 10),
+(18, '8102', 4, 0, 10),
+(18, '8102', 5, 0, 10),
+(18, '8102', 6, 0, 10),
+(18, '8102', 7, 0, 10),
+(18, '8102', 8, 0, 30),
+(19, '8134', 1, 0, 10),
+(19, '8134', 2, 0, 10),
+(19, '8134', 3, 0, 10),
+(19, '8134', 4, 0, 10),
+(19, '8134', 5, 0, 10),
+(19, '8134', 6, 0, 10),
+(19, '8134', 7, 0, 10),
+(19, '8134', 8, 0, 30),
+(20, '8137', 1, 0, 10),
+(20, '8137', 2, 0, 10),
+(20, '8137', 3, 0, 10),
+(20, '8137', 4, 0, 10),
+(20, '8137', 5, 0, 10),
+(20, '8137', 6, 0, 10),
+(20, '8137', 7, 0, 10),
+(20, '8137', 8, 0, 30);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `score_detail_2`
+--
+
+CREATE TABLE `score_detail_2` (
+  `score_id` int(11) NOT NULL,
+  `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `scored_score` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -226,8 +248,13 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`student_id`, `student_firstname`, `student_lastname`, `student_num`, `student_birthday`, `student_sex`, `student_address`, `student_idcard`, `class_id`, `user_id`) VALUES
-('s001', 'student', '01', 1, '2011-05-06', 2, '123 hello', '5-1616-16491-65-2', 'c1-1', 's001'),
-('s002', 'student', '02', 1, NULL, 1, '', '', 'c4-1', 's002');
+('7423', 'ตรัยคุณ', 'วรรณรักษ์', 1, '2011-10-10', 1, '1', '2-7675-24538-54-2', 'c1-1', 's001'),
+('7429', 'ไกรวิชญ์', 'ศิริสม', 2, '2011-08-05', 1, '2', '1-5164-62151-94-2', 'c1-1', 's002'),
+('7461', 'สรวิชญ์', 'แย้มเกสร', 3, '2011-05-02', 1, '3', '1-1689-49461-65-1', 'c1-1', 's003'),
+('7614', 'พัชรดนัย', 'บุตรทา', 4, '2011-06-22', 1, '4', '1-1684-94611-69-8', 'c1-1', 's004'),
+('8102', 'อคอง', 'เท่า', 5, '2011-09-08', 1, '5', '1-1489-46132-16-4', 'c1-1', 's005'),
+('8134', 'นัฐวุฒิ', 'สุขสวัสดิ์', 6, '2011-10-20', 1, '6', '1-1649-87984-51-3', 'c1-1', 's006'),
+('8137', 'ภควัต', 'ชาติทุ่ง', 7, '2011-12-15', 1, '7', '1-1587-98413-22-4', 'c1-1', 's007');
 
 -- --------------------------------------------------------
 
@@ -238,9 +265,9 @@ INSERT INTO `student` (`student_id`, `student_firstname`, `student_lastname`, `s
 CREATE TABLE `subjects` (
   `subjects_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `subjects_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `subjects_type` tinyint(4) NOT NULL,
-  `subjects_credit` tinyint(4) NOT NULL,
-  `subjects_time` tinyint(4) NOT NULL
+  `subjects_type` tinyint(4) NOT NULL DEFAULT '0',
+  `subjects_credit` tinyint(4) DEFAULT NULL,
+  `subjects_time` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -248,10 +275,39 @@ CREATE TABLE `subjects` (
 --
 
 INSERT INTO `subjects` (`subjects_id`, `subjects_name`, `subjects_type`, `subjects_credit`, `subjects_time`) VALUES
-('se01', 'ภาษาอังกฤษ ป.1', 1, 3, 3),
-('sm01', 'คณิตศาสตร์ ป.1', 1, 3, 3),
-('sm04', 'คณิตศาสตร์ ป.4', 1, 4, 4),
-('st04', 'ภาษาไทย ป.4', 1, 3, 3);
+('ก11101', 'แนะแนว', 3, 0, 40),
+('ก11102', 'ลูกเสือยุวกาชาด', 3, 0, 40),
+('ก11103', 'ชมรม', 3, 0, 40),
+('ค11101', 'คณิตศาสตร์', 1, 5, 200),
+('ง11101', 'การงานอาชีพและเทคโนโลยี', 1, 1, 40),
+('ท11101', 'ภาษาไทย', 1, 5, 200),
+('พ11101', 'สุขศึกษาและพละศึกษา', 1, 2, 80),
+('ว11101', 'วิทยาศาสตร์', 1, 2, 80),
+('ศ11101', 'ศิลปะ', 1, 2, 80),
+('ส11101', 'สังคมศึกษา ศาสนาและวัฒนธรรม', 1, 2, 80),
+('ส11102', 'ประวัติศาสตร์', 1, 1, 40),
+('ส11201', 'หน้าที่พลเมือง', 2, 1, 40),
+('อ11101', 'ภาษาอังกฤษ', 1, 1, 40);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subjects_type`
+--
+
+CREATE TABLE `subjects_type` (
+  `subjects_type` tinyint(4) NOT NULL,
+  `subjects_type_name` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `subjects_type`
+--
+
+INSERT INTO `subjects_type` (`subjects_type`, `subjects_type_name`) VALUES
+(1, 'พื้นฐาน'),
+(2, 'เพิ่มเติม'),
+(3, 'กิจกรรม');
 
 -- --------------------------------------------------------
 
@@ -261,6 +317,7 @@ INSERT INTO `subjects` (`subjects_id`, `subjects_name`, `subjects_type`, `subjec
 
 CREATE TABLE `teacher` (
   `teacher_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `teacher_title` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `teacher_firstname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `teacher_lastname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `teacher_birthday` date DEFAULT NULL,
@@ -273,9 +330,30 @@ CREATE TABLE `teacher` (
 -- Dumping data for table `teacher`
 --
 
-INSERT INTO `teacher` (`teacher_id`, `teacher_firstname`, `teacher_lastname`, `teacher_birthday`, `teacher_address`, `teacher_tel`, `user_id`) VALUES
-('t001', 'teacher', '01', '1968-01-04', '564', '058-554-5464', 't001'),
-('t002', 'teacher', '02', NULL, NULL, NULL, 't002');
+INSERT INTO `teacher` (`teacher_id`, `teacher_title`, `teacher_firstname`, `teacher_lastname`, `teacher_birthday`, `teacher_address`, `teacher_tel`, `user_id`) VALUES
+('t001', NULL, 'เบญจณัฐ', 'บุญธง', '1988-05-10', '101', '089-531-3485', 't001');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trait`
+--
+
+CREATE TABLE `trait` (
+  `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `trait_1` tinyint(4) NOT NULL DEFAULT '0',
+  `trait_2` tinyint(4) NOT NULL DEFAULT '0',
+  `trait_3` tinyint(4) NOT NULL DEFAULT '0',
+  `trait_4` tinyint(4) NOT NULL DEFAULT '0',
+  `trait_5` tinyint(4) NOT NULL DEFAULT '0',
+  `trait_6` tinyint(4) NOT NULL DEFAULT '0',
+  `trait_7` tinyint(4) NOT NULL DEFAULT '0',
+  `trait_8` tinyint(4) NOT NULL DEFAULT '0',
+  `trait_readwrite` tinyint(4) NOT NULL DEFAULT '0',
+  `term` tinyint(4) NOT NULL,
+  `year` year(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -298,8 +376,12 @@ INSERT INTO `user` (`user_id`, `user_password`, `user_status`, `user_level`) VAL
 ('admin', '1234', 1, 127),
 ('s001', '1234', 1, 1),
 ('s002', '1234', 1, 1),
-('t001', '1234', 1, 2),
-('t002', '1234', 1, 2);
+('s003', '1234', 1, 1),
+('s004', '1234', 1, 1),
+('s005', '1234', 1, 1),
+('s006', '1234', 1, 1),
+('s007', '', 1, 1),
+('t001', '1234', 1, 2);
 
 --
 -- Indexes for dumped tables
@@ -324,6 +406,12 @@ ALTER TABLE `score`
   ADD PRIMARY KEY (`score_id`);
 
 --
+-- Indexes for table `score_detail_2`
+--
+ALTER TABLE `score_detail_2`
+  ADD PRIMARY KEY (`score_id`);
+
+--
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
@@ -334,6 +422,12 @@ ALTER TABLE `student`
 --
 ALTER TABLE `subjects`
   ADD PRIMARY KEY (`subjects_id`);
+
+--
+-- Indexes for table `subjects_type`
+--
+ALTER TABLE `subjects_type`
+  ADD PRIMARY KEY (`subjects_type`);
 
 --
 -- Indexes for table `teacher`
@@ -355,13 +449,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `score`
 --
 ALTER TABLE `score`
-  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `score_detail_2`
+--
+ALTER TABLE `score_detail_2`
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

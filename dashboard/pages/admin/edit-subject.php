@@ -39,7 +39,7 @@
   $buffer = ob_get_contents();
   ob_end_clean();
 
-  $title = "แก้ไขผู้ใช้";
+  $title = "แก้ไขวิชา";
   $buffer = preg_replace('/(<title>)(.*?)(<\/title>)/i','$1' . $title . '$3', $buffer);
 
   echo $buffer;

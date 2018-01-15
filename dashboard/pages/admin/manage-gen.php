@@ -33,6 +33,7 @@
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
         if (isset($_POST["insSubjectsBtn"])) {
             
             try {
@@ -48,12 +49,82 @@
 
         }
 
+        if (isset($_POST["insClassBtn"])) {
+            
+            try {
+
+                $insClassStmt = $conn->prepare("INSERT INTO `class` VALUES ('".$_POST["cid"]."',".$_POST["cgrade"].",".$_POST["croom"].",'".$_POST["cteacher"]."') ");
+                $insClassStmt->execute();
+                unset($_POST["insClassBtn"]);
+                $user->redirect("manage-gen.php");
+
+            } catch (PDOException $e) {
+                echo 'ERROR : ' . $e->getMessage();
+            }
+
+        }
+
         if (isset($_POST["insScheduleBtn"])) {
 
             try {
 
                 $insScheduleStmt = $conn->prepare("INSERT INTO `schedule` VALUES ('', '".$_POST["sc_subject"]."', '".$_POST["sc_class"]."', '".$_POST["sc_teacher"]."', YEAR(CAST(STR_TO_DATE('".($_POST["year"] - 543)."', '%Y') AS DATE)), '".$_POST["term"]."',1)");
                 $insScheduleStmt->execute();
+                $checkType = $conn->prepare("SELECT * FROM `subjects` WHERE `subjects_id` = :sc_sjid");
+                $checkType->execute(array(":sc_sjid"=>$_POST["sc_subject"]));
+                $subjectType = $checkType->fetch(PDO::FETCH_ASSOC);
+                $sc = $conn->prepare("SELECT * FROM `schedule` WHERE `subjects_id` = '".$_POST["sc_subject"]."' AND `class_id` = '".$_POST["sc_class"]."' AND `teacher_id` = '".$_POST["sc_teacher"]."' AND `year` = YEAR(CAST(STR_TO_DATE('".($_POST["year"] - 543)."', '%Y') AS DATE)) AND `term` = '".$_POST["term"]."' ");
+                $sc->execute();
+                $scRow = $sc->fetch(PDO::FETCH_ASSOC);
+                $student = $conn->prepare("SELECT * FROM `student` WHERE `class_id` = '".$_POST["sc_class"]."'");
+                $student->execute();
+                $studentCount = $student->rowCount();
+                if ($subjectType["subjects_type"] == 1 && $subjectType["subjects_type"] == 2) {
+                    
+                    while ($studentRows = $student->fetch(PDO::FETCH_ASSOC)) {
+                        $insScore = $conn->prepare("INSERT INTO `score` VALUES (NULL, '".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', 0)");
+                        $insScore->execute();
+                        $scoreID = $conn->prepare("SELECT * FROM `score` WHERE `student_id` = '".$studentRows["student_id"]."' AND `subjects_id` = '".$_POST["sc_subject"]."' AND `schedule_id` = '".$scRow["schedule_id"]."'");
+                        $scoreID->execute();
+                        $scoreIDRow = $scoreID->fetch(PDO::FETCH_ASSOC);
+                        $insScoreDetail = $conn->prepare("INSERT INTO `score_detail` VALUES 
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 1, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 2, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 3, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 4, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 5, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 6, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 7, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 8, 0, 30)
+                                                        ");
+                        $insScoreDetail->execute();
+                        $insPeriod = $conn->prepare("INSERT INTO `period` VALUES 
+                                                    ('".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', 0, ".$subjectType["subjects_time"].")
+                                                   ");
+                        $insPeriod->execute();
+                    }
+
+                } else if ($subjectType["subjects_type"] == 3) {
+
+                    while ($studentRows = $student->fetch(PDO::FETCH_ASSOC)) {
+                        $insScore = $conn->prepare("INSERT INTO `score` VALUES (NULL, '".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', 0)");
+                        $insScore->execute();
+                        $scoreID = $conn->prepare("SELECT * FROM `score` WHERE `student_id` = '".$studentRows["student_id"]."' AND `subjects_id` = '".$_POST["sc_subject"]."' AND `schedule_id` = '".$scRow["schedule_id"]."'");
+                        $scoreID->execute();
+                        $scoreIDRow = $scoreID->fetch(PDO::FETCH_ASSOC);
+                        $insScoreDetail = $conn->prepare("INSERT INTO `score_detail_2` VALUES 
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 0)
+                                                        ");
+                        $insScoreDetail->execute();
+                        $insPeriod = $conn->prepare("INSERT INTO `period` VALUES 
+                                                    ('".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', 0, ".$subjectType["subjects_time"].")
+                                                   ");
+                        $insPeriod->execute();
+                    }
+
+                }
+
+                unset($_POST["insScheduleBtn"]);
                 $user->redirect("manage-gen.php");
 
             } catch (PDOException $e) {
@@ -79,6 +150,22 @@
             } catch (PDOException $e) {
                 echo 'ERROR : ' . $e->getMessage();
             }
+
+            $user->redirect("manage-gen.php");
+            
+        }
+
+        if (isset($_POST["delClassBtn"])) {
+            
+            try {
+                $delSubjectStmt = $conn->prepare("DELETE FROM `class` WHERE `class_id` = '".$_POST["cid"]."'");
+                $delSubjectStmt->execute();
+                unset($_POST["delClassBtn"]);
+            } catch (PDOException $e) {
+                echo 'ERROR : ' . $e->getMessage();
+            }
+
+            $user->redirect("manage-gen.php");
             
         }
 
@@ -95,6 +182,8 @@
                 $conn->rollback();
                 echo 'ERROR : '.$e->getMessage();
             }
+
+            $user->redirect("manage-gen.php");
 
         }
         
@@ -114,18 +203,19 @@
                     <h1 class="page-header">จัดการข้อมูลพื้นฐาน
                         <div class="dropdown" style="display: inline-block;">
                             <button class="btn btn-success dropdown-toggle" id="insDropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-plus-circle fa-fw1"> เพิ่ม</i>
+                                <i class="fas fa-plus-circle"> เพิ่ม</i>
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" aria-lebelledby="insDropdown">
                                 <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insSubjectsModal">วิชา</a></li>
+                                <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insClassModal">ชั้นเรียน</a></li>
                                 <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insScheduleModal">ตารางเรียน</a></li>
                             </ul>
                         </div>
                     </h1>
                     <ul class="nav nav-pills nav-justified" role="tablist" style="padding-bottom:1em;">
                         <li role="presentation" class="active"><a href="#subjects" aria-controls="subjects" role="tab" data-toggle="tab">จัดการวิชา</a></li>
-                        <li role="presentation" class=""><a href="#teacher" aria-controls="teacher" role="tab" data-toggle="tab">จัดการผู้สอน</a></li>
+                        <li role="presentation" class=""><a href="#class" aria-controls="class" role="tab" data-toggle="tab">จัดการชั้นเรียน</a></li>
                         <li role="presentation" class=""><a href="#schedule" aria-controls="schedule" role="tab" data-toggle="tab">จัดการตารางเรียน</a></li>
                     </ul>
                     <div class="tab-content">
@@ -176,12 +266,53 @@
                                 </table>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="teacher">
-                        
+                        <div role="tabpanel" class="tab-pane" id="class">
+                            <div class="col-xs-12">
+                                <table id="data_table2" class="table table-hover table-condensed table-responsive" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>รหัสชั้นเรียน</th>
+                                            <th>ระดับชั้น</th>
+                                            <th>ห้อง</th>
+                                            <th>ครูที่ปรึกษา</th>
+                                            <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>รหัสชั้นเรียน</th>
+                                            <th>ระดับชั้น</th>
+                                            <th>ห้อง</th>
+                                            <th>ครูที่ปรึกษา</th>
+                                            <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <?php
+                                        $stmt = $conn->prepare("SELECT * FROM `class` AS c INNER JOIN `teacher` AS t ON t.teacher_id = c.teacher_id");
+                                        $stmt->execute();
+                                        
+                                        while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                            echo '
+                                                <tr>
+                                                    <td>'.$rows["class_id"].'</td>
+                                                    <td>'.$rows["class_grade"].'</td>
+                                                    <td>'.$rows["class_room"].'</td>
+                                                    <td>'.$rows["teacher_firstname"].' '.$rows["teacher_lastname"].'</td>
+                                                    <td>
+                                                        <a href="edit-class.php?id='.$rows["class_id"].'&t='.$rows["teacher_id"].'"><button class="btn btn-info btn-sm"><i class="fas fa-edit fa-fw"></i> แก้ไข</button></a>
+                                                        <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#delClassModal" data-cid="'.$rows["class_id"].'"><i class="fas fa-times fa-fw"></i> ลบ</button>
+                                                    </td>
+                                                </tr>';
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="schedule">
                             <div class="col-xs-12">
-                                <table id="data_table2" class="table table-hover table-condensed table-responsive" cellspacing="0" width="100%">
+                                <table id="data_table3" class="table table-hover table-condensed table-responsive" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>รหัส</th>
@@ -304,6 +435,61 @@
     </div>
     <!-- /Modal - Insert Subjects -->
 
+    <!-- Modal - Insert Class -->
+    <div class="modal fade" id="insClassModal" tabindex="-1" role="dialog" aria-labelledby="insClassModalTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                    </button>
+                    <h4 class="modal-title" id="insClassModalTitle"><i class="fas fa-plus-circle fa-fw"></i> เพิ่มชั้นเรียน</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" method="post" id="insClassForm">
+                        <div class="form-group">
+                            <label for="ins31" class="col-xs-3 control-label">รหัสชั้นเรียน</label>
+                            <div class="col-xs-9">
+                                <input type="text" class="form-control" name="cid" id="ins31" placeholder="Class ID" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ins32" class="col-xs-3 control-label">ระดับชั้น</label>
+                            <div class="col-xs-9">
+                                <input type="number" min="1" max="6" class="form-control" name="cgrade" id="ins32" placeholder="Class Grade" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ins33" class="col-xs-3 control-label">ห้อง</label>
+                            <div class="col-xs-9">
+                                <input type="number" min="1" class="form-control" name="croom" id="ins33" placeholder="Class Room" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ins34" class="col-xs-3 control-label">ครูที่ปรึกษา</label>
+                            <div class="col-xs-9">
+                                <select class="form-control" name="cteacher" id="ins34" required>
+                                    <?php 
+                                    $teacher_stmt2 = $conn->prepare("SELECT * FROM `teacher`");
+                                    $teacher_stmt2->execute();
+                                    while ($teacher_rows2 = $teacher_stmt2->fetch(PDO::FETCH_ASSOC)) {
+                                        echo '<option value="'.$teacher_rows2["teacher_id"].'">'.$teacher_rows2["teacher_title"].''.$teacher_rows2["teacher_firstname"].' '.$teacher_rows2["teacher_lastname"].'</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" type="submit" form="insClassForm" name="insClassBtn" value="true"><i class="fas fa-plus-circle fa-fw"></i> Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Modal - Insert Class -->
+
     <!-- Modal - Insert Schedule -->
     <div class="modal fade" id="insScheduleModal" tabindex="-1" role="dialog" aria-labelledby="insSubjectsModalTitle">
         <div class="modal-dialog" role="document">
@@ -401,6 +587,31 @@
     </div>
     <!-- /Modal - Delete Subjects -->
 
+    <!-- Modal - Delete Class -->
+    <div class="modal fade" id="delClassModal" tabindex="-1" role="dialog" aria-labelledby="delClassModalTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+                    <h4 class="modal-title">ลบข้อมูลชั้นเรียน</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="delClassForm">
+                        <p>
+                            คุณแน่ใจที่จะลบข้อมูล <strong></strong> หรือไม่
+                            <input type="hidden" value="" name="cid" />
+                        </p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" type="submit" form="delClassForm" name="delClassBtn" value="true"><i class="fas fa-times fa-fw"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Modal - Delete Class -->
+
     <!-- Modal - Delete Subjects -->
     <div class="modal fade" id="delScheduleModal" tabindex="-1" role="dialog" aria-labelledby="delScheduleModalTitle">
         <div class="modal-dialog" role="document">
@@ -433,6 +644,7 @@
     $(document).ready(function() {
         $('#data_table').DataTable();
         $('#data_table2').DataTable();
+        $('#data_table3').DataTable();
     });
 
     $('#delSubjectsModal').on('show.bs.modal', function(e) {
@@ -444,6 +656,15 @@
         modal.find('.modal-body p strong').text(sjid);
         modal.find('.modal-body input[name=sjid]').val(sjid);
         modal.find('.modal-body input[name=type]').val(type);
+    });
+
+    $('#delClassModal').on('show.bs.modal', function(e) {
+        var button = $(e.relatedTarget);
+        var cid = button.data('cid');
+
+        var modal = $(this);
+        modal.find('.modal-body p strong').text(cid);
+        modal.find('.modal-body input[name=cid]').val(cid);
     });
 
     $('#delScheduleModal').on('show.bs.modal', function(e) {
