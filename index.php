@@ -49,7 +49,7 @@
         <div class="row">
             <div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                 <form class="form-signin" name="login" method="post">
-                    <h2 class="form-signin-heading">Please Login</h2>
+                    <h2 class="form-signin-heading">Login</h2>
                     <div class="form-group <?php echo (isset($error_login)) ? "has-error" : "" ?>">
                         <label for="inputID" class="sr-only">ID</label>
                         <div class="input-group">

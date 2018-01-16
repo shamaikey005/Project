@@ -151,6 +151,7 @@
                 echo 'ERROR : ' . $e->getMessage();
             }
 
+            unset($_POST["delSubjectsBtn"]);
             $user->redirect("manage-gen.php");
             
         }
@@ -165,6 +166,7 @@
                 echo 'ERROR : ' . $e->getMessage();
             }
 
+            unset($_POST["delClassBtn"]);
             $user->redirect("manage-gen.php");
             
         }
@@ -183,6 +185,7 @@
                 echo 'ERROR : '.$e->getMessage();
             }
 
+            unset($_POST["delScheduleBtn"]);
             $user->redirect("manage-gen.php");
 
         }
@@ -208,15 +211,15 @@
                             </button>
                             <ul class="dropdown-menu" aria-lebelledby="insDropdown">
                                 <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insSubjectsModal">วิชา</a></li>
-                                <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insClassModal">ชั้นเรียน</a></li>
-                                <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insScheduleModal">ตารางเรียน</a></li>
+                                <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insClassModal">ครูประจำชั้น</a></li>
+                                <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insScheduleModal">ครูผู้สอนรายวิชา</a></li>
                             </ul>
                         </div>
                     </h1>
                     <ul class="nav nav-pills nav-justified" role="tablist" style="padding-bottom:1em;">
                         <li role="presentation" class="active"><a href="#subjects" aria-controls="subjects" role="tab" data-toggle="tab">จัดการวิชา</a></li>
-                        <li role="presentation" class=""><a href="#class" aria-controls="class" role="tab" data-toggle="tab">จัดการชั้นเรียน</a></li>
-                        <li role="presentation" class=""><a href="#schedule" aria-controls="schedule" role="tab" data-toggle="tab">จัดการตารางเรียน</a></li>
+                        <li role="presentation" class=""><a href="#class" aria-controls="class" role="tab" data-toggle="tab">จัดการครูประจำชั้น</a></li>
+                        <li role="presentation" class=""><a href="#schedule" aria-controls="schedule" role="tab" data-toggle="tab">จัดการครูผู้สอนรายวิชา</a></li>
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="subjects">
@@ -273,8 +276,7 @@
                                         <tr>
                                             <th>รหัสชั้นเรียน</th>
                                             <th>ระดับชั้น</th>
-                                            <th>ห้อง</th>
-                                            <th>ครูที่ปรึกษา</th>
+                                            <th>ครูประจำชั้น</th>
                                             <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
                                         </tr>
                                     </thead>
@@ -282,8 +284,7 @@
                                         <tr>
                                             <th>รหัสชั้นเรียน</th>
                                             <th>ระดับชั้น</th>
-                                            <th>ห้อง</th>
-                                            <th>ครูที่ปรึกษา</th>
+                                            <th>ครูประจำชั้น</th>
                                             <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
                                         </tr>
                                     </tfoot>
@@ -296,8 +297,7 @@
                                             echo '
                                                 <tr>
                                                     <td>'.$rows["class_id"].'</td>
-                                                    <td>'.$rows["class_grade"].'</td>
-                                                    <td>'.$rows["class_room"].'</td>
+                                                    <td>ป.'.$rows["class_grade"].'/'.$rows["class_room"].'</td>
                                                     <td>'.$rows["teacher_firstname"].' '.$rows["teacher_lastname"].'</td>
                                                     <td>
                                                         <a href="edit-class.php?id='.$rows["class_id"].'&t='.$rows["teacher_id"].'"><button class="btn btn-info btn-sm"><i class="fas fa-edit fa-fw"></i> แก้ไข</button></a>
@@ -317,6 +317,7 @@
                                         <tr>
                                             <th>รหัส</th>
                                             <th>รหัสวิชา</th>
+                                            <th>ชื่อวิชา</th>
                                             <th>ชั้น</th>
                                             <th>ครู</th>
                                             <th>ปี</th>
@@ -329,6 +330,7 @@
                                         <tr>
                                             <th>รหัส</th>
                                             <th>รหัสวิชา</th>
+                                            <th>ชื่อวิชา</th>
                                             <th>ชั้น</th>
                                             <th>ครู</th>
                                             <th>ปี</th>
@@ -341,6 +343,7 @@
                                         <?php
                                         $stmt = $conn->prepare("SELECT * FROM schedule AS sc 
                                                                 LEFT JOIN class AS c ON c.class_id = sc.class_id
+                                                                LEFT JOIN subjects AS s ON s.subjects_id = sc.subjects_id
                                                                 LEFT JOIN teacher AS t ON t.teacher_id = sc.teacher_id");
 
                                         $stmt->execute();
@@ -350,6 +353,7 @@
                                                 <tr>
                                                     <td>'.$rows["schedule_id"].'</td>
                                                     <td>'.$rows["subjects_id"].'</td>
+                                                    <td>'.$rows["subjects_name"].'</td>
                                                     <td>ป.'.$rows["class_grade"].'/'.$rows["class_room"].'</td>
                                                     <td>'.$rows["teacher_firstname"].' '.$rows["teacher_lastname"].'</td>
                                                     <td>'.($rows["year"]+543).'</td>
@@ -443,7 +447,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <i class="fas fa-times"></i>
                     </button>
-                    <h4 class="modal-title" id="insClassModalTitle"><i class="fas fa-plus-circle fa-fw"></i> เพิ่มชั้นเรียน</h4>
+                    <h4 class="modal-title" id="insClassModalTitle"><i class="fas fa-plus-circle fa-fw"></i> เพิ่มข้อมูลครูประจำชั้น</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" method="post" id="insClassForm">
@@ -498,7 +502,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <i class="fas fa-times"></i>
                     </button>
-                    <h4 class="modal-title" id="insScheduleModalTitle"><i class="fas fa-plus-circle fa-fw"></i> เพิ่มตารางเรียน</h4>
+                    <h4 class="modal-title" id="insScheduleModalTitle"><i class="fas fa-plus-circle fa-fw"></i> เพิ่มข้อมูลครูผู้สอนรายวิชา</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" method="post" id="insScheduleForm">
@@ -567,7 +571,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
-                    <h4 class="modal-title">ลบข้อมูลนักเรียน</h4>
+                    <h4 class="modal-title">ลบข้อมูลวิชา</h4>
                 </div>
                 <div class="modal-body">
                     <form method="post" id="delSubjectsForm">
@@ -593,7 +597,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
-                    <h4 class="modal-title">ลบข้อมูลชั้นเรียน</h4>
+                    <h4 class="modal-title">ลบข้อมูลครูประจำชั้น</h4>
                 </div>
                 <div class="modal-body">
                     <form method="post" id="delClassForm">
@@ -618,7 +622,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
-                    <h4 class="modal-title" id="delScheduleModalTitle">ลบข้อมูลตารางเรียน</h4>
+                    <h4 class="modal-title" id="delScheduleModalTitle">ลบข้อมูลครูผู้สอนรายวิชา</h4>
                 </div>
                 <div class="modal-body">
                     <form method="post" id="delScheduleForm">

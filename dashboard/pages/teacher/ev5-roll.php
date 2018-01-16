@@ -1,34 +1,48 @@
 <?php include_once(dirname(__DIR__, 3)."/lib/conn.php"); ?>
 <?php include_once(dirname(__DIR__, 3)."/lib/Func.php"); ?>
+<?php 
+  $r = (int)$_GET['r'];
+  $cl = $_GET["c"];
+  $row_count;
+
+  $class = $conn->prepare("SELECT * FROM class AS c INNER JOIN roll AS r ON r.class_id = c.class_id WHERE c.class_id = :cl");
+  $class->execute(array(':cl'=>$cl));
+  $class_res = $class->fetch(PDO::FETCH_ASSOC);
+
+?>
 <?php
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["send"])) {
       try {
-
-        $scid = $_POST["scid"];
+        $res = array();
         $conn->beginTransaction();
-        foreach (array_combine($_POST["sid"], $_POST["st"]) as $sid => $st) {
-          $conn->exec("UPDATE `period` SET period_count = $st WHERE student_id = '$sid' AND schedule_id = $scid");
+        foreach( $_POST["stid"] as $stid => $key ) {
+          $res[$key] = array(
+            'rsl' => $_POST["rsl"][$stid],
+            'rpl' => $_POST["rpl"][$stid],
+            'rab' => $_POST["rab"][$stid],
+            'rat' => $_POST["rat"][$stid]
+          );
+
+          $conn->exec("UPDATE `roll_detail` SET 
+                      `roll_sick_leave` = ".$res[$key]["rsl"].",
+                      `roll_personal_leave` = ".$res[$key]["rpl"].",
+                      `roll_absent` = ".$res[$key]["rab"].",
+                      `roll_attend` = ".$res[$key]["rat"]."
+                      WHERE `roll_id` = '".$r."' AND `student_id` = '".$key."'");
         }
+
         $conn->commit();
+        $user->redirect("Evaluation-5.php");
 
       } catch(PDOException $e) {
 
         $conn->rollback();
-        echo "Error : Can't update score!" . $e->getMessage();
+        echo 'ERROR : ' . $e->getMessage();
 
       }
     }
   }
-?>
-<?php 
-  $id = (int)$_GET['sc'];
-  $row_count;
-
-  $class = $conn->prepare("SELECT * FROM class AS c INNER JOIN schedule AS sc ON sc.class_id = c.class_id WHERE sc.schedule_id = :sc");
-  $class->execute(array(':sc'=>$id));
-  $class_res = $class->fetch(PDO::FETCH_ASSOC);
-
 ?>
 <?php 
   ob_start();
@@ -64,24 +78,29 @@
                           <tr>
                             <th>เลขที่</th>
                             <th>ชื่อ - นามสกุล</th>
-                            <th>จำนวนชั่วโมง</th>
+                            <th>ลาป่วย</th>
+                            <th>ลากิจ</th>
+                            <th>ขาดเรียน</th>
+                            <th>มาเรียน</th>
                           </tr>      
                         </thead>
                         <tbody>
                       <?php 
                         $stmt = $conn->prepare(
-                          "SELECT * FROM `period` AS p
-                          INNER JOIN student AS st ON st.student_id = p.student_id
-                          INNER JOIN schedule AS sc ON sc.schedule_id = p.schedule_id
-                          WHERE p.schedule_id = :scid");
-                        $stmt->execute(array(':scid'=>$id));
+                          "SELECT * FROM `roll_detail` AS rd
+                          INNER JOIN `student` AS st ON st.student_id = rd.student_id
+                          INNER JOIN `roll` AS r ON r.roll_id = rd.roll_id
+                          WHERE rd.roll_id = :rid");
+                        $stmt->execute(array(':rid'=>$r));
                         while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
                           echo '<tr>
-                                  <td><input type="hidden" name="sid[]" value="'.$rows["student_id"].'">'.$rows["student_id"].'</td>
-                                  <td>'.$rows["student_firstname"].' '.$rows["student_lastname"].'</td>
-                                  <td><input class="form-control" type="number" name="st[]" min="0" max="'.$rows["period_max"].'" value="'.$rows["period_count"].'"></td>
-                                  <input type="hidden" name="scid" value="'.$id.'">
-                                </tr>';   
+                                  <td><input type="hidden" name="stid[]" value="'.$rows["student_id"].'"><p class="form-control-static">'.$rows["student_num"].'</p></td>
+                                  <td><p class="form-control-static"> '.$rows["student_firstname"].' '.$rows["student_lastname"].'</p></td>
+                                  <td><input class="form-control" type="number" name="rsl[]" min="0" value="'.$rows["roll_sick_leave"].'"></td>
+                                  <td><input class="form-control" type="number" name="rpl[]" min="0" value="'.$rows["roll_personal_leave"].'"></td>
+                                  <td><input class="form-control" type="number" name="rab[]" min="0" value="'.$rows["roll_absent"].'"></td>
+                                  <td><input class="form-control" type="number" name="rat[]" min="0" value="'.$rows["roll_attend"].'"></td>
+                                </tr>';
                         }
                       ?>  
                       </tbody>
@@ -91,6 +110,7 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
+            <div class="row" style="padding-top: 20px;padding-bottom: 20px;"></div>
         </div>
         <!-- /#page-wrapper -->
 

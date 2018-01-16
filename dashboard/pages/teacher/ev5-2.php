@@ -6,35 +6,17 @@
       try {
         
         $count = 0;
+        $res = array();
         $conn->beginTransaction();
-        foreach(array_combine($_POST["sid"], $_POST["stid"]) as $sid => $stid) {
-          $sum = 0;
-          // $conn->exec(
-          //   "DELETE FROM `score_detail` WHERE `score_id` = $sid"
-          // );
-          for ($i = 1; $i <= 8; $i++) {
-            $s_name = "s" . $i;
-            $s_part = $i;
-            $score = $_POST[$s_name][$count];
-            $sum += $score;
+        foreach( $_POST["stid"] as $stid => $key ) {
+          $res[$key] = array(
+            "sid" => $_POST["sid"][$stid],
+            "score" => $_POST["score"][$stid]
+          );
 
-            // -------------------------------------------
-            $sql = 
-              "UPDATE score_detail 
-              SET scored_point = $score 
-              WHERE score_id = $sid AND scored_part = $s_part";
-            // -------------------------------------------
-
-            // if ($i < 8) {
-            //   $sql = "INSERT INTO `score_detail` VALUES ('".$sid."', '".$stid."', ".$i.", ".$score.", 10)";
-            // } else {
-            //   $sql = "INSERT INTO `score_detail` VALUES ('".$sid."', '".$stid."', ".$i.", ".$score.", 30)";
-            // }
-
-            $conn->exec($sql);
-          }
-          $count+=1;
-          $conn->exec("UPDATE `score` SET `score_score` = $sum WHERE `score_id` = $sid");
+          $conn->exec("UPDATE `score_detail_2` SET 
+                       `scored_score` = ".$res[$key]["score"]." 
+                       WHERE `score_id` = '".$res[$key]["sid"]."' AND `student_id` = '".$key."'");
         }
         
         $conn->commit();
@@ -91,6 +73,7 @@
                       $stmt = $conn->prepare(
                         "SELECT * FROM score AS s
                          INNER JOIN student AS st ON s.student_id = st.student_id
+                         INNER JOIN score_detail_2 AS sd2 ON sd2.score_id = s.score_id
                          WHERE s.schedule_id = :sc
                       ");
                       $stmt->execute(array(":sc"=>$id));
@@ -99,29 +82,23 @@
                               <thead><tr>
                                 <th>เลขที่</th>
                                 <th>ชื่อ - นามสกุล</th>
-                                <th>ช่องที่ 1 (10)</th>
-                                <th>ช่องที่ 2 (10)</th>
-                                <th>ช่องที่ 3 (10)</th>
-                                <th>ช่องที่ 4 (10)</th>
-                                <th>ช่องที่ 5 (10)</th>
-                                <th>ช่องที่ 6 (10)</th>
-                                <th>ช่องที่ 7 (10)</th>
-                                <th>ปลายภาค (30)</th>
+                                <th>คะแนน</th>
                               </tr>
                               </thead><tbody>
                             ';
                       while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        $stmt2 = $conn->prepare("SELECT * FROM score_detail WHERE score_id = :score_id");
+                        $stmt2 = $conn->prepare("SELECT * FROM score_detail_2 WHERE score_id = :score_id");
                         $stmt2->execute(array("score_id"=>$rows["score_id"]));
-                        $i = 1;
                         echo '
                           <tr>
                             <td><p class="form-control-static">'.$rows["student_num"].'</p><input type="hidden" name="sid[]" value="'.$rows["score_id"].'"><input type="hidden" name="stid[]" value="'.$rows["student_id"].'"></td>
-                            <td><p class="form-control-static">'.$rows["student_firstname"]. ' '. $rows["student_lastname"] .'</p></td>';
-                            while ($rows2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                              echo '<td><input class="form-control" type="number" max="'.$rows2["scored_max"].'" min="0" name="s'.$i.'[]" value="'.$rows2["scored_point"].'"></td>';
-                              $i++;
-                            }
+                            <td><p class="form-control-static">'.$rows["student_firstname"]. ' '. $rows["student_lastname"] .'</p></td>
+                            <td>
+                              <select class="form-control" name="score[]" required>
+                                <option value="1" '.(($rows["scored_score"] == 1) ? "selected" : "").'>ผ่าน</option>
+                                <option value="0" '.(($rows["scored_score"] == 0) ? "selected" : "").'>ไม่ผ่าน</option>
+                              </select>
+                            </td>';
                         echo '</tr>';
                       }
                       echo '</tbody></table>';
@@ -131,11 +108,7 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
-            <div class="row">
-                <div class="col-xs-12" style="padding-top: 20px;padding-bottom: 20px;">
-                      
-                </div>
-            </div>
+            <div class="row" style="padding-top: 20px;padding-bottom: 20px;"></div>
         </div>
         <!-- /#page-wrapper -->
 

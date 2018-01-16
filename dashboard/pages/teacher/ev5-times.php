@@ -11,6 +11,7 @@
           $conn->exec("UPDATE `period` SET period_count = $st WHERE student_id = '$sid' AND schedule_id = $scid");
         }
         $conn->commit();
+        $user->redirect("Evaluation-5.php");
 
       } catch(PDOException $e) {
 
@@ -91,6 +92,7 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
+            <div class="row" style="padding-top: 20px;padding-bottom: 20px;"></div>
         </div>
         <!-- /#page-wrapper -->
 

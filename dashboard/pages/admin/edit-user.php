@@ -38,6 +38,7 @@
         } else if ( $level == 2 ) {
           $conn->exec("UPDATE `teacher` SET
                       `teacher_id` = '".$_POST["tid"]."',
+                      `teacher_title` = '".$_POST["title"]."',
                       `teacher_firstname` = '".$_POST["firstname"]."',
                       `teacher_lastname` = '".$_POST["lastname"]."',
                       `teacher_birthday` = CAST('".$_POST["birth"]."' AS DATE),
@@ -191,6 +192,16 @@
                         </div>
                     </div>
                     <hr />
+                    <div class="form-group">
+                        <label for="c14-0" class="col-xs-3 control-label">คำนำหน้า</label>
+                        <div class="col-xs-9">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <input type="text" class="form-control" name="title" id="c14-0" value="'.$rows["teacher_title"].'" placeholder="Title" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="c14-1" class="col-xs-3 control-label">ชื่อ-นามสกุล</label>
                         <div class="col-xs-9">

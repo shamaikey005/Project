@@ -19,9 +19,14 @@
             try {
                 $st_stmt = $conn->prepare("SELECT * FROM `student` WHERE `class_id` = :cid");
                 $st_stmt->execute(array(":cid"=>$_POST["rclass"]));
+                $insRollStmt = $conn->prepare("INSERT INTO `roll` VALUES (NULL, '".$_POST["rclass"]."', ".$_POST["rterm"].", YEAR(CAST(STR_TO_DATE('".($_POST["ryear"] - 543)."', '%Y') AS DATE)))");
+                $insRollStmt->execute();
+                $roll_check_stmt = $conn->prepare("SELECT * FROM `roll` WHERE class_id = :cid AND term = :term AND year = :year");
+                $roll_check_stmt->execute(array(":cid"=>$_POST["rclass"],":term"=>$_POST["rterm"],":year"=>($_POST["ryear"]-543)));
+                $roll_check_rows = $roll_check_stmt->fetch(PDO::FETCH_ASSOC);
                 $conn->beginTransaction();
                 while ($st_rows = $st_stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $conn->exec("INSERT INTO `roll` VALUES ('".$st_rows["student_id"]."', '".$_POST["rclass"]."', 0, 0, 0, 0, ".$_POST["rterm"].", YEAR(CAST(STR_TO_DATE('".($_POST["ryear"] - 543)."', '%Y') AS DATE)))");
+                    $conn->exec("INSERT INTO `roll_detail` VALUES ('".$roll_check_rows["roll_id"]."', '".$st_rows["student_id"]."', 0, 0, 0, 0)");
                 }
                 $conn->commit();
                 unset($_POST["insRollBtn"]);
@@ -35,10 +40,15 @@
         if (isset($_POST["insTraitBtn"])) {
             try {
                 $st_stmt = $conn->prepare("SELECT * FROM `student` WHERE `class_id` = :cid");
-                $st_stmt->execute(array(":cid"=>$_POST["rclass"]));
+                $st_stmt->execute(array(":cid"=>$_POST["trclass"]));
+                $insTraitStmt = $conn->prepare("INSERT INTO `trait` VALUES (NULL, '".$_POST["trclass"]."', ".$_POST["trterm"].", YEAR(CAST(STR_TO_DATE('".($_POST["tryear"] - 543)."', '%Y') AS DATE)))");
+                $insTraitStmt->execute();
+                $trait_check_stmt = $conn->prepare("SELECT * FROM `trait` WHERE class_id = :cid AND term = :term AND year = :year");
+                $trait_check_stmt->execute(array(":cid"=>$_POST["trclass"],":term"=>$_POST["trterm"],":year"=>($_POST["tryear"]-543)));
+                $trait_check_rows = $trait_check_stmt->fetch(PDO::FETCH_ASSOC);
                 $conn->beginTransaction();
                 while ($st_rows = $st_stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $conn->exec("INSERT INTO `trait` VALUES ('".$st_rows["student_id"]."', '".$_POST["rclass"]."', 0, 0, 0, 0, 0, 0, 0, 0, 0, ".$_POST["rterm"].", YEAR(CAST(STR_TO_DATE('".($_POST["ryear"] - 543)."', '%Y') AS DATE)))");
+                    $conn->exec("INSERT INTO `trait_detail` VALUES ('".$trait_check_rows["trait_id"]."' ,'".$st_rows["student_id"]."', 0, 0, 0, 0, 0, 0, 0, 0, 0)");
                 }
                 $conn->commit();
                 unset($_POST["insTraitBtn"]);
@@ -47,6 +57,48 @@
                 $conn->rollback();
                 echo 'ERROR : ' . $e->getMessage();
             }
+        }
+
+        if (isset($_POST["delRollBtn"])) {
+            try {
+                $roll_detail_stmt = $conn->prepare("SELECT * FROM `roll_detail` WHERE `roll_id` = :rid");
+                $roll_detail_stmt->bindParam(":rid", $_POST["rid"]);
+                $roll_detail_stmt->execute();
+                $count = $roll_detail_stmt->rowCount();
+                if ($count > 0) {
+                    $del_roll_detail_stmt = $conn->prepare("DELETE FROM `roll_detail` WHERE `roll_id` = '" . $_POST["rid"] . "'");
+                    $del_roll_detail_stmt->execute();
+                }
+                $del_roll_stmt = $conn->prepare("DELETE FROM `roll` WHERE `roll_id` = '".$_POST["rid"]."'");
+                $del_roll_stmt->execute();
+
+            } catch (PDOException $e) {
+                echo 'ERROR : ' . $e->getMessage();
+            }
+
+            unset($_POST["delRollBtn"]);
+            $user->redirect("Evaluation-5.php");
+        }
+
+        if (isset($_POST["delTraitBtn"])) {
+            try {
+                $trait_detail_stmt = $conn->prepare("SELECT * FROM `trait_detail` WHERE `trait_id` = :trid");
+                $trait_detail_stmt->bindParam(":trid", $_POST["trid"]);
+                $trait_detail_stmt->execute();
+                $count = $trait_detail_stmt->rowCount();
+                if ($count > 0) {
+                    $del_trait_detail_stmt = $conn->prepare("DELETE FROM `trait_detail` WHERE `trait_id` = '" . $_POST["trid"] . "'");
+                    $del_trait_detail_stmt->execute();
+                }
+                $del_trait_stmt = $conn->prepare("DELETE FROM `trait` WHERE `trait_id` = '".$_POST["trid"]."'");
+                $del_trait_stmt->execute();
+                
+            } catch (PDOException $e) {
+                echo 'ERROR : ' . $e->getMessage();
+            }
+
+            unset($_POST["delTraitBtn"]);
+            $user->redirect("Evaluation-5.php");
         }
 
     }
@@ -70,7 +122,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-lebelledby="insDropdown">
                                 <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insRollModal">วันมาเรียน</a></li>
-                                <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insTraitModal">อัตลักษณ์ & อ่านเขียน</a></li>
+                                <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insTraitModal">คุณลักษณะ & อ่านเขียน</a></li>
                             </ul>
                         </div>
                     </h1>
@@ -96,8 +148,8 @@
                                         เทอม '.$rows2["term"].' - ปีการศึกษา '.($rows2["year"]+543).'  
                                     </div>
                                     <div class="panel-body">
-                                        <p>'.$rows2['subjects_name'] . ' <br>ชั้น ป.' . $rows2["class_grade"] . ' ห้อง ' . $rows2["class_room"] . '</p>
-                                        <a href="ev5.php?sc='.$rows2["schedule_id"].'"><button class="btn btn-success">บันทึกคะแนน</button></a> 
+                                        <p>'.$rows2["subjects_id"].' <br> '.$rows2['subjects_name'] . ' <br>ชั้น ป.' . $rows2["class_grade"] . ' ห้อง ' . $rows2["class_room"] . '</p>
+                                        <a href="'.(($rows2["subjects_type"] != 3) ? "ev5" : "ev5-2") .'.php?sc='.$rows2["schedule_id"].'"><button class="btn btn-success">บันทึกคะแนน</button></a> 
                                         <a href="ev5-times.php?sc='.$rows2["schedule_id"].'"><button class="btn btn-info">ลงชั่วโมงเรียน</button></a>
                                     </div>
                                 </div>';
@@ -110,9 +162,9 @@
                                         เทอม '.$trait_rows["term"].' - ปีการศึกษา '.($trait_rows["year"]+543).'  
                                     </div>
                                     <div class="panel-body">
-                                        <p> อัตลักษณ์ & อ่าน-เขียน <br>ชั้น ป.' . $trait_rows["class_grade"] . ' ห้อง ' . $trait_rows["class_room"] . '</p> 
-                                        <a href="ev5-trait.php?sc='.$trait_rows["class_id"].'"><button class="btn btn-success">บันทึกคะแนน</button></a>
-                                        <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#delTraitModal" data-sjid="'.$rows["subjects_id"].'" data-type="'.$rows["subjects_type"].'"><i class="fas fa-times fa-fw"></i> ลบ</button>
+                                        <p> คุณลักษณะ & อ่าน-เขียน <br>ชั้น ป.' . $trait_rows["class_grade"] . ' ห้อง ' . $trait_rows["class_room"] . '</p> 
+                                        <a href="ev5-trait.php?tr='.$trait_rows["trait_id"].'&c='.$trait_rows["class_id"].'"><button class="btn btn-success">บันทึกคะแนน</button></a>
+                                        <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#delTraitModal" data-trid="'.$trait_rows["trait_id"].'" data-term="'.$trait_rows["term"].'" data-year="'.$trait_rows["year"].'"><i class="fas fa-times fa-fw"></i> ลบ</button>
                                     </div>
                                 </div>';
                         }
@@ -124,9 +176,9 @@
                                         เทอม '.$roll_rows["term"].' - ปีการศึกษา '.($roll_rows["year"]+543).'  
                                     </div>
                                     <div class="panel-body">
-                                        <p> เช็ควันมาเรียน <br>ชั้น ป.' . $roll_rows["class_grade"] . ' ห้อง ' . $roll_rows["class_room"] . '</p> 
-                                        <a href="ev5-roll.php?c='.$roll_rows["class_id"].'"><button class="btn btn-success">บันทึกวันมาเรียน</button></a>
-                                        <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#delRollModal" data-sjid="'.$rows["subjects_id"].'" data-type="'.$rows["subjects_type"].'"><i class="fas fa-times fa-fw"></i> ลบ</button>
+                                        <p> ลงวันมาเรียน <br>ชั้น ป.' . $roll_rows["class_grade"] . ' ห้อง ' . $roll_rows["class_room"] . '</p> 
+                                        <a href="ev5-roll.php?r='.$roll_rows["roll_id"].'&c='.$roll_rows["class_id"].'"><button class="btn btn-success">บันทึกวันมาเรียน</button></a>
+                                        <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#delRollModal" data-rid="'.$roll_rows["roll_id"].'" data-term="'.$roll_rows["term"].'" data-year="'.$roll_rows["year"].'"><i class="fas fa-times fa-fw"></i> ลบ</button>
                                     </div>
                                 </div>';
                         }
@@ -155,7 +207,7 @@
                 <div class="modal-body">
                     <form class="form-horizontal" method="post" id="insRollForm">
                         <div class="form-group">
-                            <label for="ins13" class="col-xs-3 control-label">ชั้น</label>
+                            <label for="rclass" class="col-xs-3 control-label">ชั้น</label>
                             <div class="col-xs-9">
                                 <select class="form-control" name="rclass" id="rclass" required>
                                     <?php 
@@ -171,13 +223,13 @@
                         <div class="form-group">
                             <label for="ryear" class="col-xs-3 control-label">ปีการศึกษา</label>
                             <div class="col-xs-9">
-                                <input class="form-control" type="number" id="ryear" name="ryear" min="0" max="5" value="" placeholder="Year" required />
+                                <input class="form-control" type="text" id="ryear" name="ryear" value="" placeholder="Year" required />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="rterm" class="col-xs-3 control-label">เทอม</label>
                             <div class="col-xs-9">
-                                <input class="form-control" type="number" id="rterm" name="rterm" min="0" max="" value="" placeholder="Term" required />
+                                <input class="form-control" type="number" id="rterm" name="rterm" min="1" max="" value="" placeholder="Term" required />
                             </div>
                         </div>
                     </form>
@@ -199,14 +251,14 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <i class="fas fa-times"></i>
                     </button>
-                    <h4 class="modal-title" id="insTraitModalTitle"><i class="fas fa-plus-circle fa-fw"></i> เพิ่มอัตลักษณ์ & อ่านเขียน</h4>
+                    <h4 class="modal-title" id="insTraitModalTitle"><i class="fas fa-plus-circle fa-fw"></i> เพิ่มคุณลักษณะ & อ่านเขียน</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" method="post" id="insTraitForm">
                         <div class="form-group">
-                            <label for="ins13" class="col-xs-3 control-label">ชั้น</label>
+                            <label for="trclass" class="col-xs-3 control-label">ชั้น</label>
                             <div class="col-xs-9">
-                                <select class="form-control" name="rclass" id="rclass" required>
+                                <select class="form-control" name="trclass" id="trclass" required>
                                     <?php 
                                         $class_stmt = $conn->prepare("SELECT * FROM `class` WHERE `teacher_id` = '".$_SESSION["id"]."'");
                                         $class_stmt->execute();
@@ -220,13 +272,13 @@
                         <div class="form-group">
                             <label for="tryear" class="col-xs-3 control-label">ปีการศึกษา</label>
                             <div class="col-xs-9">
-                                <input class="form-control" type="number" id="tryear" name="tryear" min="0" max="5" value="" placeholder="Year" required />
+                                <input class="form-control" type="text" id="tryear" name="tryear" value="" placeholder="Year" required />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="trterm" class="col-xs-3 control-label">เทอม</label>
                             <div class="col-xs-9">
-                                <input class="form-control" type="number" id="trterm" name="trterm" min="0" max="" value="" placeholder="Term" required />
+                                <input class="form-control" type="number" id="trterm" name="trterm" min="1" max="" value="" placeholder="Term" required />
                             </div>
                         </div>
                     </form>
@@ -240,7 +292,88 @@
     </div>
     <!-- /Modal - Insert Trait -->
 
+    <!-- Modal - Delete Roll -->
+    <div class="modal fade" id="delRollModal" tabindex="-1" role="dialog" aria-labelledby="delRollModalTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+                    <h4 class="modal-title">ลบข้อมูลวันมาเรียน</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="delRollForm">
+                        <p>
+                            คุณแน่ใจที่จะลบข้อมูล <strong></strong> หรือไม่
+                            <input type="hidden" value="" name="rid" />
+                            <input type="hidden" value="" name="term" />
+                            <input type="hidden" value="" name="year" />
+                        </p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" type="submit" form="delRollForm" name="delRollBtn" value="true"><i class="fas fa-times fa-fw"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Modal - Delete Roll -->
+
+    <!-- Modal - Delete Trait -->
+    <div class="modal fade" id="delTraitModal" tabindex="-1" role="dialog" aria-labelledby="delTraitModalTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+                    <h4 class="modal-title">ลบข้อมูลนักเรียน</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="delTraitForm">
+                        <p>
+                            คุณแน่ใจที่จะลบข้อมูล <strong></strong> หรือไม่
+                            <input type="hidden" value="" name="trid" />
+                            <input type="hidden" value="" name="term" />
+                            <input type="hidden" value="" name="year" />
+                        </p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" type="submit" form="delTraitForm" name="delTraitBtn" value="true"><i class="fas fa-times fa-fw"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Modal - Delete Trait -->
+
     <?php include_once('js.inc.php') ?>
+    <script>
+        $('#delRollModal').on('show.bs.modal', function(e) {
+            var button = $(e.relatedTarget);
+            var rid = button.data('rid');
+            var term = button.data('term');
+            var year = button.data('year');
+
+            var modal = $(this);
+            modal.find('.modal-body p strong').text(rid);
+            modal.find('.modal-body input[name=rid]').val(rid);
+            modal.find('.modal-body input[name=term]').val(term);
+            modal.find('.modal-body input[name=year]').val(year);
+        });
+
+        $('#delTraitModal').on('show.bs.modal', function(e) {
+            var button = $(e.relatedTarget);
+            var trid = button.data('trid');
+            var term = button.data('term');
+            var year = button.data('year');
+
+            var modal = $(this);
+            modal.find('.modal-body p strong').text(trid);
+            modal.find('.modal-body input[name=trid]').val(trid);
+            modal.find('.modal-body input[name=term]').val(term);
+            modal.find('.modal-body input[name=year]').val(year);
+        });
+    </script>
 
 </body>
 

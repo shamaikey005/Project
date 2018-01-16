@@ -11,6 +11,12 @@
 
   echo $buffer;
 ?>
+<?php
+  $stmt = $conn->prepare("SELECT * FROM `schedule` AS `sc` INNER JOIN `teacher` AS `t` ON `t`.`teacher_id` = `sc`.`teacher_id` WHERE `t`.`teacher_id` = :tid");
+  $stmt->bindParam(":tid", $_SESSION["id"]);
+  $stmt->execute();
+  
+?>
 
 <body>
 
@@ -23,7 +29,11 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">ปพ.6</h1>
-                    <a href="ev6-print.php">ev6</a>
+                    <?php 
+                      while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        echo '<a href="ev6-print.php?sc='.$rows["schedule_id"].'">ev6</a><br>';
+                      }
+                    ?>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
