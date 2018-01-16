@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2018 at 12:20 PM
+-- Generation Time: Jan 16, 2018 at 08:35 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -67,7 +67,14 @@ INSERT INTO `period` (`student_id`, `subjects_id`, `schedule_id`, `period_count`
 ('7614', 'ค11101', '12', 0, 127),
 ('8102', 'ค11101', '12', 0, 127),
 ('8134', 'ค11101', '12', 0, 127),
-('8137', 'ค11101', '12', 0, 127);
+('8137', 'ค11101', '12', 0, 127),
+('7423', 'ก11101', '13', 0, 40),
+('7429', 'ก11101', '13', 0, 40),
+('7461', 'ก11101', '13', 0, 40),
+('7614', 'ก11101', '13', 0, 40),
+('8102', 'ก11101', '13', 0, 40),
+('8134', 'ก11101', '13', 0, 40),
+('8137', 'ก11101', '13', 0, 40);
 
 -- --------------------------------------------------------
 
@@ -76,15 +83,54 @@ INSERT INTO `period` (`student_id`, `subjects_id`, `schedule_id`, `period_count`
 --
 
 CREATE TABLE `roll` (
-  `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `roll_id` int(11) NOT NULL,
   `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `roll_sick_leave` smallint(6) NOT NULL DEFAULT '0',
-  `roll_personal_leave` smallint(6) NOT NULL DEFAULT '0',
-  `roll_absent` smallint(6) NOT NULL DEFAULT '0',
-  `roll_attend` smallint(6) NOT NULL DEFAULT '0',
   `term` tinyint(4) NOT NULL,
   `year` year(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `roll`
+--
+
+INSERT INTO `roll` (`roll_id`, `class_id`, `term`, `year`) VALUES
+(6, 'c1-1', 1, 2017),
+(7, 'c1-1', 2, 2017);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roll_detail`
+--
+
+CREATE TABLE `roll_detail` (
+  `roll_id` int(11) NOT NULL,
+  `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `roll_sick_leave` smallint(6) NOT NULL DEFAULT '0',
+  `roll_personal_leave` smallint(6) NOT NULL DEFAULT '0',
+  `roll_absent` smallint(6) NOT NULL DEFAULT '0',
+  `roll_attend` smallint(6) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `roll_detail`
+--
+
+INSERT INTO `roll_detail` (`roll_id`, `student_id`, `roll_sick_leave`, `roll_personal_leave`, `roll_absent`, `roll_attend`) VALUES
+(6, '7423', 1, 1, 2, 5),
+(6, '7429', 0, 0, 0, 0),
+(6, '7461', 0, 0, 0, 0),
+(6, '7614', 0, 0, 0, 0),
+(6, '8102', 0, 0, 0, 0),
+(6, '8134', 0, 0, 0, 0),
+(6, '8137', 0, 0, 0, 0),
+(7, '7423', 0, 0, 0, 0),
+(7, '7429', 0, 0, 0, 0),
+(7, '7461', 0, 0, 0, 0),
+(7, '7614', 0, 0, 0, 0),
+(7, '8102', 0, 0, 0, 0),
+(7, '8134', 0, 0, 0, 0),
+(7, '8137', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -107,7 +153,8 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`schedule_id`, `subjects_id`, `class_id`, `teacher_id`, `year`, `term`, `status`) VALUES
-(12, 'ค11101', 'c1-1', 't001', 2017, 1, 1);
+(12, 'ค11101', 'c1-1', 't001', 2017, 1, 1),
+(13, 'ก11101', 'c1-1', 't001', 2017, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -128,13 +175,20 @@ CREATE TABLE `score` (
 --
 
 INSERT INTO `score` (`score_id`, `student_id`, `subjects_id`, `schedule_id`, `score_score`) VALUES
-(14, '7423', 'ค11101', '12', 2),
+(14, '7423', 'ค11101', '12', 5),
 (15, '7429', 'ค11101', '12', 0),
 (16, '7461', 'ค11101', '12', 0),
 (17, '7614', 'ค11101', '12', 0),
 (18, '8102', 'ค11101', '12', 0),
 (19, '8134', 'ค11101', '12', 0),
-(20, '8137', 'ค11101', '12', 0);
+(20, '8137', 'ค11101', '12', 0),
+(21, '7423', 'ก11101', '13', 0),
+(22, '7429', 'ก11101', '13', 0),
+(23, '7461', 'ก11101', '13', 0),
+(24, '7614', 'ก11101', '13', 0),
+(25, '8102', 'ก11101', '13', 0),
+(26, '8134', 'ก11101', '13', 0),
+(27, '8137', 'ก11101', '13', 0);
 
 -- --------------------------------------------------------
 
@@ -157,8 +211,8 @@ CREATE TABLE `score_detail` (
 INSERT INTO `score_detail` (`score_id`, `student_id`, `scored_part`, `scored_point`, `scored_max`) VALUES
 (14, '7423', 1, 1, 10),
 (14, '7423', 2, 1, 10),
-(14, '7423', 3, 0, 10),
-(14, '7423', 4, 0, 10),
+(14, '7423', 3, 1, 10),
+(14, '7423', 4, 2, 10),
 (14, '7423', 5, 0, 10),
 (14, '7423', 6, 0, 10),
 (14, '7423', 7, 0, 10),
@@ -223,6 +277,19 @@ CREATE TABLE `score_detail_2` (
   `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `scored_score` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `score_detail_2`
+--
+
+INSERT INTO `score_detail_2` (`score_id`, `student_id`, `scored_score`) VALUES
+(21, '7423', 0),
+(22, '7429', 0),
+(23, '7461', 1),
+(24, '7614', 1),
+(25, '8102', 1),
+(26, '8134', 1),
+(27, '8137', 1);
 
 -- --------------------------------------------------------
 
@@ -340,8 +407,29 @@ INSERT INTO `teacher` (`teacher_id`, `teacher_title`, `teacher_firstname`, `teac
 --
 
 CREATE TABLE `trait` (
-  `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `trait_id` int(11) NOT NULL,
   `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `term` tinyint(4) NOT NULL,
+  `year` year(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `trait`
+--
+
+INSERT INTO `trait` (`trait_id`, `class_id`, `term`, `year`) VALUES
+(3, 'c1-1', 1, 2017),
+(4, 'c1-1', 2, 2017);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trait_detail`
+--
+
+CREATE TABLE `trait_detail` (
+  `trait_id` int(11) NOT NULL,
+  `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `trait_1` tinyint(4) NOT NULL DEFAULT '0',
   `trait_2` tinyint(4) NOT NULL DEFAULT '0',
   `trait_3` tinyint(4) NOT NULL DEFAULT '0',
@@ -350,10 +438,28 @@ CREATE TABLE `trait` (
   `trait_6` tinyint(4) NOT NULL DEFAULT '0',
   `trait_7` tinyint(4) NOT NULL DEFAULT '0',
   `trait_8` tinyint(4) NOT NULL DEFAULT '0',
-  `trait_readwrite` tinyint(4) NOT NULL DEFAULT '0',
-  `term` tinyint(4) NOT NULL,
-  `year` year(4) NOT NULL
+  `trait_readwrite` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `trait_detail`
+--
+
+INSERT INTO `trait_detail` (`trait_id`, `student_id`, `trait_1`, `trait_2`, `trait_3`, `trait_4`, `trait_5`, `trait_6`, `trait_7`, `trait_8`, `trait_readwrite`) VALUES
+(3, '7423', 1, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, '7429', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, '7461', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, '7614', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, '8102', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, '8134', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, '8137', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, '7423', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, '7429', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, '7461', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, '7614', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, '8102', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, '8134', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, '8137', 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -394,6 +500,12 @@ ALTER TABLE `class`
   ADD PRIMARY KEY (`class_id`);
 
 --
+-- Indexes for table `roll`
+--
+ALTER TABLE `roll`
+  ADD PRIMARY KEY (`roll_id`);
+
+--
 -- Indexes for table `schedule`
 --
 ALTER TABLE `schedule`
@@ -403,12 +515,6 @@ ALTER TABLE `schedule`
 -- Indexes for table `score`
 --
 ALTER TABLE `score`
-  ADD PRIMARY KEY (`score_id`);
-
---
--- Indexes for table `score_detail_2`
---
-ALTER TABLE `score_detail_2`
   ADD PRIMARY KEY (`score_id`);
 
 --
@@ -436,6 +542,12 @@ ALTER TABLE `teacher`
   ADD PRIMARY KEY (`teacher_id`);
 
 --
+-- Indexes for table `trait`
+--
+ALTER TABLE `trait`
+  ADD PRIMARY KEY (`trait_id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -444,6 +556,12 @@ ALTER TABLE `user`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `roll`
+--
+ALTER TABLE `roll`
+  MODIFY `roll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `schedule`
@@ -455,13 +573,13 @@ ALTER TABLE `schedule`
 -- AUTO_INCREMENT for table `score`
 --
 ALTER TABLE `score`
-  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT for table `score_detail_2`
+-- AUTO_INCREMENT for table `trait`
 --
-ALTER TABLE `score_detail_2`
-  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `trait`
+  MODIFY `trait_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
