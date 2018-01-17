@@ -32,7 +32,43 @@
     <!-- Custom Style -->
     <link href="../../../assets/css/style-print.css" rel="stylesheet">
 
-    <style>@page { size: A4 }</style>
+    <style>
+        @page { size: A4; }
+        @font-face {
+            font-family: "THSarabunNew";
+            src: url("../../../assets/webfonts/THSarabunNew.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "THSarabunNew";
+            src: url("../../../assets/webfonts/THSarabunNew Italic.ttf") format("truetype");
+            font-weight: normal;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: "THSarabunNew";
+            src: url("../../../assets/webfonts/THSarabunNew Bold.ttf") format("truetype");
+            font-weight: bold;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "THSarabunNew";
+            src: url("../../../assets/webfonts/THSarabunNew BoldItalic.ttf") format("truetype");
+            font-weight: bold;
+            font-style: italic;
+        }
+        *{ margin: 0; padding: 0;}
+        body { 
+            font-family: "THSarabunNew", sans-serif; 
+            font-size: 16px;
+            color: black; }
+        table, th, td {
+            text-align: center;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
