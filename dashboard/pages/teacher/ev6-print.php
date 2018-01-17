@@ -22,13 +22,10 @@
 
   <section class="sheet padding-10mm">
     <article>
-      Hello
-    </acticle>
-  </section>
-
-  <section class="sheet padding-10mm">
-    <article>
-      Hello
+      <div>
+        <img class="pull-left" src="../../../assets/img/logo.png" width="100" height="100" alt="logo">
+        <div class="text-center"><h3>รายงานพัฒนาคุณภาพผู้เรียนเป็นรายบุคคล</h3></div>
+      </div>
     </acticle>
   </section>
 
