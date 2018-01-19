@@ -133,6 +133,77 @@ class Func {
     return $type;
   }
 
+  public function grade($data) {
+    $grade;
+    switch (true) {
+      case ($data >= 80) :
+        $grade = 4;
+        break;
+      
+        case ($data < 80 && $data >= 75) :
+        $grade = 3.5;
+        break;
+
+        case ($data < 75 && $data >= 70) :
+        $grade = 3;
+        break;
+
+        case ($data < 70 && $data >= 65) :
+        $grade = 2.5;
+        break;
+
+        case ($data < 65 && $data >= 60) :
+        $grade = 2;
+        break;
+
+        case ($data < 60 && $data >= 55) :
+        $grade = 1.5;
+        break;
+
+        case ($data < 55 && $data >= 50) :
+        $grade = 1;
+        break;
+
+        case ($data < 50) :
+        $grade = 0;
+        break;
+
+    }
+
+    return $grade;
+  }
+
+  public function traitResult ($data) : string {
+    $res;
+    switch (true) {
+      case ($data <= 5 && $data > 4) :
+      $res = "ดีเยี่ยม";
+      break;
+
+      case ($data <= 4 && $data > 3) :
+      $res = "ดี";
+      break;
+
+      case ($data <= 3 && $data > 2) :
+      $res = "ปานกลาง";
+      break;
+
+      case ($data <= 2 && $data > 1) :
+      $res = "แย่";
+      break;
+
+      case ($data <= 1 && $data > 0) :
+      $res = "แย่มาก";
+      break;
+
+      default :
+      $res = "";
+      break;
+    }
+
+    return $res;
+  }
+
 }
 
 ?>

@@ -1,8 +1,6 @@
 <?php 
 
-  session_start([
-    'cookie_lifetime' => 86400
-  ]);
+  session_start();
   date_default_timezone_set('Asia/Bangkok');
 
   $server = "localhost";

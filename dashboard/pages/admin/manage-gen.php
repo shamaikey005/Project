@@ -79,7 +79,7 @@
                 $student = $conn->prepare("SELECT * FROM `student` WHERE `class_id` = '".$_POST["sc_class"]."'");
                 $student->execute();
                 $studentCount = $student->rowCount();
-                if ($subjectType["subjects_type"] == 1 && $subjectType["subjects_type"] == 2) {
+                if ($subjectType["subjects_type"] == 1 || $subjectType["subjects_type"] == 2) {
                     
                     while ($studentRows = $student->fetch(PDO::FETCH_ASSOC)) {
                         $insScore = $conn->prepare("INSERT INTO `score` VALUES (NULL, '".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', 0)");

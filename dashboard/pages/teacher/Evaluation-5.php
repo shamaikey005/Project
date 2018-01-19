@@ -16,47 +16,59 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (isset($_POST["insRollBtn"])) {
-            try {
-                $st_stmt = $conn->prepare("SELECT * FROM `student` WHERE `class_id` = :cid");
-                $st_stmt->execute(array(":cid"=>$_POST["rclass"]));
-                $insRollStmt = $conn->prepare("INSERT INTO `roll` VALUES (NULL, '".$_POST["rclass"]."', ".$_POST["rterm"].", YEAR(CAST(STR_TO_DATE('".($_POST["ryear"] - 543)."', '%Y') AS DATE)))");
-                $insRollStmt->execute();
-                $roll_check_stmt = $conn->prepare("SELECT * FROM `roll` WHERE class_id = :cid AND term = :term AND year = :year");
-                $roll_check_stmt->execute(array(":cid"=>$_POST["rclass"],":term"=>$_POST["rterm"],":year"=>($_POST["ryear"]-543)));
-                $roll_check_rows = $roll_check_stmt->fetch(PDO::FETCH_ASSOC);
-                $conn->beginTransaction();
-                while ($st_rows = $st_stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $conn->exec("INSERT INTO `roll_detail` VALUES ('".$roll_check_rows["roll_id"]."', '".$st_rows["student_id"]."', 0, 0, 0, 0)");
+            $check_roll = $conn->prepare("SELECT * FROM `roll` WHERE `year` = :year AND `term` = :term");
+            $check_roll->execute(array(":year"=>($_POST["ryear"] - 543), ":term"=>$_POST["rterm"]));
+            $check_roll_rows = $check_roll->fetch(PDO::FETCH_ASSOC);
+            if ( !isset($check_roll_rows["roll_id"]) ) {
+                try {
+                    $st_stmt = $conn->prepare("SELECT * FROM `student` WHERE `class_id` = :cid");
+                    $st_stmt->execute(array(":cid"=>$_POST["rclass"]));
+                    $insRollStmt = $conn->prepare("INSERT INTO `roll` VALUES (NULL, '".$_POST["rclass"]."', ".$_POST["rterm"].", YEAR(CAST(STR_TO_DATE('".($_POST["ryear"] - 543)."', '%Y') AS DATE)))");
+                    $insRollStmt->execute();
+                    $roll_check_stmt = $conn->prepare("SELECT * FROM `roll` WHERE class_id = :cid AND term = :term AND year = :year");
+                    $roll_check_stmt->execute(array(":cid"=>$_POST["rclass"],":term"=>$_POST["rterm"],":year"=>($_POST["ryear"]-543)));
+                    $roll_check_rows = $roll_check_stmt->fetch(PDO::FETCH_ASSOC);
+                    $conn->beginTransaction();
+                    while ($st_rows = $st_stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $conn->exec("INSERT INTO `roll_detail` VALUES ('".$roll_check_rows["roll_id"]."', '".$st_rows["student_id"]."', 0, 0, 0, 0)");
+                    }
+                    $conn->commit();
+                    unset($_POST["insRollBtn"]);
+                    $user->redirect("Evaluation-5.php");
+                } catch (PDOException $e) {
+                    $conn->rollback();
+                    echo 'ERROR : ' . $e->getMessage();
                 }
-                $conn->commit();
-                unset($_POST["insRollBtn"]);
-                $user->redirect("Evaluation-5.php");
-            } catch (PDOException $e) {
-                $conn->rollback();
-                echo 'ERROR : ' . $e->getMessage();
             }
         }
 
         if (isset($_POST["insTraitBtn"])) {
-            try {
-                $st_stmt = $conn->prepare("SELECT * FROM `student` WHERE `class_id` = :cid");
-                $st_stmt->execute(array(":cid"=>$_POST["trclass"]));
-                $insTraitStmt = $conn->prepare("INSERT INTO `trait` VALUES (NULL, '".$_POST["trclass"]."', ".$_POST["trterm"].", YEAR(CAST(STR_TO_DATE('".($_POST["tryear"] - 543)."', '%Y') AS DATE)))");
-                $insTraitStmt->execute();
-                $trait_check_stmt = $conn->prepare("SELECT * FROM `trait` WHERE class_id = :cid AND term = :term AND year = :year");
-                $trait_check_stmt->execute(array(":cid"=>$_POST["trclass"],":term"=>$_POST["trterm"],":year"=>($_POST["tryear"]-543)));
-                $trait_check_rows = $trait_check_stmt->fetch(PDO::FETCH_ASSOC);
-                $conn->beginTransaction();
-                while ($st_rows = $st_stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $conn->exec("INSERT INTO `trait_detail` VALUES ('".$trait_check_rows["trait_id"]."' ,'".$st_rows["student_id"]."', 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+            $check_trait = $conn->prepare("SELECT * FROM `trait` WHERE `year` = :year AND `term` = :term");
+            $check_trait->execute(array(":year"=>($_POST["tryear"] - 543), ":term"=>$_POST["trterm"]));
+            $check_trait_rows = $check_trait->fetch(PDO::FETCH_ASSOC);
+            if ( !isset($check_trait_rows["trait_id"]) ) {
+                try {
+                
+                    $st_stmt = $conn->prepare("SELECT * FROM `student` WHERE `class_id` = :cid");
+                    $st_stmt->execute(array(":cid"=>$_POST["trclass"]));
+                    $insTraitStmt = $conn->prepare("INSERT INTO `trait` VALUES (NULL, '".$_POST["trclass"]."', ".$_POST["trterm"].", YEAR(CAST(STR_TO_DATE('".($_POST["tryear"] - 543)."', '%Y') AS DATE)))");
+                    $insTraitStmt->execute();
+                    $trait_check_stmt = $conn->prepare("SELECT * FROM `trait` WHERE class_id = :cid AND term = :term AND year = :year");
+                    $trait_check_stmt->execute(array(":cid"=>$_POST["trclass"],":term"=>$_POST["trterm"],":year"=>($_POST["tryear"]-543)));
+                    $trait_check_rows = $trait_check_stmt->fetch(PDO::FETCH_ASSOC);
+                    $conn->beginTransaction();
+                    while ($st_rows = $st_stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $conn->exec("INSERT INTO `trait_detail` VALUES ('".$trait_check_rows["trait_id"]."' ,'".$st_rows["student_id"]."', 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+                    }
+                    $conn->commit();
+                    unset($_POST["insTraitBtn"]);
+                    $user->redirect("Evaluation-5.php");
+                } catch (PDOException $e) {
+                    $conn->rollback();
+                    echo 'ERROR : ' . $e->getMessage();
                 }
-                $conn->commit();
-                unset($_POST["insTraitBtn"]);
-                $user->redirect("Evaluation-5.php");
-            } catch (PDOException $e) {
-                $conn->rollback();
-                echo 'ERROR : ' . $e->getMessage();
-            }
+            } 
+            
         }
 
         if (isset($_POST["delRollBtn"])) {

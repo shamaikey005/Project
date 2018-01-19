@@ -35,7 +35,7 @@
         </div>
 
         <div class="col-xs-12">
-          <div class="col-xs-12 text-center" style="font-size: 18px;font-weight: bold; margin-bottom: 3mm;">
+          <div class="col-xs-12 text-center" style="font-size: 18px;font-weight: bold;">
             <span class="">โรงเรียนประชาภิบาล</span>
           </div>
         </div>

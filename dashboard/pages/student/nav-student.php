@@ -56,7 +56,7 @@
                             <a href="school-record.php"><i class="fa fa-table fa-fw" aria-hidden="true"></i> ผลการเรียน</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fas fa-edit fa-fw" aria-hidden="true"></i> ปพ.6</a>
+                            <a href="Evaluation-6.php"><i class="fas fa-edit fa-fw" aria-hidden="true"></i> ปพ.6</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-files-o fa-fw" aria-hidden="true"></i> Sample Pages<span class="fa arrow"></span></a>
