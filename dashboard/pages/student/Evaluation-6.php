@@ -12,13 +12,14 @@
   echo $buffer;
 ?>
 <?php
-  $check_year_term_stmt = $conn->prepare("SELECT DISTINCT `year` FROM `schedule`");
-  $check_year_term_stmt->execute();
-
   $stmt = $conn->prepare("SELECT * FROM `student` WHERE `student_id` = :sid");
   $stmt->bindParam(":sid", $_SESSION["id"]);
   $stmt->execute();
   $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  $check_year_term_stmt = $conn->prepare("SELECT DISTINCT `year` FROM `schedule` WHERE `class_id` = :cid");
+  $check_year_term_stmt->bindParam(":cid", $rows["class_id"]);
+  $check_year_term_stmt->execute();
   
 ?>
 

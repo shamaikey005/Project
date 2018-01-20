@@ -42,7 +42,7 @@ class Func {
         break;
 
       case 2:
-        $res = "ประเมินผล";
+        $res = "ส่งเกรดแล้ว";
         break;
 
       case 3:
@@ -76,7 +76,7 @@ class Func {
     return $panel;
   }
 
-  public function checkSex($data) {
+  public function checkSex($data) : string {
     $sex;
     switch ($data) {
       case 0:
@@ -95,7 +95,23 @@ class Func {
     return $sex;
   }
 
-  public function checkStatusUser($data) {
+  public function checkSex2($data) : string {
+    $sex;
+    switch ($data) {
+
+      case 1:
+       $sex = "เด็กชาย";
+       break;
+
+      case 2:
+       $sex = "เด็กหญิง";
+       break;
+    }
+
+    return $sex;
+  }
+
+  public function checkStatusUser($data) : string {
     $status;
     switch ($data) {
       case 0:
@@ -110,7 +126,7 @@ class Func {
     return $status;
   }
 
-  public function checkSubjectsType($data) {
+  public function checkSubjectsType($data) : string {
     $type;
     switch ($data) {
       case 0:

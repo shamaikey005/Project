@@ -30,9 +30,8 @@
                         <i class="fas fa-user fa-fw" aria-hidden="true"></i> <?php echo $_SESSION["firstname"]; ?> <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="settings.php"><i class="fas fa-cog fa-fw" aria-hidden="true"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
+                        <!-- <li><a href="settings.php"><i class="fas fa-cog fa-fw" aria-hidden="true"></i> Settings</a></li> -->
+                        <!-- <li class="divider"></li> -->
                         <li>
                             <a href="#" onclick="document.getElementById('logout').submit();"><i class="fas fa-sign-out-alt fa-fw" aria-hidden="true"></i> Logout</a>
                             <form method="post" id="logout"><input type="hidden" name="logout" value="true"></form>
@@ -59,9 +58,9 @@
                         <li>
                             <a href="check-status.php"><i class="far fa-check-square fa-fw" aria-hidden="true"></i> ตรวจสอบสถานะการส่งเกรด</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="check-grade.php"><i class="far fa-check-square fa-fw" aria-hidden="true"></i> เกรดรวม</a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

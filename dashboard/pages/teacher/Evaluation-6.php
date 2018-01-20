@@ -12,14 +12,14 @@
   echo $buffer;
 ?>
 <?php
-  $check_year_term_stmt = $conn->prepare("SELECT * FROM `schedule`");
-  $check_year_term_stmt->execute();
-
-  $stmt = $conn->prepare("SELECT DISTINCT * FROM `class` AS `c`
-                            INNER JOIN `teacher` AS `t` ON `t`.`teacher_id` = `c`.`teacher_id` 
-                            WHERE `c`.`teacher_id` = :tid");
+  $stmt = $conn->prepare("SELECT * FROM `teacher` AS `t` INNER JOIN `class` AS `c` ON `c`.`teacher_id` = `t`.`teacher_id` WHERE `t`.`teacher_id` = :tid");
   $stmt->bindParam(":tid", $_SESSION["id"]);
   $stmt->execute();
+  $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  $check_year_term_stmt = $conn->prepare("SELECT DISTINCT `year` FROM `schedule` WHERE `class_id` = :cid");
+  $check_year_term_stmt->bindParam(":cid", $rows["class_id"]);
+  $check_year_term_stmt->execute();
   
 ?>
 
@@ -35,18 +35,16 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">ปพ.6</h1>
                     <?php 
-                    //   while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    //     echo '<div class="panel panel-'.$func->scheduleStatusPanel($rows2["status"]).'">
-                    //     <div class="panel-heading"> 
-                    //         เทอม '.$rows2["term"].' - ปีการศึกษา '.($rows2["year"]+543).'  
-                    //     </div>
-                    //     <div class="panel-body">
-                    //         <p>'.$rows2["subjects_id"].' <br> '.$rows2['subjects_name'] . ' <br>ชั้น ป.' . $rows2["class_grade"] . ' ห้อง ' . $rows2["class_room"] . '</p>
-                    //         <a href="'.(($rows2["subjects_type"] != 3) ? "ev5" : "ev5-2") .'.php?sc='.$rows2["schedule_id"].'"><button class="btn btn-success">บันทึกคะแนน</button></a> 
-                    //         <a href="ev5-times.php?sc='.$rows2["schedule_id"].'"><button class="btn btn-info">ลงชั่วโมงเรียน</button></a>
-                    //     </div>
-                    // </div>';
-                    //   }
+                      while ($year_term_rows = $check_year_term_stmt->fetch(PDO::FETCH_ASSOC)) {
+                        echo '<div class="panel panel-primary">
+                                <div class="panel-heading"> 
+                                    ปีการศึกษา '.($year_term_rows["year"]+543).' ชั้น ป.'.$rows["class_grade"].'/'.$rows["class_room"].' 
+                                </div>
+                                <div class="panel-body">
+                                    <a href="ev6.php?c='.$rows["class_id"].'&y='.$year_term_rows["year"].'"><button class="btn btn-success">ดู</button></a> 
+                                </div>
+                              </div>';
+                      }
                     ?>
                 </div>
                 <!-- /.col-lg-12 -->

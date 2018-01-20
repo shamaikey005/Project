@@ -96,7 +96,7 @@
                             <td>
                               <select class="form-control" name="score[]" required>
                                 <option value="1" '.(($rows["scored_score"] == 1) ? "selected" : "").'>ผ่าน</option>
-                                <option value="0" '.(($rows["scored_score"] == 0) ? "selected" : "").'>ไม่ผ่าน</option>
+                                <option value="2" '.(($rows["scored_score"] == 2) ? "selected" : "").'>ไม่ผ่าน</option>
                               </select>
                             </td>';
                         echo '</tr>';

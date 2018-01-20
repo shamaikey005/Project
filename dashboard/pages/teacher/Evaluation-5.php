@@ -113,6 +113,20 @@
             $user->redirect("Evaluation-5.php");
         }
 
+        if (isset($_POST["sendGradeBtn"])) {
+            try {
+                $send_grade_stmt = $conn->prepare("UPDATE `schedule` SET `status` = 2 WHERE `schedule_id` = :scid");
+                $send_grade_stmt->bindParam(":scid", $_POST["scid"]);
+                $send_grade_stmt->execute();
+                
+            } catch (PDOException $e) {
+                echo 'ERROR : ' . $e->getMessage();
+            }
+
+            unset($_POST["sendGradeBtn"]);
+            $user->redirect("Evaluation-5.php");
+        }
+
     }
 ?>
 
@@ -155,14 +169,15 @@
                         
                         while ($rows2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo '
-                                <div class="panel panel-'.$func->scheduleStatusPanel($rows2["status"]).'">
+                                <div class="panel panel-primary">
                                     <div class="panel-heading"> 
-                                        เทอม '.$rows2["term"].' - ปีการศึกษา '.($rows2["year"]+543).'  
+                                        เทอม '.$rows2["term"].' - ปีการศึกษา '.($rows2["year"]+543).' ('.$func->scheduleStatusText($rows2["status"]).')  
                                     </div>
                                     <div class="panel-body">
                                         <p>'.$rows2["subjects_id"].' <br> '.$rows2['subjects_name'] . ' <br>ชั้น ป.' . $rows2["class_grade"] . ' ห้อง ' . $rows2["class_room"] . '</p>
                                         <a href="'.(($rows2["subjects_type"] != 3) ? "ev5" : "ev5-2") .'.php?sc='.$rows2["schedule_id"].'"><button class="btn btn-success">บันทึกคะแนน</button></a> 
                                         <a href="ev5-times.php?sc='.$rows2["schedule_id"].'"><button class="btn btn-info">ลงชั่วโมงเรียน</button></a>
+                                        <button class="btn btn-primary '.(($rows2["status"] == 2 || $rows2["status"] == 3) ? "disabled" : "" ).'" type="button" data-toggle="modal" data-target="#sendGradeModal" data-scid="'.$rows2["schedule_id"].'" data-sjid="'.$rows2["subjects_id"].'" data-cgrade="'.$rows2["class_grade"].'/'.$rows2["class_room"].'" '.(($rows2["status"] == 2 || $rows2["status"] == 3) ? 'disabled="disabled"' : "" ).'>ส่งเกรด</button>
                                     </div>
                                 </div>';
                         }
@@ -358,6 +373,33 @@
     </div>
     <!-- /Modal - Delete Trait -->
 
+    <!-- Modal - Send Grade -->
+    <div class="modal fade" id="sendGradeModal" tabindex="-1" role="dialog" aria-labelledby="sendGradeModalTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+                    <h4 class="modal-title">ส่งเกรด</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="sendGradeForm">
+                        <p>
+                            คุณแน่ใจที่จะส่งเกรด <strong></strong> หรือไม่
+                            <input type="hidden" value="" name="scid" />
+                            <input type="hidden" value="" name="sjid" />
+                            <input type="hidden" value="" name="cgrade" />
+                        </p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="submit" form="sendGradeForm" name="sendGradeBtn" value="true"><i class="fas fa-times fa-fw"></i> Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Modal - Send Grade -->
+
     <?php include_once('js.inc.php') ?>
     <script>
         $('#delRollModal').on('show.bs.modal', function(e) {
@@ -384,6 +426,19 @@
             modal.find('.modal-body input[name=trid]').val(trid);
             modal.find('.modal-body input[name=term]').val(term);
             modal.find('.modal-body input[name=year]').val(year);
+        });
+
+        $('#sendGradeModal').on('show.bs.modal', function(e) {
+            var button = $(e.relatedTarget);
+            var scid = button.data('scid');
+            var sjid = button.data('sjid');
+            var cgrade = button.data('cgrade');
+
+            var modal = $(this);
+            modal.find('.modal-body p strong').text("วิชา " + sjid + " - ชั้น " + cgrade);
+            modal.find('.modal-body input[name=scid]').val(scid);
+            modal.find('.modal-body input[name=sjid]').val(sjid);
+            modal.find('.modal-body input[name=cgrade]').val(cgrade);
         });
     </script>
 

@@ -187,13 +187,19 @@
               $subjects_stmt = $conn->prepare("SELECT DISTINCT `s`.*, `sch`.`year`, `sch`.`class_id`, `st`.* FROM `subjects` AS `s` 
                                                 INNER JOIN `schedule` AS `sch` ON `sch`.`subjects_id` = `s`.`subjects_id`
                                                 INNER JOIN `student` AS `st` ON `st`.`class_id` = `sch`.`class_id`
-                                                WHERE `st`.`student_id` = :stid AND `sch`.`year` = :year AND (`s`.`subjects_type` = 1 OR `s`.`subjects_type` = 2)
+                                                WHERE `st`.`student_id` = :stid AND `sch`.`year` = :year AND (`s`.`subjects_type` = 1 OR `s`.`subjects_type` = 2) AND (`sch`.`status` = 2 OR `sch`.`status` = 3) 
                                                 ORDER BY `s`.`subjects_type` ASC, `s`.`subjects_id` ASC");
               $subjects_stmt->bindParam(":stid", $st);
               $subjects_stmt->bindParam(":year", $year);
               $subjects_stmt->execute();
-              $subjects_count = 0;             
+              $subjects_count = 0;
+              $subjects_time = 0;
+              $grade = 0;
+              $credit = 0;
+              $gpa = 0;
+              $cgpa = 0;
               while ($subjects_rows = $subjects_stmt->fetch(PDO::FETCH_ASSOC)) {
+                $subjects_time += $subjects_rows["subjects_time"];
                 echo '<tr></tr><th>'.(($subjects_count)+1).'</th>
                       <td colspan="3">'.$subjects_rows["subjects_name"].'</td>
                       <td>'.$subjects_rows["subjects_id"].'</td>
@@ -201,7 +207,7 @@
 
                 $score_1_stmt = $conn->prepare("SELECT * FROM `score` AS `s` 
                                                 INNER JOIN `schedule` AS `sc` ON `sc`.`schedule_id` = `s`.`schedule_id` 
-                                                WHERE `s`.`student_id` = :stid AND `sc`.`subjects_id` = :sid AND `sc`.`year` = :year AND `sc`.`term` = 1");
+                                                WHERE `s`.`student_id` = :stid AND `sc`.`subjects_id` = :sid AND `sc`.`year` = :year AND `sc`.`term` = 1 AND (`sc`.`status` = 2 OR `sc`.`status` = 3)");
                 $score_1_stmt->bindParam(":stid", $st);
                 $score_1_stmt->bindParam(":sid", $subjects_rows["subjects_id"]);
                 $score_1_stmt->bindParam(":year", $subjects_rows["year"]);
@@ -209,20 +215,24 @@
                 $score_1_rows = $score_1_stmt->fetch(PDO::FETCH_ASSOC);
                 $score_2_stmt = $conn->prepare("SELECT * FROM `score` AS `s` 
                                                 INNER JOIN `schedule` AS `sc` ON `sc`.`schedule_id` = `s`.`schedule_id` 
-                                                WHERE `s`.`student_id` = :stid AND `sc`.`subjects_id` = :sid AND `sc`.`year` = :year AND `sc`.`term` = 2");
+                                                WHERE `s`.`student_id` = :stid AND `sc`.`subjects_id` = :sid AND `sc`.`year` = :year AND `sc`.`term` = 2 AND (`sc`.`status` = 2 OR `sc`.`status` = 3)");
                 $score_2_stmt->bindParam(":stid", $st);
                 $score_2_stmt->bindParam(":sid", $subjects_rows["subjects_id"]);
                 $score_2_stmt->bindParam(":year", $subjects_rows["year"]);
                 $score_2_stmt->execute();
                 $score_2_rows = $score_2_stmt->fetch(PDO::FETCH_ASSOC);
+                $grade = $func->grade(isset($score_2_rows["score_score"]) ? (($score_1_rows["score_score"] + $score_2_rows["score_score"])/2) : $score_1_rows["score_score"]);
+                $credit += $subjects_rows["subjects_credit"];
+                $gpa += ($grade * $subjects_rows["subjects_credit"]);
                 echo 
                   '<td>'.$score_1_rows["score_score"].'</td>
                    <td>'.$score_2_rows["score_score"].'</td>
-                   <td>'.$func->grade(isset($score_2_rows["score_score"]) ? (($score_1_rows["score_score"] + $score_2_rows["score_score"])/2) : $score_1_rows["score_score"]).'</td>';
+                   <td>'.$grade.'</td>';
                 echo '<td>'.$func->checkSubjectsType($subjects_rows["subjects_type"]).'</td></tr>';
                 $subjects_count++;
               }
-
+              try { $cgpa = (($gpa != 0 || $credit != 0) ? ($gpa / $credit) : ""); } catch (PDOException $e) {}
+              
               while ($subjects_count < 18) {
                 echo '<tr>
                         <th>&nbsp;</th>
@@ -241,19 +251,23 @@
           </table>
         </div>
 
+        <?php
+
+        ?>
+        
         <div class="col-xs-12">
           <table width="100%" style="border-top-style: hidden;">
             <tbody>
               <tr>
-                <th>ตลอดปีการศึกษา</th>
-                <td>000</td>
-                <th>ชั่วโมง</th>
-                <th>ผลการเรียนเฉลี่ย</th>
-                <td>0.00</td>
-                <th>รวมคะแนน</th>
+                <th width="208mm">ตลอดปีการศึกษา</th>
+                <td width="65mm"><?php echo $subjects_time; ?></td>
+                <th width="112mm">ชั่วโมง</th>
+                <th width="216mm">ผลการเรียนเฉลี่ย</th>
+                <td><?php echo round($cgpa, 2); ?></td>
+                <!-- <th>รวมคะแนน</th>
                 <td>000</td>
                 <th>อันดับที่</th>
-                <td>0</td>
+                <td>0</td> -->
               </tr>
             </tbody>
           </table>
@@ -264,28 +278,28 @@
         </div>
 
         <?php
-        try{
-          $trait_1_stmt = $conn->prepare("SELECT * FROM `trait` AS `t` 
-                                        INNER JOIN `trait_detail` AS `td` ON `td`.`trait_id` = `t`.`trait_id`
-                                        WHERE `t`.`year` = :year AND `t`.`term` = 1 AND `td`.`student_id` = :stid");
-          $trait_1_stmt->bindParam(":year", $year);
-          $trait_1_stmt->bindParam(":stid", $st);
-          $trait_1_stmt->execute();
-          $trait_1_rows = $trait_1_stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
+          try{
+            $trait_1_stmt = $conn->prepare("SELECT * FROM `trait` AS `t` 
+                                          INNER JOIN `trait_detail` AS `td` ON `td`.`trait_id` = `t`.`trait_id`
+                                          WHERE `t`.`year` = :year AND `t`.`term` = 1 AND `td`.`student_id` = :stid");
+            $trait_1_stmt->bindParam(":year", $year);
+            $trait_1_stmt->bindParam(":stid", $st);
+            $trait_1_stmt->execute();
+            $trait_1_rows = $trait_1_stmt->fetch(PDO::FETCH_ASSOC);
+          } catch (PDOException $e) {
 
-        }
-        try {
-          $trait_2_stmt = $conn->prepare("SELECT * FROM `trait` AS `t` 
-                                        INNER JOIN `trait_detail` AS `td` ON `td`.`trait_id` = `t`.`trait_id`
-                                        WHERE `t`.`year` = :year AND `t`.`term` = 2 AND `td`.`student_id` = :stid");
-          $trait_2_stmt->bindParam(":year", $year);
-          $trait_2_stmt->bindParam(":stid", $st);
-          $trait_2_stmt->execute();
-          $trait_2_rows = $trait_2_stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
+          }
+          try {
+            $trait_2_stmt = $conn->prepare("SELECT * FROM `trait` AS `t` 
+                                          INNER JOIN `trait_detail` AS `td` ON `td`.`trait_id` = `t`.`trait_id`
+                                          WHERE `t`.`year` = :year AND `t`.`term` = 2 AND `td`.`student_id` = :stid");
+            $trait_2_stmt->bindParam(":year", $year);
+            $trait_2_stmt->bindParam(":stid", $st);
+            $trait_2_stmt->execute();
+            $trait_2_rows = $trait_2_stmt->fetch(PDO::FETCH_ASSOC);
+          } catch (PDOException $e) {
 
-        }
+          }
         ?>
 
         <div class="col-xs-12">
@@ -432,9 +446,9 @@
                   $score_4_rows = $score_4_stmt->fetch(PDO::FETCH_ASSOC);
                   echo '<tr>
                     <th>'.$score_3_rows["subjects_name"].'</th>
-                    <td>'.(($score_3_rows["scored_score"] == 1) ? "ผ่าน" : ($score_3_rows["score_score"] ? "ไม่ผ่าน" : "&nbsp;")).'</td>
+                    <td>'.(($score_3_rows["scored_score"] == 1) ? "ผ่าน" : (($score_3_rows["score_score"] == 2) ? "ไม่ผ่าน" : "&nbsp;")).'</td>
                     <th>'.$score_4_rows["subjects_name"].'</th>
-                    <td>'.(($score_4_rows["scored_score"] == 1) ? "ผ่าน" : ($score_3_rows["score_score"] ? "ไม่ผ่าน" : "&nbsp;")).'</td>
+                    <td>'.(($score_4_rows["scored_score"] == 1) ? "ผ่าน" : (($score_4_rows["score_score"] == 2) ? "ไม่ผ่าน" : "&nbsp;")).'</td>
                   </tr>';
                   $subjects_3_count++;
                 }
