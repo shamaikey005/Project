@@ -174,7 +174,7 @@
                                         เทอม '.$rows2["term"].' - ปีการศึกษา '.($rows2["year"]+543).' ('.$func->scheduleStatusText($rows2["status"]).')  
                                     </div>
                                     <div class="panel-body">
-                                        <p>'.$rows2["subjects_id"].' <br> '.$rows2['subjects_name'] . ' <br>ชั้น ป.' . $rows2["class_grade"] . ' ห้อง ' . $rows2["class_room"] . '</p>
+                                        <p>'.$rows2["subjects_id"].' <br> '.$rows2['subjects_name'] . ' <br>ชั้น ป.' . $rows2["class_grade"] . '/' . $rows2["class_room"] . '</p>
                                         <a href="'.(($rows2["subjects_type"] != 3) ? "ev5" : "ev5-2") .'.php?sc='.$rows2["schedule_id"].'"><button class="btn btn-success">บันทึกคะแนน</button></a> 
                                         <a href="ev5-times.php?sc='.$rows2["schedule_id"].'"><button class="btn btn-info">ลงชั่วโมงเรียน</button></a>
                                         <button class="btn btn-primary '.(($rows2["status"] == 2 || $rows2["status"] == 3) ? "disabled" : "" ).'" type="button" data-toggle="modal" data-target="#sendGradeModal" data-scid="'.$rows2["schedule_id"].'" data-sjid="'.$rows2["subjects_id"].'" data-cgrade="'.$rows2["class_grade"].'/'.$rows2["class_room"].'" '.(($rows2["status"] == 2 || $rows2["status"] == 3) ? 'disabled="disabled"' : "" ).'>ส่งเกรด</button>

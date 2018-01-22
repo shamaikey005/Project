@@ -38,7 +38,7 @@
                       while ($year_term_rows = $check_year_term_stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo '<div class="panel panel-primary">
                                 <div class="panel-heading"> 
-                                    ชั้น ป.'.$rows["class_grade"].'/'.$rows["class_room"]. ' ปีการศึกษา '.($year_term_rows["year"]+543).'  
+                                    ชั้น ป.'.$rows["class_grade"].'/'.$rows["class_room"]. ' - ปีการศึกษา '.($year_term_rows["year"]+543).'  
                                 </div>
                                 <div class="panel-body">
                                     <a href="ev6.php?c='.$rows["class_id"].'&y='.$year_term_rows["year"].'"><button class="btn btn-success">ดู</button></a> 
