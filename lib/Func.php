@@ -189,6 +189,25 @@ class Func {
     return $grade;
   }
 
+  public function grade2 ($data) {
+    $res;
+    switch ($data) {
+      case 0 :
+        $res = "-";
+        break;
+      
+      case 1 :
+        $res = "ผ่าน";
+        break;
+
+      case 2 :
+        $res = "ไม่ผ่าน";
+        break;
+    }
+
+    return $res;
+  }
+
   public function traitResult ($data) : string {
     $res;
     switch (true) {

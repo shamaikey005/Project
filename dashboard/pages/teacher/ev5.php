@@ -131,14 +131,9 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
-            <div class="row">
-                <div class="col-xs-12" style="padding-top: 20px;padding-bottom: 20px;">
-                      
-                </div>
-            </div>
+
         </div>
         <!-- /#page-wrapper -->
-
 
   </div>  
   <!-- /#wrapper -->

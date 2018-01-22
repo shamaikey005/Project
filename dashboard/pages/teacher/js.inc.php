@@ -1,3 +1,13 @@
+<!-- Footer -->
+<footer>
+  <div class="row">
+      <div class="col-xs-12" style="padding-top: 30px;padding-bottom: 30px;">
+            
+      </div>
+  </div>
+</footer>
+<!-- / Footer -->
+
 <!-- jQuery -->
 <script src="../../vendor/jquery/jquery.min.js"></script>
 
