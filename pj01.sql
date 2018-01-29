@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2018 at 01:26 PM
+-- Generation Time: Jan 29, 2018 at 05:38 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `class` (
-  `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` int(11) NOT NULL,
   `class_grade` tinyint(4) NOT NULL,
   `class_room` tinyint(4) NOT NULL,
   `teacher_id` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL
@@ -40,7 +40,7 @@ CREATE TABLE `class` (
 --
 
 INSERT INTO `class` (`class_id`, `class_grade`, `class_room`, `teacher_id`) VALUES
-('c1-1', 1, 1, 't001');
+(1, 1, 1, 't001');
 
 -- --------------------------------------------------------
 
@@ -51,7 +51,7 @@ INSERT INTO `class` (`class_id`, `class_grade`, `class_room`, `teacher_id`) VALU
 CREATE TABLE `period` (
   `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `subjects_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `schedule_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `schedule_id` int(11) NOT NULL,
   `period_count` tinyint(4) NOT NULL DEFAULT '0',
   `period_max` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -61,48 +61,48 @@ CREATE TABLE `period` (
 --
 
 INSERT INTO `period` (`student_id`, `subjects_id`, `schedule_id`, `period_count`, `period_max`) VALUES
-('7423', 'ค11101', '12', 20, 127),
-('7429', 'ค11101', '12', 20, 127),
-('7461', 'ค11101', '12', 30, 127),
-('7614', 'ค11101', '12', 40, 127),
-('8102', 'ค11101', '12', 50, 127),
-('8134', 'ค11101', '12', 20, 127),
-('8137', 'ค11101', '12', 50, 127),
-('7423', 'ก11101', '13', 40, 40),
-('7429', 'ก11101', '13', 0, 40),
-('7461', 'ก11101', '13', 0, 40),
-('7614', 'ก11101', '13', 0, 40),
-('8102', 'ก11101', '13', 0, 40),
-('8134', 'ก11101', '13', 0, 40),
-('8137', 'ก11101', '13', 0, 40),
-('7423', 'ก11101', '15', 0, 40),
-('7429', 'ก11101', '15', 0, 40),
-('7461', 'ก11101', '15', 0, 40),
-('7614', 'ก11101', '15', 0, 40),
-('8102', 'ก11101', '15', 0, 40),
-('8134', 'ก11101', '15', 0, 40),
-('8137', 'ก11101', '15', 0, 40),
-('7423', 'ค11101', '16', 0, 127),
-('7429', 'ค11101', '16', 0, 127),
-('7461', 'ค11101', '16', 0, 127),
-('7614', 'ค11101', '16', 0, 127),
-('8102', 'ค11101', '16', 0, 127),
-('8134', 'ค11101', '16', 0, 127),
-('8137', 'ค11101', '16', 0, 127),
-('7423', 'ส11201', '17', 40, 40),
-('7429', 'ส11201', '17', 0, 40),
-('7461', 'ส11201', '17', 0, 40),
-('7614', 'ส11201', '17', 0, 40),
-('8102', 'ส11201', '17', 0, 40),
-('8134', 'ส11201', '17', 0, 40),
-('8137', 'ส11201', '17', 0, 40),
-('7423', 'ส11201', '18', 40, 40),
-('7429', 'ส11201', '18', 0, 40),
-('7461', 'ส11201', '18', 0, 40),
-('7614', 'ส11201', '18', 0, 40),
-('8102', 'ส11201', '18', 0, 40),
-('8134', 'ส11201', '18', 0, 40),
-('8137', 'ส11201', '18', 0, 40);
+('7423', 'ค11101', 12, 20, 127),
+('7429', 'ค11101', 12, 20, 127),
+('7461', 'ค11101', 12, 30, 127),
+('7614', 'ค11101', 12, 40, 127),
+('8102', 'ค11101', 12, 50, 127),
+('8134', 'ค11101', 12, 20, 127),
+('8137', 'ค11101', 12, 50, 127),
+('7423', 'ก11101', 13, 40, 40),
+('7429', 'ก11101', 13, 0, 40),
+('7461', 'ก11101', 13, 0, 40),
+('7614', 'ก11101', 13, 0, 40),
+('8102', 'ก11101', 13, 0, 40),
+('8134', 'ก11101', 13, 0, 40),
+('8137', 'ก11101', 13, 0, 40),
+('7423', 'ก11101', 15, 0, 40),
+('7429', 'ก11101', 15, 0, 40),
+('7461', 'ก11101', 15, 0, 40),
+('7614', 'ก11101', 15, 0, 40),
+('8102', 'ก11101', 15, 0, 40),
+('8134', 'ก11101', 15, 0, 40),
+('8137', 'ก11101', 15, 0, 40),
+('7423', 'ค11101', 16, 0, 127),
+('7429', 'ค11101', 16, 0, 127),
+('7461', 'ค11101', 16, 0, 127),
+('7614', 'ค11101', 16, 0, 127),
+('8102', 'ค11101', 16, 0, 127),
+('8134', 'ค11101', 16, 0, 127),
+('8137', 'ค11101', 16, 0, 127),
+('7423', 'ส11201', 17, 40, 40),
+('7429', 'ส11201', 17, 0, 40),
+('7461', 'ส11201', 17, 0, 40),
+('7614', 'ส11201', 17, 0, 40),
+('8102', 'ส11201', 17, 0, 40),
+('8134', 'ส11201', 17, 0, 40),
+('8137', 'ส11201', 17, 0, 40),
+('7423', 'ส11201', 18, 40, 40),
+('7429', 'ส11201', 18, 0, 40),
+('7461', 'ส11201', 18, 0, 40),
+('7614', 'ส11201', 18, 0, 40),
+('8102', 'ส11201', 18, 0, 40),
+('8134', 'ส11201', 18, 0, 40),
+('8137', 'ส11201', 18, 0, 40);
 
 -- --------------------------------------------------------
 
@@ -112,7 +112,7 @@ INSERT INTO `period` (`student_id`, `subjects_id`, `schedule_id`, `period_count`
 
 CREATE TABLE `roll` (
   `roll_id` int(11) NOT NULL,
-  `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` int(11) NOT NULL,
   `term` tinyint(4) NOT NULL,
   `year` year(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -122,8 +122,8 @@ CREATE TABLE `roll` (
 --
 
 INSERT INTO `roll` (`roll_id`, `class_id`, `term`, `year`) VALUES
-(6, 'c1-1', 1, 2017),
-(10, 'c1-1', 2, 2017);
+(6, 1, 1, 2017),
+(10, 1, 2, 2017);
 
 -- --------------------------------------------------------
 
@@ -169,7 +169,7 @@ INSERT INTO `roll_detail` (`roll_id`, `student_id`, `roll_sick_leave`, `roll_per
 CREATE TABLE `schedule` (
   `schedule_id` int(11) NOT NULL,
   `subjects_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` int(11) NOT NULL,
   `teacher_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `year` year(4) NOT NULL,
   `term` tinyint(4) NOT NULL DEFAULT '0',
@@ -181,12 +181,12 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`schedule_id`, `subjects_id`, `class_id`, `teacher_id`, `year`, `term`, `status`) VALUES
-(12, 'ค11101', 'c1-1', 't001', 2017, 1, 2),
-(13, 'ก11101', 'c1-1', 't001', 2017, 1, 1),
-(15, 'ก11101', 'c1-1', 't001', 2017, 2, 1),
-(16, 'ค11101', 'c1-1', 't001', 2017, 2, 2),
-(17, 'ส11201', 'c1-1', 't001', 2017, 1, 1),
-(18, 'ส11201', 'c1-1', 't001', 2017, 2, 1);
+(12, 'ค11101', 1, 't001', 2017, 1, 2),
+(13, 'ก11101', 1, 't001', 2017, 1, 1),
+(15, 'ก11101', 1, 't001', 2017, 2, 1),
+(16, 'ค11101', 1, 't001', 2017, 2, 2),
+(17, 'ส11201', 1, 't001', 2017, 1, 1),
+(18, 'ส11201', 1, 't001', 2017, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -198,7 +198,7 @@ CREATE TABLE `score` (
   `score_id` int(11) NOT NULL,
   `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `subjects_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `schedule_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `schedule_id` int(11) NOT NULL,
   `score_score` tinyint(4) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -207,48 +207,48 @@ CREATE TABLE `score` (
 --
 
 INSERT INTO `score` (`score_id`, `student_id`, `subjects_id`, `schedule_id`, `score_score`) VALUES
-(14, '7423', 'ค11101', '12', 82),
-(15, '7429', 'ค11101', '12', 68),
-(16, '7461', 'ค11101', '12', 0),
-(17, '7614', 'ค11101', '12', 0),
-(18, '8102', 'ค11101', '12', 0),
-(19, '8134', 'ค11101', '12', 0),
-(20, '8137', 'ค11101', '12', 0),
-(21, '7423', 'ก11101', '13', 0),
-(22, '7429', 'ก11101', '13', 0),
-(23, '7461', 'ก11101', '13', 0),
-(24, '7614', 'ก11101', '13', 0),
-(25, '8102', 'ก11101', '13', 0),
-(26, '8134', 'ก11101', '13', 0),
-(27, '8137', 'ก11101', '13', 0),
-(28, '7423', 'ก11101', '15', 0),
-(29, '7429', 'ก11101', '15', 0),
-(30, '7461', 'ก11101', '15', 0),
-(31, '7614', 'ก11101', '15', 0),
-(32, '8102', 'ก11101', '15', 0),
-(33, '8134', 'ก11101', '15', 0),
-(34, '8137', 'ก11101', '15', 0),
-(35, '7423', 'ค11101', '16', 80),
-(36, '7429', 'ค11101', '16', 0),
-(37, '7461', 'ค11101', '16', 0),
-(38, '7614', 'ค11101', '16', 0),
-(39, '8102', 'ค11101', '16', 0),
-(40, '8134', 'ค11101', '16', 0),
-(41, '8137', 'ค11101', '16', 0),
-(42, '7423', 'ส11201', '17', 60),
-(43, '7429', 'ส11201', '17', 0),
-(44, '7461', 'ส11201', '17', 0),
-(45, '7614', 'ส11201', '17', 0),
-(46, '8102', 'ส11201', '17', 0),
-(47, '8134', 'ส11201', '17', 0),
-(48, '8137', 'ส11201', '17', 0),
-(49, '7423', 'ส11201', '18', 67),
-(50, '7429', 'ส11201', '18', 0),
-(51, '7461', 'ส11201', '18', 0),
-(52, '7614', 'ส11201', '18', 0),
-(53, '8102', 'ส11201', '18', 0),
-(54, '8134', 'ส11201', '18', 0),
-(55, '8137', 'ส11201', '18', 0);
+(14, '7423', 'ค11101', 12, 82),
+(15, '7429', 'ค11101', 12, 68),
+(16, '7461', 'ค11101', 12, 0),
+(17, '7614', 'ค11101', 12, 0),
+(18, '8102', 'ค11101', 12, 0),
+(19, '8134', 'ค11101', 12, 0),
+(20, '8137', 'ค11101', 12, 0),
+(21, '7423', 'ก11101', 13, 0),
+(22, '7429', 'ก11101', 13, 0),
+(23, '7461', 'ก11101', 13, 0),
+(24, '7614', 'ก11101', 13, 0),
+(25, '8102', 'ก11101', 13, 0),
+(26, '8134', 'ก11101', 13, 0),
+(27, '8137', 'ก11101', 13, 0),
+(28, '7423', 'ก11101', 15, 0),
+(29, '7429', 'ก11101', 15, 0),
+(30, '7461', 'ก11101', 15, 0),
+(31, '7614', 'ก11101', 15, 0),
+(32, '8102', 'ก11101', 15, 0),
+(33, '8134', 'ก11101', 15, 0),
+(34, '8137', 'ก11101', 15, 0),
+(35, '7423', 'ค11101', 16, 80),
+(36, '7429', 'ค11101', 16, 0),
+(37, '7461', 'ค11101', 16, 0),
+(38, '7614', 'ค11101', 16, 0),
+(39, '8102', 'ค11101', 16, 0),
+(40, '8134', 'ค11101', 16, 0),
+(41, '8137', 'ค11101', 16, 0),
+(42, '7423', 'ส11201', 17, 60),
+(43, '7429', 'ส11201', 17, 0),
+(44, '7461', 'ส11201', 17, 0),
+(45, '7614', 'ส11201', 17, 0),
+(46, '8102', 'ส11201', 17, 0),
+(47, '8134', 'ส11201', 17, 0),
+(48, '8137', 'ส11201', 17, 0),
+(49, '7423', 'ส11201', 18, 67),
+(50, '7429', 'ส11201', 18, 0),
+(51, '7461', 'ส11201', 18, 0),
+(52, '7614', 'ส11201', 18, 0),
+(53, '8102', 'ส11201', 18, 0),
+(54, '8134', 'ส11201', 18, 0),
+(55, '8137', 'ส11201', 18, 0);
 
 -- --------------------------------------------------------
 
@@ -541,7 +541,7 @@ CREATE TABLE `student` (
   `student_sex` tinyint(4) NOT NULL DEFAULT '0',
   `student_address` text COLLATE utf8_unicode_ci,
   `student_idcard` varchar(17) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` int(11) NOT NULL,
   `user_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -550,13 +550,13 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`student_id`, `student_firstname`, `student_lastname`, `student_num`, `student_birthday`, `student_sex`, `student_address`, `student_idcard`, `class_id`, `user_id`) VALUES
-('7423', 'ตรัยคุณ', 'วรรณรักษ์', 1, '2011-10-10', 1, '1', '2-7675-24538-54-2', 'c1-1', 's001'),
-('7429', 'ไกรวิชญ์', 'ศิริสม', 2, '2011-08-05', 1, '2', '1-5164-62151-94-2', 'c1-1', 's002'),
-('7461', 'สรวิชญ์', 'แย้มเกสร', 3, '2011-05-02', 1, '3', '1-1689-49461-65-1', 'c1-1', 's003'),
-('7614', 'พัชรดนัย', 'บุตรทา', 4, '2011-06-22', 1, '4', '1-1684-94611-69-8', 'c1-1', 's004'),
-('8102', 'อคอง', 'เท่า', 5, '2011-09-08', 1, '5', '1-1489-46132-16-4', 'c1-1', 's005'),
-('8134', 'นัฐวุฒิ', 'สุขสวัสดิ์', 6, '2011-10-20', 1, '6', '1-1649-87984-51-3', 'c1-1', 's006'),
-('8137', 'ภควัต', 'ชาติทุ่ง', 7, '2011-12-15', 1, '7', '1-1587-98413-22-4', 'c1-1', 's007');
+('7423', 'ตรัยคุณ', 'วรรณรักษ์', 1, '2011-10-10', 1, '1', '2-7675-24538-54-2', 1, 's001'),
+('7429', 'ไกรวิชญ์', 'ศิริสม', 2, '2011-08-05', 1, '2', '1-5164-62151-94-2', 1, 's002'),
+('7461', 'สรวิชญ์', 'แย้มเกสร', 3, '2011-05-02', 1, '3', '1-1689-49461-65-1', 1, 's003'),
+('7614', 'พัชรดนัย', 'บุตรทา', 4, '2011-06-22', 1, '4', '1-1684-94611-69-8', 1, 's004'),
+('8102', 'อคอง', 'เท่า', 5, '2011-09-08', 1, '5', '1-1489-46132-16-4', 1, 's005'),
+('8134', 'นัฐวุฒิ', 'สุขสวัสดิ์', 6, '2011-10-20', 1, '6', '1-1649-87984-51-3', 1, 's006'),
+('8137', 'ภควัต', 'ชาติทุ่ง', 7, '2011-12-15', 1, '7', '1-1587-98413-22-4', 1, 's007');
 
 -- --------------------------------------------------------
 
@@ -643,7 +643,7 @@ INSERT INTO `teacher` (`teacher_id`, `teacher_title`, `teacher_firstname`, `teac
 
 CREATE TABLE `trait` (
   `trait_id` int(11) NOT NULL,
-  `class_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` int(11) NOT NULL,
   `term` tinyint(4) NOT NULL,
   `year` year(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -653,8 +653,8 @@ CREATE TABLE `trait` (
 --
 
 INSERT INTO `trait` (`trait_id`, `class_id`, `term`, `year`) VALUES
-(3, 'c1-1', 1, 2017),
-(6, 'c1-1', 2, 2017);
+(3, 1, 1, 2017),
+(6, 1, 2, 2017);
 
 -- --------------------------------------------------------
 
@@ -732,65 +732,128 @@ INSERT INTO `user` (`user_id`, `user_password`, `user_status`, `user_level`) VAL
 -- Indexes for table `class`
 --
 ALTER TABLE `class`
-  ADD PRIMARY KEY (`class_id`);
+  ADD PRIMARY KEY (`class_id`),
+  ADD KEY `teacher_id` (`teacher_id`);
+
+--
+-- Indexes for table `period`
+--
+ALTER TABLE `period`
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `subjects_id` (`subjects_id`),
+  ADD KEY `schedule_id` (`schedule_id`);
 
 --
 -- Indexes for table `roll`
 --
 ALTER TABLE `roll`
-  ADD PRIMARY KEY (`roll_id`);
+  ADD PRIMARY KEY (`roll_id`),
+  ADD KEY `roll_id` (`roll_id`),
+  ADD KEY `class_id` (`class_id`);
+
+--
+-- Indexes for table `roll_detail`
+--
+ALTER TABLE `roll_detail`
+  ADD KEY `roll_id` (`roll_id`),
+  ADD KEY `student_id` (`student_id`);
 
 --
 -- Indexes for table `schedule`
 --
 ALTER TABLE `schedule`
-  ADD PRIMARY KEY (`schedule_id`);
+  ADD PRIMARY KEY (`schedule_id`),
+  ADD KEY `subjects_id` (`subjects_id`),
+  ADD KEY `teacher_id` (`teacher_id`),
+  ADD KEY `class_id` (`class_id`);
 
 --
 -- Indexes for table `score`
 --
 ALTER TABLE `score`
-  ADD PRIMARY KEY (`score_id`);
+  ADD PRIMARY KEY (`score_id`),
+  ADD KEY `score_id` (`score_id`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `subjects_id` (`subjects_id`),
+  ADD KEY `schedule_id` (`schedule_id`);
+
+--
+-- Indexes for table `score_detail`
+--
+ALTER TABLE `score_detail`
+  ADD KEY `score_id` (`score_id`),
+  ADD KEY `student_id` (`student_id`);
+
+--
+-- Indexes for table `score_detail_2`
+--
+ALTER TABLE `score_detail_2`
+  ADD KEY `score_id` (`score_id`),
+  ADD KEY `student_id` (`student_id`);
 
 --
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
-  ADD PRIMARY KEY (`student_id`);
+  ADD PRIMARY KEY (`student_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `class_id` (`class_id`);
 
 --
 -- Indexes for table `subjects`
 --
 ALTER TABLE `subjects`
-  ADD PRIMARY KEY (`subjects_id`);
+  ADD PRIMARY KEY (`subjects_id`),
+  ADD KEY `subjects_id` (`subjects_id`),
+  ADD KEY `subjects_type` (`subjects_type`);
 
 --
 -- Indexes for table `subjects_type`
 --
 ALTER TABLE `subjects_type`
-  ADD PRIMARY KEY (`subjects_type`);
+  ADD PRIMARY KEY (`subjects_type`),
+  ADD KEY `subjects_type` (`subjects_type`);
 
 --
 -- Indexes for table `teacher`
 --
 ALTER TABLE `teacher`
-  ADD PRIMARY KEY (`teacher_id`);
+  ADD PRIMARY KEY (`teacher_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `trait`
 --
 ALTER TABLE `trait`
-  ADD PRIMARY KEY (`trait_id`);
+  ADD PRIMARY KEY (`trait_id`),
+  ADD KEY `trait_id` (`trait_id`),
+  ADD KEY `class_id` (`class_id`);
+
+--
+-- Indexes for table `trait_detail`
+--
+ALTER TABLE `trait_detail`
+  ADD KEY `trait_id` (`trait_id`),
+  ADD KEY `student_id` (`student_id`);
 
 --
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `user_id_2` (`user_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `user_id_3` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `class`
+--
+ALTER TABLE `class`
+  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `roll`
@@ -815,6 +878,98 @@ ALTER TABLE `score`
 --
 ALTER TABLE `trait`
   MODIFY `trait_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `class`
+--
+ALTER TABLE `class`
+  ADD CONSTRAINT `class_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`);
+
+--
+-- Constraints for table `period`
+--
+ALTER TABLE `period`
+  ADD CONSTRAINT `period_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
+  ADD CONSTRAINT `period_ibfk_2` FOREIGN KEY (`subjects_id`) REFERENCES `subjects` (`subjects_id`),
+  ADD CONSTRAINT `period_ibfk_3` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`schedule_id`);
+
+--
+-- Constraints for table `roll`
+--
+ALTER TABLE `roll`
+  ADD CONSTRAINT `roll_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`);
+
+--
+-- Constraints for table `roll_detail`
+--
+ALTER TABLE `roll_detail`
+  ADD CONSTRAINT `roll_detail_ibfk_1` FOREIGN KEY (`roll_id`) REFERENCES `roll` (`roll_id`),
+  ADD CONSTRAINT `roll_detail_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`);
+
+--
+-- Constraints for table `schedule`
+--
+ALTER TABLE `schedule`
+  ADD CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`subjects_id`) REFERENCES `subjects` (`subjects_id`),
+  ADD CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`);
+
+--
+-- Constraints for table `score`
+--
+ALTER TABLE `score`
+  ADD CONSTRAINT `score_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
+  ADD CONSTRAINT `score_ibfk_2` FOREIGN KEY (`subjects_id`) REFERENCES `subjects` (`subjects_id`),
+  ADD CONSTRAINT `score_ibfk_3` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`schedule_id`);
+
+--
+-- Constraints for table `score_detail`
+--
+ALTER TABLE `score_detail`
+  ADD CONSTRAINT `score_detail_ibfk_1` FOREIGN KEY (`score_id`) REFERENCES `score` (`score_id`),
+  ADD CONSTRAINT `score_detail_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`);
+
+--
+-- Constraints for table `score_detail_2`
+--
+ALTER TABLE `score_detail_2`
+  ADD CONSTRAINT `score_detail_2_ibfk_1` FOREIGN KEY (`score_id`) REFERENCES `score` (`score_id`),
+  ADD CONSTRAINT `score_detail_2_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`);
+
+--
+-- Constraints for table `student`
+--
+ALTER TABLE `student`
+  ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `student_ibfk_2` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`);
+
+--
+-- Constraints for table `subjects`
+--
+ALTER TABLE `subjects`
+  ADD CONSTRAINT `subjects_ibfk_1` FOREIGN KEY (`subjects_type`) REFERENCES `subjects_type` (`subjects_type`);
+
+--
+-- Constraints for table `teacher`
+--
+ALTER TABLE `teacher`
+  ADD CONSTRAINT `teacher_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Constraints for table `trait`
+--
+ALTER TABLE `trait`
+  ADD CONSTRAINT `trait_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`);
+
+--
+-- Constraints for table `trait_detail`
+--
+ALTER TABLE `trait_detail`
+  ADD CONSTRAINT `trait_detail_ibfk_1` FOREIGN KEY (`trait_id`) REFERENCES `trait` (`trait_id`),
+  ADD CONSTRAINT `trait_detail_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
