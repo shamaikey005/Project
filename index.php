@@ -5,7 +5,7 @@
         if($user->login($_POST["id"], $_POST["pass"])) {
             if($user->isLogin()) {
               if($user->isAdmin()) {
-                $user->redirect("./dashboard/pages/admin/");
+                $user->redirect("./dashboard/pages/admin/manage-user.php");
               }
               else if($user->isTeacher()) {
                 $user->redirect("./dashboard/pages/teacher/");

@@ -12,12 +12,16 @@
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["send"])) {
       try {
-        $stmt = $conn->prepare("UPDATE `class` SET
-                                `class_grade` = '".$_POST["cgrade"]."',
-                                `class_room` = ".$_POST["croom"].",
-                                `teacher_id` = ".$_POST["cteacher"].",
-                                 WHERE `class_id` = '". $cid."'");
-        $stmt->execute();
+        $class_update_stmt = $conn->prepare("UPDATE `class` SET 
+                                `class_grade` = :cgrade,
+                                `class_room` = :croom,
+                                `teacher_id` = :cteacher 
+                                 WHERE `class_id` = :cid");
+        $class_update_stmt->bindParam(":cgrade", $_POST["cgrade"]);
+        $class_update_stmt->bindParam(":croom", $_POST["croom"]);
+        $class_update_stmt->bindParam(":cteacher", $_POST["cteacher"]);
+        $class_update_stmt->bindParam(":cid", $cid);
+        $class_update_stmt->execute();
         unset($_POST["send"]);
         $user->redirect("manage-gen.php");
       } catch(PDOException $e) {

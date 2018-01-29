@@ -25,9 +25,8 @@
         <div class="col-lg-12">
             <h1 class="page-header">ตรวจสอบสถานะการส่งเกรด</h1>
             <ul class="nav nav-pills nav-justified" role="tablist" style="padding-bottom:1em;">
-                <li role="presentation" class="active"><a href="#cop" aria-controls="cop" role="tab" data-toggle="tab">เปิดสอน</a></li>
-                <li role="presentation" class=""><a href="#cde" aria-controls="cde" role="tab" data-toggle="tab">ตัดเกรด</a></li>
-                <li role="presentation" class=""><a href="#cdp" aria-controls="cdp" role="tab" data-toggle="tab">จบการสอน</a></li>
+                <li role="presentation" class="active"><a href="#cop" aria-controls="cop" role="tab" data-toggle="tab">รายวิชาที่เปิดสอน</a></li>
+                <li role="presentation" class=""><a href="#cde" aria-controls="cde" role="tab" data-toggle="tab">รายวิชาที่ส่งเกรดแล้ว</a></li>
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="cop">
@@ -43,7 +42,6 @@
                                     <th>ปี</th>
                                     <th>เทอม</th>
                                     <th>สถานะ</th>
-                                    <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -56,7 +54,6 @@
                                     <th>ปี</th>
                                     <th>เทอม</th>
                                     <th>สถานะ</th>
-                                    <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -80,9 +77,6 @@
                                                 <td>'.($rows["year"]+543).'</td>
                                                 <td>'.$rows["term"].'</td>
                                                 <td>'.$func->scheduleStatusText($rows["status"]).'</td>
-                                                <td>
-                                                    
-                                                </td>
                                             </tr>';
                                     }
                                 ?>
@@ -103,7 +97,6 @@
                                     <th>ปี</th>
                                     <th>เทอม</th>
                                     <th>สถานะ</th>
-                                    <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -116,7 +109,6 @@
                                     <th>ปี</th>
                                     <th>เทอม</th>
                                     <th>สถานะ</th>
-                                    <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -140,69 +132,6 @@
                                                 <td>'.($rows["year"]+543).'</td>
                                                 <td>'.$rows["term"].'</td>
                                                 <td>'.$func->scheduleStatusText($rows["status"]).'</td>
-                                                <td>
-                                                    
-                                                </td>
-                                            </tr>';
-                                    }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="cdp">
-                    <div class="col-xs-12">
-                        <table id="data_table3" class="table table-hover table-condensed table-responsive" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>รหัส</th>
-                                    <th>รหัสวิชา</th>
-                                    <th>ชื่อวิชา</th>
-                                    <th>ชั้น</th>
-                                    <th>ครู</th>
-                                    <th>ปี</th>
-                                    <th>เทอม</th>
-                                    <th>สถานะ</th>
-                                    <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>รหัส</th>
-                                    <th>รหัสวิชา</th>
-                                    <th>ชื่อวิชา</th>
-                                    <th>ชั้น</th>
-                                    <th>ครู</th>
-                                    <th>ปี</th>
-                                    <th>เทอม</th>
-                                    <th>สถานะ</th>
-                                    <th><i class="fas fa-cog fa-fw"></i> ตั้งค่า</th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                <?php
-                                    $stmt = $conn->prepare("SELECT * FROM `schedule` AS `sc` 
-                                                            LEFT JOIN `class` AS `c` ON `c`.`class_id` = `sc`.`class_id`
-                                                            LEFT JOIN `subjects` AS `s` ON `s`.`subjects_id` = `sc`.`subjects_id`
-                                                            LEFT JOIN `teacher` AS `t` ON `t`.`teacher_id` = `sc`.`teacher_id`
-                                                            WHERE `sc`.`status` = 3");
-
-                                    $stmt->execute();
-                                    
-                                    while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                        echo '
-                                            <tr>
-                                                <td>'.$rows["schedule_id"].'</td>
-                                                <td>'.$rows["subjects_id"].'</td>
-                                                <td>'.$rows["subjects_name"].'</td>
-                                                <td>ป.'.$rows["class_grade"].'/'.$rows["class_room"].'</td>
-                                                <td>'.$rows["teacher_firstname"].' '.$rows["teacher_lastname"].'</td>
-                                                <td>'.($rows["year"]+543).'</td>
-                                                <td>'.$rows["term"].'</td>
-                                                <td>'.$func->scheduleStatusText($rows["status"]).'</td>
-                                                <td>
-
-                                                </td>
                                             </tr>';
                                     }
                                 ?>
@@ -228,7 +157,6 @@
     $(document).ready(function() {
     $('#data_table').DataTable();
     $('#data_table2').DataTable();
-    $('#data_table3').DataTable();
     });
 
 </script>

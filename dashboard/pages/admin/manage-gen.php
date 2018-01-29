@@ -53,7 +53,7 @@
             
             try {
 
-                $insClassStmt = $conn->prepare("INSERT INTO `class` VALUES ('".$_POST["cid"]."',".$_POST["cgrade"].",".$_POST["croom"].",'".$_POST["cteacher"]."') ");
+                $insClassStmt = $conn->prepare("INSERT INTO `class` VALUES (NULL,".$_POST["cgrade"].",".$_POST["croom"].",'".$_POST["cteacher"]."') ");
                 $insClassStmt->execute();
                 unset($_POST["insClassBtn"]);
                 $user->redirect("manage-gen.php");
@@ -298,7 +298,7 @@
                                                 <tr>
                                                     <td>'.$rows["class_id"].'</td>
                                                     <td>ป.'.$rows["class_grade"].'/'.$rows["class_room"].'</td>
-                                                    <td>'.$rows["teacher_firstname"].' '.$rows["teacher_lastname"].'</td>
+                                                    <td>'.$rows["teacher_title"].$rows["teacher_firstname"].' '.$rows["teacher_lastname"].'</td>
                                                     <td>
                                                         <a href="edit-class.php?id='.$rows["class_id"].'&t='.$rows["teacher_id"].'"><button class="btn btn-info btn-sm"><i class="fas fa-edit fa-fw"></i> แก้ไข</button></a>
                                                         <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#delClassModal" data-cid="'.$rows["class_id"].'"><i class="fas fa-times fa-fw"></i> ลบ</button>
@@ -355,7 +355,7 @@
                                                     <td>'.$rows["subjects_id"].'</td>
                                                     <td>'.$rows["subjects_name"].'</td>
                                                     <td>ป.'.$rows["class_grade"].'/'.$rows["class_room"].'</td>
-                                                    <td>'.$rows["teacher_firstname"].' '.$rows["teacher_lastname"].'</td>
+                                                    <td>'.$rows["teacher_title"].$rows["teacher_firstname"].' '.$rows["teacher_lastname"].'</td>
                                                     <td>'.($rows["year"]+543).'</td>
                                                     <td>'.$rows["term"].'</td>
                                                     <td>'.$func->scheduleStatusText($rows["status"]).'</td>
@@ -452,12 +452,6 @@
                 <div class="modal-body">
                     <form class="form-horizontal" method="post" id="insClassForm">
                         <div class="form-group">
-                            <label for="ins31" class="col-xs-3 control-label">รหัสชั้นเรียน</label>
-                            <div class="col-xs-9">
-                                <input type="text" class="form-control" name="cid" id="ins31" placeholder="Class ID" required />
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="ins32" class="col-xs-3 control-label">ระดับชั้น</label>
                             <div class="col-xs-9">
                                 <input type="number" min="1" max="6" class="form-control" name="cgrade" id="ins32" placeholder="Class Grade" required />
@@ -524,7 +518,7 @@
                             <select class="form-control" name="sc_teacher" id="sc_teacher" required>
                                     <?php 
                                     while ($teacher_rows = $teacher_stmt->fetch(PDO::FETCH_ASSOC)) {
-                                        echo '<option value="'.$teacher_rows["teacher_id"].'">'.$teacher_rows["teacher_firstname"].' '.$teacher_rows["teacher_lastname"].'</option>';
+                                        echo '<option value="'.$teacher_rows["teacher_id"].'">'.$teacher_rows["teacher_title"].$teacher_rows["teacher_firstname"].' '.$teacher_rows["teacher_lastname"].'</option>';
                                     }
                                     ?>
                                 </select>

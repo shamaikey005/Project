@@ -38,7 +38,7 @@ class Func {
         break;
       
       case 1:
-        $res = "เปิดสอน";
+        $res = "รอประเมิน";
         break;
 
       case 2:
