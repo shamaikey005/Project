@@ -166,7 +166,6 @@
                 echo 'ERROR : ' . $e->getMessage();
             }
 
-            unset($_POST["delClassBtn"]);
             $user->redirect("manage-gen.php");
             
         }
@@ -175,9 +174,17 @@
 
             try {
                 $conn->beginTransaction();
-                $conn->exec("DELETE FROM `schedule` WHERE `schedule_id` = '".$_POST["scid"]."'");
-                $conn->exec("DELETE FROM `score` WHERE `schedule_id` = '".$_POST["scid"]."'");
-                $conn->exec("DELETE FROM `period` WHERE `schedule_id` = '".$_POST["scid"]."'");
+                $score_stmt = $conn->prepare("SELECT `score_id` FROM `score` WHERE `schedule_id` = ".$_POST["scid"]);
+                $score_stmt->execute();
+                while ($score_rows = $score_stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $conn->exec("DELETE FROM `score_detail` WHERE `score_id` = ".$score_rows["score_id"]);
+                    $conn->exec("DELETE FROM `score_detail_2` WHERE `score_id` = ".$score_rows["score_id"]);
+                }
+
+                $conn->exec("DELETE FROM `score` WHERE `schedule_id` = ".$_POST["scid"]);
+                $conn->exec("DELETE FROM `period` WHERE `schedule_id` = ".$_POST["scid"]);
+                $conn->exec("DELETE FROM `schedule` WHERE `schedule_id` = ".$_POST["scid"]);
+                
                 $conn->commit();
                 unset($_POST["delScheduleBtn"]);
             } catch (PDOException $e) {
@@ -185,7 +192,6 @@
                 echo 'ERROR : '.$e->getMessage();
             }
 
-            unset($_POST["delScheduleBtn"]);
             $user->redirect("manage-gen.php");
 
         }

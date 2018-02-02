@@ -51,8 +51,8 @@
         if ( isset($_POST["insStudentBtn"]) ) {
             try {
                 $conn->beginTransaction();
-                $conn->exec("INSERT INTO `student` VALUES ('".$_POST["sid"]."','".$_POST["firstname"]."','".$_POST["lastname"]."',".$_POST["num"].",CAST('".$_POST["birth"]."' AS DATE),".$_POST["sex"].",'".$_POST["address"]."','".$_POST["pid"]."','".$_POST["class"]."','".$_POST["uid"]."')");
                 $conn->exec("INSERT INTO `user` VALUES ('".$_POST["uid"]."','".$_POST["password"]."',1,1)");
+                $conn->exec("INSERT INTO `student` VALUES ('".$_POST["sid"]."','".$_POST["firstname"]."','".$_POST["lastname"]."',".$_POST["num"].",CAST('".$_POST["birth"]."' AS DATE),".$_POST["sex"].",'".$_POST["address"]."','".$_POST["pid"]."','".$_POST["class"]."','".$_POST["uid"]."')");
                 $conn->commit();
             } catch(PDOException $e) {
                 $conn->rollback();
@@ -65,8 +65,8 @@
             try {
                 unset($error_manage_user);
                 $conn->beginTransaction();
-                $conn->exec("INSERT INTO `teacher` VALUES ('".$_POST["tid"]."', '".$_POST["title"]."','".$_POST["firstname"]."','".$_POST["lastname"]."',CAST('".$_POST["birth"]."' AS DATE),'".$_POST["address"]."','".$_POST["tel"]."','".$_POST["uid"]."')");
                 $conn->exec("INSERT INTO `user` VALUES ('".$_POST["uid"]."','".$_POST["password"]."',1,2)");
+                $conn->exec("INSERT INTO `teacher` VALUES ('".$_POST["tid"]."', '".$_POST["title"]."','".$_POST["firstname"]."','".$_POST["lastname"]."',CAST('".$_POST["birth"]."' AS DATE),'".$_POST["address"]."','".$_POST["tel"]."','".$_POST["uid"]."')");
                 $conn->commit();
             } catch(PDOException $e) {
                 $conn->rollback();
@@ -74,6 +74,79 @@
                 $error_manage_user = "ไม่สามารถเพิ่มข้อมูลได้";
             }
             unset($_POST["insTeacherBtn"]);
+        }
+        if(isset($_POST['insStudentBtn2'])){
+            try {
+            // move_uploaded_file($_FILES["MyStudent"]["tmp_name"],"Myxls/".$_FILES["MyStudent"]["name"]);
+            move_uploaded_file($_FILES["MyStudent"]["tmp_name"],"Myxls/".$_FILES["MyStudent"]["name"]);
+        
+            //*** Get Document Path ***//
+            $strPath = realpath(basename(getenv($_SERVER["SCRIPT_NAME"])));
+            $OpenFile = "Myxls/".$_FILES["MyStudent"]["name"];
+            // $OpenFile = "Myxls/MyStudent.xlt";
+            // //*** Create Exce.Application ***//
+            
+            // $xlApp = new COM("Excel.Application") or die("Unable to instanciate excel");
+            // $xlBook = $xlApp->Workbooks->Open($strPath."/".$OpenFile);
+            // //$xlBook = $xlApp->Workbooks->Open(realpath($OpenFile));
+        
+            // $xlSheet1 = $xlBook->Worksheets(1);	
+
+            $objCSV = fopen($strPath."/".$OpenFile, "r");
+            try {
+
+                $conn->beginTransaction();
+                while (($objArr = fgetcsv($objCSV, 1000, ",")) !== FALSE) {
+                    if(trim($objArr[0]) != "" ) {
+                        $year = ((int)substr(($objArr[4]), -4)) - 543;
+                        $mon = substr($objArr[4], 3, 2);
+                        $day = substr($objArr[4], 0, 2);
+                        $bdate = date('Y-m-d', strtotime($mon.'/'.$day.'/'.$year));
+                        // echo $bdate."<br>";
+                        $conn->exec("INSERT INTO user (user_id, user_password, user_status, user_level) VALUES ('".$objArr[9]."', '1234', 1, 1)");
+                        $conn->exec("INSERT INTO student 
+                                    (student_id, student_firstname, student_lastname, student_num, student_birthday, student_sex, student_address, student_idcard, class_id, user_id) VALUES 
+                                    ('".$objArr[0]."', '".$objArr[1]."', '".$objArr[2]."', ".$objArr[3].", CAST('".$bdate."' AS DATE),
+                                    ".$objArr[5].", '".$objArr[6]."', '".$objArr[7]."', ".$objArr[8].", '".$objArr[9]."')");
+                        
+                    }
+                        
+                }
+                $conn->commit();
+                // $user->redirect("manage-user.php");
+            } catch (Exception $e) {
+                $conn->rollback();
+                echo 'Error : - '.$e->getMessage();
+            }
+
+                //*** Insert to MySQL Database ***//
+            //     $conn->beginTransaction();
+            //     for ($i=1;$i<=50;$i++){
+            //         if (trim($xlSheet1->Cells->Item($i,1)) != "")
+            //         {
+            //             $conn->exec("INSERT INTO user (user_id, user_password, user_status, user_level) VALUES ('".$xlSheet1->Cells->Item($i,10)."', '1234', 1, 1)");
+            //             $conn->exec("INSERT INTO student 
+            //                         (student_id, student_firstname, student_lastname, student_num, student_birthday, student_sex, student_address, student_idcard, class_id, user_id) VALUES 
+            //                         ('".$xlSheet1->Cells->Item($i,1)."', '".$xlSheet1->Cells->Item($i,2)."', '".$xlSheet1->Cells->Item($i,3)."', ".$xlSheet1->Cells->Item($i,4).", CAST('".$xlSheet1->Cells->Item($i,5)."' AS DATE),
+            //                         ".$xlSheet1->Cells->Item($i,6).", '".$xlSheet1->Cells->Item($i,7)."', '".$xlSheet1->Cells->Item($i,8)."', ".$xlSheet1->Cells->Item($i,9).", '".$xlSheet1->Cells->Item($i,10)."')");
+                        
+            //         }
+            //     }
+            //     $conn->commit();
+            //     $user->redirect("manage-user.php");
+            // } catch (Exception $e) {
+            //     $conn->rollback();
+            //     echo 'Error : - '.$e->getMessage();
+            // }
+            
+            //*** Close & Quit ***//
+            // $xlApp->Application->Quit();
+            // $xlApp = null;
+            // $xlBook = null;
+            // $xlSheet1 = null;
+            } catch (Exception $e) {
+
+            }
         }
         if ( isset($_POST["changeStatusBtn"]) ) {
             $uid = $_POST["uid"];
@@ -84,6 +157,7 @@
             } catch(PDOException $e) {
                 echo 'Error : ' . $e->getMessage();
             }
+            
         }
     }
 ?>
@@ -107,6 +181,7 @@
                             <ul class="dropdown-menu" aria-lebelledby="insDropdown">
                                 <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insStudentModal">นักเรียน</a></li>
                                 <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insTeacherModal">ครู</a></li>
+                                <li><a class="btn btn-link" style="text-decoration: none;color:black;text-align:left;" type="button" data-toggle="modal" data-target="#insStudentModal2">Import ข้อมูลนักเรียน</a></li>
                             </ul>
                         </div>
                     </h1>
@@ -354,6 +429,35 @@
         </div>
     </div>
     <!-- /Modal - Insert Student -->
+
+    <!-- Modal -import Student -->
+    <div class="modal fade" id="insStudentModal2" tabindex="-1" role="dialog" aria-labelledby="insStudentModalTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                    </button>
+                    <h4 class="modal-title" id="insStudentModalTitle"><i class="fas fa-plus-circle fa-fw"></i> Import Data</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" method="post" id="imStudentForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="MyStudent" class="col-xs-3 control-label">MyStudent</label>
+                            <div class="col-xs-9">
+                                <input type="file" class="form-control" name="MyStudent" id="MyStudent" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input class="btn btn-success" type="submit" name="insStudentBtn2" form="imStudentForm" value="Import Data">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Modal student import -->
 
     <!-- Modal - Insert Teacher -->
     <div class="modal fade" id="insTeacherModal" tabindex="-1" role="dialog" aria-labelledby="insTeacherModalTitle">
