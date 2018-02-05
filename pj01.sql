@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2018 at 05:38 AM
+-- Generation Time: Feb 05, 2018 at 09:09 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -586,7 +586,6 @@ INSERT INTO `subjects` (`subjects_id`, `subjects_name`, `subjects_type`, `subjec
 ('พ11101', 'สุขศึกษาและพละศึกษา', 1, 2, 80),
 ('ว11101', 'วิทยาศาสตร์', 1, 2, 80),
 ('ศ11101', 'ศิลปะ', 1, 2, 80),
-('ส11101', 'สังคมศึกษา ศาสนาและวัฒนธรรม', 1, 2, 80),
 ('ส11102', 'ประวัติศาสตร์', 1, 1, 40),
 ('ส11201', 'หน้าที่พลเมือง', 2, 1, 40),
 ('อ11101', 'ภาษาอังกฤษ', 1, 1, 40);
@@ -915,7 +914,8 @@ ALTER TABLE `roll_detail`
 --
 ALTER TABLE `schedule`
   ADD CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`subjects_id`) REFERENCES `subjects` (`subjects_id`),
-  ADD CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`);
+  ADD CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`),
+  ADD CONSTRAINT `schedule_ibfk_3` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `score`
