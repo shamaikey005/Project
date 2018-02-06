@@ -43,8 +43,13 @@
             $uid = (string)$_POST["uid"];
             try {
                 $conn->beginTransaction();
-                $conn->exec("UPDATE `class` SET `teacher_id` = NULL WHERE `teacher_id` = '$tid'");
+                try{
+                    $conn->exec("UPDATE `class` SET `teacher_id` = NULL WHERE `teacher_id` = '$tid'");
+                } catch (PDOException $e) {}
                 $conn->exec("DELETE FROM `period` WHERE `teacher_id` = '$tid'");
+                $conn->exec("DELETE FROM `score_detail_2` WHERE `teacher_id` = '$tid'");
+                $conn->exec("DELETE FROM `score_detail` WHERE `teacher_id` = '$tid'");
+                $conn->exec("DELETE FROM `score` WHERE `teacher_id` = '$tid'");
                 $conn->exec("DELETE FROM `schedule` WHERE `teacher_id` = '$tid'");
                 $conn->exec("DELETE FROM `teacher` WHERE `teacher_id` = '$tid' AND `user_id` = '$uid'");
                 $conn->exec("DELETE FROM `user` WHERE `user_id` = '$uid'");

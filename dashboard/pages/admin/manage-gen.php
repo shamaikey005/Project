@@ -82,20 +82,20 @@
                 if ($subjectType["subjects_type"] == 1 || $subjectType["subjects_type"] == 2) {
                     
                     while ($studentRows = $student->fetch(PDO::FETCH_ASSOC)) {
-                        $insScore = $conn->prepare("INSERT INTO `score` VALUES (NULL, '".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', 0)");
+                        $insScore = $conn->prepare("INSERT INTO `score` VALUES (NULL, '".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', '".$_POST["sc_teacher"]."', 0)");
                         $insScore->execute();
                         $scoreID = $conn->prepare("SELECT * FROM `score` WHERE `student_id` = '".$studentRows["student_id"]."' AND `subjects_id` = '".$_POST["sc_subject"]."' AND `schedule_id` = '".$scRow["schedule_id"]."'");
                         $scoreID->execute();
                         $scoreIDRow = $scoreID->fetch(PDO::FETCH_ASSOC);
                         $insScoreDetail = $conn->prepare("INSERT INTO `score_detail` VALUES 
-                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 1, 0, 10),
-                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 2, 0, 10),
-                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 3, 0, 10),
-                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 4, 0, 10),
-                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 5, 0, 10),
-                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 6, 0, 10),
-                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 7, 0, 10),
-                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 8, 0, 30)
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', '".$_POST["sc_teacher"]."', 1, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', '".$_POST["sc_teacher"]."', 2, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', '".$_POST["sc_teacher"]."', 3, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', '".$_POST["sc_teacher"]."', 4, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', '".$_POST["sc_teacher"]."', 5, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', '".$_POST["sc_teacher"]."', 6, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', '".$_POST["sc_teacher"]."', 7, 0, 10),
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', '".$_POST["sc_teacher"]."', 8, 0, 30)
                                                         ");
                         $insScoreDetail->execute();
                         $insPeriod = $conn->prepare("INSERT INTO `period` VALUES 
@@ -107,13 +107,13 @@
                 } else if ($subjectType["subjects_type"] == 3) {
 
                     while ($studentRows = $student->fetch(PDO::FETCH_ASSOC)) {
-                        $insScore = $conn->prepare("INSERT INTO `score` VALUES (NULL, '".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', 0)");
+                        $insScore = $conn->prepare("INSERT INTO `score` VALUES (NULL, '".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', '".$_POST["sc_teacher"]."', 0)");
                         $insScore->execute();
                         $scoreID = $conn->prepare("SELECT * FROM `score` WHERE `student_id` = '".$studentRows["student_id"]."' AND `subjects_id` = '".$_POST["sc_subject"]."' AND `schedule_id` = '".$scRow["schedule_id"]."'");
                         $scoreID->execute();
                         $scoreIDRow = $scoreID->fetch(PDO::FETCH_ASSOC);
                         $insScoreDetail = $conn->prepare("INSERT INTO `score_detail_2` VALUES 
-                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', 0)
+                                                        ('".$scoreIDRow["score_id"]."', '".$studentRows["student_id"]."', '".$_POST["sc_teacher"]."', 0)
                                                         ");
                         $insScoreDetail->execute();
                         $insPeriod = $conn->prepare("INSERT INTO `period` VALUES 
@@ -296,7 +296,7 @@
                                     </tfoot>
                                     <tbody>
                                         <?php
-                                        $stmt = $conn->prepare("SELECT * FROM `class` AS c INNER JOIN `teacher` AS t ON t.teacher_id = c.teacher_id");
+                                        $stmt = $conn->prepare("SELECT * FROM `class` AS c LEFT OUTER JOIN `teacher` AS t ON t.teacher_id = c.teacher_id");
                                         $stmt->execute();
                                         
                                         while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
