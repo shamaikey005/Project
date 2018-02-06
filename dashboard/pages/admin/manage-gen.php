@@ -99,7 +99,7 @@
                                                         ");
                         $insScoreDetail->execute();
                         $insPeriod = $conn->prepare("INSERT INTO `period` VALUES 
-                                                    ('".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', 0, ".$subjectType["subjects_time"].")
+                                                    ('".$studentRows["student_id"]."', '".$_POST["sc_subject"]."', '".$scRow["schedule_id"]."', '".$_POST["sc_teacher"]."', 0, ".$subjectType["subjects_time"].")
                                                    ");
                         $insPeriod->execute();
                     }
