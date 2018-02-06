@@ -30,7 +30,7 @@
                     $roll_check_rows = $roll_check_stmt->fetch(PDO::FETCH_ASSOC);
                     $conn->beginTransaction();
                     while ($st_rows = $st_stmt->fetch(PDO::FETCH_ASSOC)) {
-                        $conn->exec("INSERT INTO `roll_detail` VALUES ('".$roll_check_rows["roll_id"]."', '".$st_rows["student_id"]."', 0, 0, 0, 0)");
+                        $conn->exec("INSERT INTO `roll_detail` VALUES ('".$roll_check_rows["roll_id"]."', '".$st_rows["student_id"]."', '".$_POST["rclass"]."', 0, 0, 0, 0)");
                     }
                     $conn->commit();
                     unset($_POST["insRollBtn"]);
@@ -58,7 +58,7 @@
                     $trait_check_rows = $trait_check_stmt->fetch(PDO::FETCH_ASSOC);
                     $conn->beginTransaction();
                     while ($st_rows = $st_stmt->fetch(PDO::FETCH_ASSOC)) {
-                        $conn->exec("INSERT INTO `trait_detail` VALUES ('".$trait_check_rows["trait_id"]."' ,'".$st_rows["student_id"]."', 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+                        $conn->exec("INSERT INTO `trait_detail` VALUES ('".$trait_check_rows["trait_id"]."' ,'".$st_rows["student_id"]."', '".$_POST["trclass"]."', 0, 0, 0, 0, 0, 0, 0, 0, 0)");
                     }
                     $conn->commit();
                     unset($_POST["insTraitBtn"]);

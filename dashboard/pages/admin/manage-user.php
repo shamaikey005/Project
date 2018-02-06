@@ -247,7 +247,7 @@
                                         $stmt = $conn->prepare(
                                             "SELECT * FROM user AS u
                                             INNER JOIN student AS st ON st.user_id = u.user_id
-                                            INNER JOIN class AS c ON c.class_id = st.class_id
+                                            LEFT OUTER JOIN class AS c ON c.class_id = st.class_id
                                             WHERE u.user_level = 1
                                             ");
                                         $stmt->execute();

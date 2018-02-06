@@ -88,7 +88,7 @@
                         $teacher_stmt = $conn->prepare("SELECT * FROM `teacher`");
                         $teacher_stmt->execute();
                         while ($teacher_rows = $teacher_stmt->fetch(PDO::FETCH_ASSOC)) {
-                          echo '<option value="'.$teacher_rows["teacher_id"].'" '. (($teacher == $teacher_rows["teacher_id"]) ? '"selected"' : "") .'>'.$teacher_rows["teacher_title"].''.$teacher_rows["teacher_firstname"].' '.$teacher_rows["teacher_lastname"].'</option>';
+                          echo '<option value="'.$teacher_rows["teacher_id"].'" '. (($teacher == $teacher_rows["teacher_id"]) ? "selected" : "") .'>'.$teacher_rows["teacher_title"].''.$teacher_rows["teacher_firstname"].' '.$teacher_rows["teacher_lastname"].'</option>';
                         }
                       echo '</select>
                   </div>

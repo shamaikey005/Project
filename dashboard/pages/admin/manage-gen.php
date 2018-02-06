@@ -159,14 +159,23 @@
         if (isset($_POST["delClassBtn"])) {
             
             try {
-                $delSubjectStmt = $conn->prepare("DELETE FROM `class` WHERE `class_id` = '".$_POST["cid"]."'");
-                $delSubjectStmt->execute();
+                $conn->beginTransaction();
+                $conn->exec("UPDATE `class` SET `teacher_id` = NULL WHERE `class_id` = '".$_POST["cid"]."'");
+                $conn->exec("DELETE FROM `roll_detail` WHERE `class_id` = '".$_POST["cid"]."'");
+                $conn->exec("DELETE FROM `roll` WHERE `class_id` = '".$_POST["cid"]."'");
+                $conn->exec("DELETE FROM `trait_detail` WHERE `class_id` = '".$_POST["cid"]."'");
+                $conn->exec("DELETE FROM `trait` WHERE `class_id` = '".$_POST["cid"]."'");
+                try {
+                    $conn->exec("UPDATE `student` SET `class_id` = NULL WHERE `class_id` = '".$_POST["cid"]."'");
+                } catch (PDOException $e) {}
+                $conn->exec("DELETE FROM `class` WHERE `class_id` = '".$_POST["cid"]."'");
+                $conn->commit();
+                $user->redirect("manage-gen.php");
                 unset($_POST["delClassBtn"]);
             } catch (PDOException $e) {
+                $conn->rollback();
                 echo 'ERROR : ' . $e->getMessage();
             }
-
-            $user->redirect("manage-gen.php");
             
         }
 

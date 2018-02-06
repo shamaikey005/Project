@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 06, 2018 at 04:47 AM
+-- Generation Time: Feb 06, 2018 at 05:50 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -40,7 +40,7 @@ CREATE TABLE `class` (
 --
 
 INSERT INTO `class` (`class_id`, `class_grade`, `class_room`, `teacher_id`) VALUES
-(1, 1, 1, NULL);
+(3, 2, 1, 't002');
 
 -- --------------------------------------------------------
 
@@ -70,14 +70,6 @@ CREATE TABLE `roll` (
   `year` year(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `roll`
---
-
-INSERT INTO `roll` (`roll_id`, `class_id`, `term`, `year`) VALUES
-(6, 1, 1, 2017),
-(10, 1, 2, 2017);
-
 -- --------------------------------------------------------
 
 --
@@ -87,29 +79,12 @@ INSERT INTO `roll` (`roll_id`, `class_id`, `term`, `year`) VALUES
 CREATE TABLE `roll_detail` (
   `roll_id` int(11) NOT NULL,
   `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` int(11) NOT NULL,
   `roll_sick_leave` smallint(6) NOT NULL DEFAULT '0',
   `roll_personal_leave` smallint(6) NOT NULL DEFAULT '0',
   `roll_absent` smallint(6) NOT NULL DEFAULT '0',
   `roll_attend` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `roll_detail`
---
-
-INSERT INTO `roll_detail` (`roll_id`, `student_id`, `roll_sick_leave`, `roll_personal_leave`, `roll_absent`, `roll_attend`) VALUES
-(6, '7423', 1, 1, 2, 96),
-(6, '7429', 0, 0, 0, 0),
-(6, '7461', 0, 0, 0, 0),
-(6, '7614', 0, 0, 0, 0),
-(6, '8102', 0, 0, 0, 0),
-(6, '8134', 0, 0, 0, 0),
-(10, '7423', 2, 3, 4, 91),
-(10, '7429', 0, 0, 0, 0),
-(10, '7461', 0, 0, 0, 0),
-(10, '7614', 0, 0, 0, 0),
-(10, '8102', 0, 0, 0, 0),
-(10, '8134', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -185,7 +160,7 @@ CREATE TABLE `student` (
   `student_sex` tinyint(4) NOT NULL DEFAULT '0',
   `student_address` text COLLATE utf8_unicode_ci,
   `student_idcard` varchar(17) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `class_id` int(11) NOT NULL,
+  `class_id` int(11) DEFAULT NULL,
   `user_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -194,12 +169,12 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`student_id`, `student_firstname`, `student_lastname`, `student_num`, `student_birthday`, `student_sex`, `student_address`, `student_idcard`, `class_id`, `user_id`) VALUES
-('7423', 'ตรัยคุณ', 'วรรณรักษ์', 1, '2011-10-10', 1, '1', '2-7675-24538-54-2', 1, 's001'),
-('7429', 'ไกรวิชญ์', 'ศิริสม', 2, '2011-08-05', 1, '2', '1-5164-62151-94-2', 1, 's002'),
-('7461', 'สรวิชญ์', 'แย้มเกสร', 3, '2011-05-02', 1, '3', '1-1689-49461-65-1', 1, 's003'),
-('7614', 'พัชรดนัย', 'บุตรทา', 4, '2011-06-22', 1, '4', '1-1684-94611-69-8', 1, 's004'),
-('8102', 'อคอง', 'เท่า', 5, '2011-09-08', 1, '5', '1-1489-46132-16-4', 1, 's005'),
-('8134', 'นัฐวุฒิ', 'สุขสวัสดิ์', 6, '2011-10-20', 1, '6', '1-1649-87984-51-3', 1, 's006');
+('7423', 'ตรัยคุณ', 'วรรณรักษ์', 1, '2011-10-10', 1, '1', '2-7675-24538-54-2', 3, 's001'),
+('7429', 'ไกรวิชญ์', 'ศิริสม', 2, '2011-08-05', 1, '2', '1-5164-62151-94-2', NULL, 's002'),
+('7461', 'สรวิชญ์', 'แย้มเกสร', 3, '2011-05-02', 1, '3', '1-1689-49461-65-1', NULL, 's003'),
+('7614', 'พัชรดนัย', 'บุตรทา', 4, '2011-06-22', 1, '4', '1-1684-94611-69-8', NULL, 's004'),
+('8102', 'อคอง', 'เท่า', 5, '2011-09-08', 1, '5', '1-1489-46132-16-4', NULL, 's005'),
+('8134', 'นัฐวุฒิ', 'สุขสวัสดิ์', 6, '2011-10-20', 1, '6', '1-1649-87984-51-3', NULL, 's006');
 
 -- --------------------------------------------------------
 
@@ -270,6 +245,14 @@ CREATE TABLE `teacher` (
   `user_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `teacher`
+--
+
+INSERT INTO `teacher` (`teacher_id`, `teacher_title`, `teacher_firstname`, `teacher_lastname`, `teacher_birthday`, `teacher_address`, `teacher_tel`, `user_id`) VALUES
+('t002', 'asd', 'qeq', 'sdfsdf', '2018-02-01', 'asdasd', '045-275-2722', 't002'),
+('t005', 'sdfds', 'dfgsd', 'fgdg', '2018-02-01', 'asdasd', '785-278-7527', 't005');
+
 -- --------------------------------------------------------
 
 --
@@ -283,14 +266,6 @@ CREATE TABLE `trait` (
   `year` year(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `trait`
---
-
-INSERT INTO `trait` (`trait_id`, `class_id`, `term`, `year`) VALUES
-(3, 1, 1, 2017),
-(6, 1, 2, 2017);
-
 -- --------------------------------------------------------
 
 --
@@ -300,6 +275,7 @@ INSERT INTO `trait` (`trait_id`, `class_id`, `term`, `year`) VALUES
 CREATE TABLE `trait_detail` (
   `trait_id` int(11) NOT NULL,
   `student_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` int(11) NOT NULL,
   `trait_1` tinyint(4) NOT NULL DEFAULT '0',
   `trait_2` tinyint(4) NOT NULL DEFAULT '0',
   `trait_3` tinyint(4) NOT NULL DEFAULT '0',
@@ -310,24 +286,6 @@ CREATE TABLE `trait_detail` (
   `trait_8` tinyint(4) NOT NULL DEFAULT '0',
   `trait_readwrite` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `trait_detail`
---
-
-INSERT INTO `trait_detail` (`trait_id`, `student_id`, `trait_1`, `trait_2`, `trait_3`, `trait_4`, `trait_5`, `trait_6`, `trait_7`, `trait_8`, `trait_readwrite`) VALUES
-(3, '7423', 4, 4, 4, 4, 4, 5, 4, 4, 5),
-(3, '7429', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, '7461', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, '7614', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, '8102', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, '8134', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, '7423', 4, 4, 5, 4, 4, 4, 5, 4, 5),
-(6, '7429', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, '7461', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, '7614', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, '8102', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, '8134', 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -353,7 +311,9 @@ INSERT INTO `user` (`user_id`, `user_password`, `user_status`, `user_level`) VAL
 ('s003', '1234', 1, 1),
 ('s004', '1234', 1, 1),
 ('s005', '1234', 1, 1),
-('s006', '1234', 1, 1);
+('s006', '1234', 1, 1),
+('t002', '1234', 1, 2),
+('t005', '1123', 1, 2);
 
 --
 -- Indexes for dumped tables
@@ -388,7 +348,8 @@ ALTER TABLE `roll`
 --
 ALTER TABLE `roll_detail`
   ADD KEY `roll_id` (`roll_id`),
-  ADD KEY `student_id` (`student_id`);
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `class_id` (`class_id`);
 
 --
 -- Indexes for table `schedule`
@@ -469,7 +430,8 @@ ALTER TABLE `trait`
 --
 ALTER TABLE `trait_detail`
   ADD KEY `trait_id` (`trait_id`),
-  ADD KEY `student_id` (`student_id`);
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `class_id` (`class_id`);
 
 --
 -- Indexes for table `user`
@@ -488,7 +450,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `class`
 --
 ALTER TABLE `class`
-  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roll`
